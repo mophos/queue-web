@@ -1,18 +1,29 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, InjectionToken } from '@angular/core';
 import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { YoutubePlayerModule } from 'ngx-youtube-player';
 
 import { AdminModule } from './admin/admin.module';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-import { environment } from 'src/environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginModule } from './login/login.module';
 import { SharedModule } from './shared/shared.module';
+import { environment } from '../environments/environment';
+
+import {
+  IMqttMessage,
+  MqttModule,
+  IMqttServiceOptions
+} from 'ngx-mqtt';
+
+export const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
+  hostname: 'localhost',
+  port: 3000,
+  path: '/mqtt'
+};
 
 export function tokenGetter() {
   return sessionStorage.getItem('token');
@@ -29,7 +40,6 @@ export const whitelistedDomains = [new RegExp('[\s\S]*')] as RegExp[];
     AppRoutingModule,
     HttpClientModule,
     NgbModule.forRoot(),
-    YoutubePlayerModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
@@ -37,6 +47,7 @@ export const whitelistedDomains = [new RegExp('[\s\S]*')] as RegExp[];
         blacklistedRoutes: ['/login']
       }
     }),
+    MqttModule.forRoot(MQTT_SERVICE_OPTIONS),
     SharedModule,
     AdminModule,
     LoginModule
@@ -44,6 +55,7 @@ export const whitelistedDomains = [new RegExp('[\s\S]*')] as RegExp[];
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: 'API_URL', useValue: environment.apiUrl },
+
   ],
   bootstrap: [AppComponent]
 })
