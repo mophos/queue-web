@@ -1,0 +1,61 @@
+<div class="page-header">
+  <h3 class="page-title">
+    ผู้ใช้งานระบบ
+  </h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript://" routerLink="/admin/dashboard">Dashboard</a></li>
+      <li class="breadcrumb-item active" aria-current="page">ผู้ใช้งานระบบ</li>
+    </ol>
+  </nav>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <button (click)="openRegister()" class="float-right btn-lg btn btn-sm btn-gradient-success"> <i class="mdi mdi-plus"></i>
+              เพิ่มผู้ใช้งาน
+            </button>
+          </div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>ชื่อ - สกุล</th>
+              <th>แผนก</th>
+              <th>สถานะ</th>
+              <th style="width: 150px;">#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>admin</td>
+              <td>สถิตย์ เรียนพิศ</td>
+              <td>ศูนย์คอมพิวเตอร์</td>
+              <td><i class="mdi mdi-check text-success"></i></td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-icon-append btn-gradient-success">
+                    <i class="mdi mdi-pencil"></i> แก้ไข
+                  </button>
+                  <button class="btn btn-sm btn-gradient-primary">
+                    <i class="mdi mdi-key"></i> เปลี่ยนรหัส
+                  </button>
+                  <button class="btn btn-sm btn-gradient-danger">
+                    <i class="mdi mdi-delete-outline"></i> ลบ
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-add-user [userId]="userId" #mdlUser (onSave)="onSave($event)"></app-modal-add-user>

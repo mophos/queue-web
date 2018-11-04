@@ -1,0 +1,77 @@
+<div class="page-header">
+  <h3 class="page-title">
+    จุดบริการ
+  </h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript://" routerLink="/admin/dashboard">Dashboard</a></li>
+      <li class="breadcrumb-item active" aria-current="page">จุดบริการ</li>
+    </ol>
+  </nav>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <button (click)="openRegister()" class="float-right btn-lg btn btn-sm btn-gradient-success"> <i class="mdi mdi-plus"></i>
+              เพิ่มจุดบริการ
+            </button>
+          </div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>จุดบริการ</th>
+              <th style="width: 150px;">#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                แผนกผู้ป่วยนอก
+              </td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-icon-append btn-gradient-success">
+                    <i class="mdi mdi-pencil"></i> แก้ไข
+                  </button>
+                  <button class="btn btn-sm btn-gradient-primary">
+                    <i class="mdi mdi-format-list-bulleted"></i> ช่องบริการ
+                  </button>
+                  <button class="btn btn-sm btn-gradient-danger">
+                    <i class="mdi mdi-delete-outline"></i> ลบ
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                ทันตกรรม
+              </td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-icon-append btn-gradient-success">
+                    <i class="mdi mdi-pencil"></i> แก้ไข
+                  </button>
+                  <button class="btn btn-sm btn-gradient-primary">
+                    <i class="mdi mdi-format-list-bulleted"></i> ช่องบริการ
+                  </button>
+                  <button class="btn btn-sm btn-gradient-danger">
+                    <i class="mdi mdi-delete-outline"></i> ลบ
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-add-service-point [servicePointId]="servicePointId" [servicePointName]="servicePointName" #mdlServicePoint
+  (onSave)="onSave($event)"></app-modal-add-service-point>

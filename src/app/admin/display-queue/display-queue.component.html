@@ -1,0 +1,125 @@
+<div class="container-scroller">
+  <!-- partial:../../partials/_navbar.html -->
+  <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+      <img src="./assets/images/h4u.png" style="margin-right: 10px;" width="50" height="50" alt="logo" />
+      <span class="font-weight-bold" style="font-size: 2rem;">โรงพยาบาลเขื่องใน</span>
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-stretch">
+
+      <ul class="navbar-nav navbar-nav-right">
+
+        <li class="nav-item d-none d-lg-block full-screen-link">
+          <a class="nav-link">
+            <span class="h1 text-primary font-weight-bold">แผนกผู้ป่วยนอก</span>
+          </a>
+        </li>
+
+        <li class="nav-item d-none d-lg-block full-screen-link">
+          <a class="nav-link">
+            <i class="mdi mdi-home text-success" routerLink="/admin"></i>
+          </a>
+        </li>
+        <li class="nav-item d-none d-lg-block full-screen-link">
+          <a class="nav-link">
+            <i class="mdi mdi-fullscreen text-success" id="fullscreen-button"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:../../partials/_sidebar.html -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+
+      <div class="row" style="padding: 0 0.2rem 0.2rem 0.2rem;">
+        <div class="col-md-12 stretch-card grid-margin">
+          <div class="card bg-success card-img-holder text-white">
+            <div class="card-body">
+              <img src="./assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+              <div style="display: inline-block; vertical-align: middle;">
+                <h2 class="display-3 mb-3 font-weight-bold">ช่องบริการ 3 </h2>
+              </div>
+
+              <h1 class="mb-5 font-weight-bold" style="letter-spacing: 8px; font-size: 5rem;">A210</h1>
+              <h2 class="display-3 card-text font-weight-bold">นายสุรชัย <br> ศรีอาราม</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </nav>
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+
+        <div class="card">
+          <div class="card-body">
+            <!-- <h4 class="card-title">รายการคิว</h4> -->
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ช่องบริการ</th>
+                  <th>ชื่อ - สกุล</th>
+                  <th>คิวปัจจุบัน</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <label style="width: 80px;" class="badge badge-danger">
+                      <span class="h1 font-weight-bold">3</span>
+                    </label>
+                  </td>
+                  <td>
+                    <span class="h1 font-weight-bold">นายสุรชัย ศรีอาราม</span>
+                  </td>
+                  <td>
+                    <label style="width: 100px;" class="badge badge-danger">
+                      <span class="h1 font-weight-bold" style="letter-spacing: 5px;">A210</span>
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label style="width: 80px;" class="badge badge-danger">
+                      <span class="h1 font-weight-bold">2</span>
+                    </label> </td>
+                  <td>
+                    <span class="h1 font-weight-bold">นายสถิตย์ เรียนพิศ</span>
+                  </td>
+                  <td>
+                    <label style="width: 100px;" class="badge badge-primary">
+                      <span class="h1 font-weight-bold" style="letter-spacing: 5px;">A220</span>
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label style="width: 80px;" class="badge badge-danger">
+                      <span class="h1 font-weight-bold">4</span>
+                    </label>
+                  </td>
+                  <td>
+                    <span class="h1 font-weight-bold">นางรุ่งวิภา กิจเจริญดี</span>
+                  </td>
+                  <td>
+                    <label style="width: 100px;" class="badge badge-success">
+                      <span class="h1 font-weight-bold" style="letter-spacing: 5px;">B565</span>
+                    </label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- main-panel ends -->
+  </div>
+
+  <!-- page-body-wrapper ends -->
+</div>

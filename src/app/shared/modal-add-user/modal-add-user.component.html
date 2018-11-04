@@ -1,0 +1,43 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">ผู้ใช้งาน</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="username" class="required">ชื่อผู้ใช้งาน</label>
+          <input type="text" name="username" id="username" class="form-control" name="username" [(ngModel)]="username">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="password" class="required">รหัสผ่าน</label>
+          <input type="password" name="password" id="password" class="form-control" name="password" [(ngModel)]="password">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="fullname" class="required">ชื่อ - สกุล</label>
+          <input type="text" name="fullname" id="fullname" class="form-control" name="fullname" [(ngModel)]="fullname">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="password" class="required">จุดให้บริการ</label>
+          <select class="form-control" name="servicePointId" [(ngModel)]="servicePointId">
+            <option *ngFor="let item of servicePointItems" [value]="item.service_point_id">{{item.service_point_name}}</option>
+          </select>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="save()">บันทึก</button>
+    <button type="button" class="btn btn-outline-danger" (click)="dismiss()">ยกเลิก</button>
+  </div>
+</ng-template>

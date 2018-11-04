@@ -23,6 +23,15 @@
               "src/assets"
             ],
             "styles": [
+              {
+                "input": "./node_modules/bootstrap/dist/css/bootstrap.css"
+              },
+              {
+                "input": "./node_modules/@mdi/font/css/materialdesignicons.css"
+              },
+              {
+                "input": "./src/assets/css/style.css"
+              },
               "src/styles.css"
             ],
             "scripts": []

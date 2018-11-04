@@ -1,0 +1,236 @@
+<div class="container-scroller">
+  <!-- partial:../../partials/_navbar.html -->
+  <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+      <img src="./assets/images/h4u.png" style="margin-right: 10px;" width="50" height="50" alt="logo" />
+      <span class="font-weight-bold" style="font-size: 2rem;">โรงพยาบาลเขื่องใน</span>
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-stretch">
+
+      <ul class="navbar-nav navbar-nav-right">
+
+        <li class="nav-item d-none d-lg-block full-screen-link">
+          <a class="nav-link">
+            <span class="h1 text-primary font-weight-bold">ระบบเรียกคิว - &nbsp;</span>
+            <span class="h1 text-success font-weight-bold"> แผนกผู้ป่วยนอก</span>
+          </a>
+        </li>
+
+        <li class="nav-item d-none d-lg-block full-screen-link">
+          <a class="nav-link">
+            <i class="mdi mdi-fullscreen text-success" id="fullscreen-button"></i>
+          </a>
+        </li>
+        <li class="nav-item d-none d-lg-block full-screen-link">
+          <a class="nav-link" routerLink="/admin">
+            <i class="mdi mdi-home text-danger"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:../../partials/_sidebar.html -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+
+      <ul class="nav">
+        <li class="nav-item sidebar-actions">
+          <span class="nav-link">
+            <div class="border-bottom">
+              <h6 class="font-weight-normal mb-3 h3">เมนูหลัก</h6>
+            </div>
+            <button class="btn btn-sm btn-block btn-lg btn-success mt-4">
+              <span class="h3">กลับหน้าหลัก</span>
+            </button>
+
+          </span>
+        </li>
+      </ul>
+
+    </nav>
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+
+        <ngb-tabset>
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <span class="h3">กำลังตรวจ
+                <label class="badge badge-danger">
+                  <span class="h3 font-weight-bold">10</span>
+                </label>
+              </span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="card">
+                <div class="card-body">
+                  <!-- <h4 class="card-title">รายการคิว</h4> -->
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>ช่องบริการ</th>
+                        <th>HN</th>
+                        <th>ชื่อ - สกุล</th>
+                        <th>คิวปัจจุบัน</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <button class="btn btn-sm btn-success" [ngbPopover]="popContentChangeRoom" popoverTitle="เลือกช่องรับบริการ">
+                            <span class="h3">
+                              ช่องบริการ 4
+                            </span>
+                          </button>
+                        </td>
+                        <td>
+                          <span class="h3 font-weight-bold">0042332</span>
+                        </td>
+                        <td>
+                          <span class="h3 font-weight-bold">นายสุรชัย ศรีอาราม</span>
+                        </td>
+                        <td>
+                          <label style="width: 100px;" class="badge badge-danger">
+                            <span class="h3 font-weight-bold" style="letter-spacing: 5px;">A210</span>
+                          </label>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <button class="btn btn-sm btn-success" [ngbPopover]="popContentChangeRoom" popoverTitle="เปลี่ยนช่องบริการ">
+                            <span class="h3">
+                              ช่องบริการ 2
+                            </span>
+                          </button>
+                        </td>
+                        <td>
+                          <span class="h3 font-weight-bold">0098665</span>
+                        </td>
+                        <td>
+                          <span class="h3 font-weight-bold">นายสถิตย์ เรียนพิศ</span>
+                        </td>
+                        <td>
+                          <label style="width: 100px;" class="badge badge-primary">
+                            <span class="h3 font-weight-bold" style="letter-spacing: 5px;">A220</span>
+                          </label>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <button class="btn btn-sm btn-success" [ngbPopover]="popContentChangeRoom" popoverTitle="เลือกช่องรับบริการ">
+                            <span class="h3">
+                              ช่องบริการ 1
+                            </span>
+                          </button>
+                        </td>
+                        <td>
+                          <span class="h3 font-weight-bold">0098898</span>
+                        </td>
+                        <td>
+                          <span class="h3 font-weight-bold">นางรุ่งวิภา กิจเจริญดี</span>
+                        </td>
+                        <td>
+                          <label style="width: 100px;" class="badge badge-success">
+                            <span class="h3 font-weight-bold" style="letter-spacing: 5px;">B565</span>
+                          </label>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <span class="h3">
+                รอเรียก
+                <label class="badge badge-danger">
+                  <span class="h3 font-weight-bold">45</span>
+                </label>
+              </span>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <div class="card">
+                <div class="card-body">
+                  <!-- <h4 class="card-title">รายการคิว</h4> -->
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>HN</th>
+                        <th>เวลา</th>
+                        <th>ชื่อ - สกุล</th>
+                        <th>สิทธิการรักษา</th>
+                        <th>คิวตรวจ</th>
+                        <th>#</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+
+                        <td>
+                          <span class="h3-x">0043332</span>
+                        </td>
+                        <td>
+                          <span class="h3-x">12:30</span>
+                        </td>
+                        <td>
+                          <span class="h3-x">นายสุรชัย ศรีอาราม</span>
+                        </td>
+                        <td>
+                          <span class="h3-x">บัตรประกันสุขภาพถ้วนหน้า</span>
+                        </td>
+                        <td>
+                          <label class="badge badge-danger" style="width: 65px;">
+                            <span class="h3-x font-weight-bold" style="letter-spacing: 5px;">A220</span>
+                          </label>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-gradient-success" [ngbPopover]="popContent" popoverTitle="เลือกช่องรับบริการ">
+                            <span class="h4">
+                              เรียกคิว
+                              <i class="mdi mdi-send"></i>
+                            </span>
+                          </button>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+
+      </div>
+
+    </div>
+    <!-- main-panel ends -->
+  </div>
+
+</div>
+
+<ng-template #popContent>
+  <div class="text-center">
+    <button type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw">
+      <span class="h4">ช่องบริการ 1</span>
+    </button>
+    <button type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw">
+      <span class="h4">ช่องบริการ 2</span>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #popContentChangeRoom>
+  <div class="text-center">
+    <button type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw">
+      <span class="h4">ช่องบริการ 1</span>
+    </button>
+    <button type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw">
+      <span class="h4">ช่องบริการ 2</span>
+    </button>
+  </div>
+</ng-template>

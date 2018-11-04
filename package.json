@@ -20,8 +20,15 @@
     "@angular/platform-browser": "~7.0.0",
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
+    "@auth0/angular-jwt": "^2.0.0",
+    "@mdi/font": "^3.0.39",
+    "@ng-bootstrap/ng-bootstrap": "^2.2.2",
+    "@ng-bootstrap/schematics": "^2.0.0-alpha.1",
+    "bootstrap": "^4.0.0",
     "core-js": "^2.5.4",
+    "ngx-youtube-player": "^6.0.0",
     "rxjs": "~6.3.3",
+    "sweetalert2": "^7.28.11",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
