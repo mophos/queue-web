@@ -1,0 +1,74 @@
+<div class="page-header">
+  <h3 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-human-male-female"></i>
+    </span>
+    ผู้มารับบริการที่ยังไม่ได้รับคิวบริการ
+  </h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript://" routerLink="/admin/dashboard">Dashboard</a></li>
+      <li class="breadcrumb-item active" aria-current="page">ทะเบียนผู้มารับบริการ</li>
+    </ol>
+  </nav>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <button (click)="refresh()" class="float-right btn-lg btn btn-sm btn-gradient-success"> <i class="mdi mdi-refresh"></i>
+              Refresh
+            </button>
+          </div>
+        </div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>เวลา</th>
+              <th>HN</th>
+              <th>ชื่อ - สกุล</th>
+              <th>แผนก</th>
+              <th style="width: 80px;">#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="!visit.length">
+              <td colspan="5">
+                <p>ไม่พบรายการ</p>
+              </td>
+            </tr>
+            <tr *ngFor="let v of visit">
+              <td>{{v.time_serv}}</td>
+              <td>{{v.hn}}</td>
+              <td>{{v.first_name}} {{v.last_name}}</td>
+              <td>{{v.clinic_code}} - {{v.clinic_name}}</td>
+              <td>
+                <div class="d-inline-block" ngbDropdown placement="top-right" #myDrop="ngbDropdown">
+                  <button class="btn btn-sm btn-icon-append btn-gradient-primary" ngbDropdownAnchor (focus)="myDrop.open()">
+                    <i class="mdi mdi-library-plus"></i> สร้างคิว
+                  </button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownManual">
+                    <button class="dropdown-item" *ngFor="let item of priorities" (click)="doRegister(item.priority_id, v)">
+                      ({{item.priority_prefix}}) {{ item.priority_name }}</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="visit.length" style="padding-top: 25px;">
+          <ngb-pagination class="d-flex justify-content-center" [rotate]="true" [collectionSize]="total" [maxSize]="maxSizePage"
+            [boundaryLinks]="true" [pageSize]="pageSize" (pageChange)="onPageChange($event)" [(page)]="currentPage"
+            aria-label="pagination"></ngb-pagination>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <app-modal-add-user [userId]="userId" #mdlUser (onSave)="onSave($event)"></app-modal-add-user> -->

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ModalSelectServicepointsComponent } from 'src/app/shared/modal-select-servicepoints/modal-select-servicepoints.component';
 
 @Component({
   selector: 'app-display-queue',
@@ -7,28 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DisplayQueueComponent implements OnInit {
 
-  youtubeId = 'qDuKsiwS5xw';
-  private player;
-  private ytEvent;
+  @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectServicepointsComponent;
+
+  servicePointId: any;
+  servicePointName: any;
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  onStateChange(event) {
-    this.ytEvent = event.data;
-  }
-  savePlayer(player) {
-    this.player = player;
+  selectServicePoint() {
+    this.mdlServicePoint.open();
   }
 
-  playVideo() {
-    this.player.playVideo();
-  }
-
-  pauseVideo() {
-    this.player.pauseVideo();
+  onSelectedPoint(event: any) {
+    console.log(event);
+    this.servicePointName = event.service_point_name;
+    this.servicePointId = event.service_point_id;
   }
 
 }

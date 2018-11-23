@@ -12,9 +12,10 @@ import { SharedModule } from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { UserComponent } from './settings/user/user.component';
 import { QueueCenterComponent } from './queue-center/queue-center.component';
+import { VisitComponent } from './visit/visit.component';
 
 @NgModule({
-  declarations: [LayoutComponent, DashboardComponent, DisplayQueueComponent, QueueCallerComponent, ServicePointComponent, UserComponent, QueueCenterComponent],
+  declarations: [LayoutComponent, DashboardComponent, DisplayQueueComponent, QueueCallerComponent, ServicePointComponent, UserComponent, QueueCenterComponent, VisitComponent],
   imports: [
     CommonModule,
     NgbModule,

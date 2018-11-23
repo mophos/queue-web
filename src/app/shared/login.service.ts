@@ -10,7 +10,7 @@ export class LoginService {
 
   async doLogin(username: string, password: string) {
     const _url = `${this.apiUrl}/login`;
-    return this.httpClient.get(_url).toPromise();
+    return this.httpClient.post(_url, { username: username, password: password }).toPromise();
   }
 
 }

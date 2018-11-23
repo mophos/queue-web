@@ -10,14 +10,12 @@ import { ServicePointService } from '../service-point.service';
 })
 export class ModalAddServicePointComponent implements OnInit {
 
-  @Input('servicePointId')
-  set setId(value: any) {
-    this.servicePointId = value;
-  }
-
-  @Input('servicePointName')
-  set setName(value: any) {
-    this.servicePointName = value;
+  @Input('info')
+  set setItems(value: any) {
+    this.servicePointId = value.service_point_id;
+    this.servicePointName = value.service_point_name;
+    this.servicePointAbbr = value.service_point_abbr;
+    this.localCode = value.local_code;
   }
 
   @Output('onSave') onSave: EventEmitter<any> = new EventEmitter<any>();
@@ -27,6 +25,8 @@ export class ModalAddServicePointComponent implements OnInit {
   modalReference: NgbModalRef;
   servicePointId: any;
   servicePointName: any;
+  localCode: any;
+  servicePointAbbr: any;
 
   constructor(
     private modalService: NgbModal,
@@ -40,8 +40,8 @@ export class ModalAddServicePointComponent implements OnInit {
       ariaLabelledBy: 'modal-basic-title',
       keyboard: false,
       backdrop: 'static',
-      size: 'sm',
-      centered: true
+      // size: 'sm',
+      // centered: true
     });
 
     this.modalReference.result.then((result) => { });
@@ -52,9 +52,14 @@ export class ModalAddServicePointComponent implements OnInit {
   }
 
   async save() {
-    if (this.servicePointName) {
+    if (this.servicePointName && this.localCode) {
       try {
-        const data: any = { servicePointName: this.servicePointName };
+        const data: any = {
+          servicePointName: this.servicePointName,
+          localCode: this.localCode,
+          servicePointAbbr: this.servicePointAbbr
+        };
+
         var rs: any;
 
         if (this.servicePointId) {
@@ -63,7 +68,7 @@ export class ModalAddServicePointComponent implements OnInit {
           rs = await this.servicePointService.save(data);
         }
 
-        if (rs.ok) {
+        if (rs.statusCode === 200) {
           this.modalReference.close();
           this.onSave.emit();
         } else {

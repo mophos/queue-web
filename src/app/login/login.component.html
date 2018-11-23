@@ -21,7 +21,7 @@
                   placeholder="Password">
               </div>
               <div class="mt-3">
-                <button type="submit" (click)="doLogin()" class="btn btn-block btn-gradient-success btn-lg font-weight-medium auth-form-btn">
+                <button type="submit" [disabled]="!username || !password" (click)="doLogin()" class="btn btn-block btn-gradient-success btn-lg font-weight-medium auth-form-btn">
                   เข้าใช้งานระบบ
                 </button>
               </div>

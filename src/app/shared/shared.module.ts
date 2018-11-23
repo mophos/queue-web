@@ -7,15 +7,20 @@ import { FormsModule } from '@angular/forms';
 import { ModalAddUserComponent } from './modal-add-user/modal-add-user.component';
 import { AuthGuardService } from './auth-guard.service';
 import { LoginService } from './login.service';
+import { ModalRoomsComponent } from './modal-rooms/modal-rooms.component';
+import { ServiceRoomService } from './service-room.service';
+import { PriorityService } from './priority.service';
+import { QueueService } from './queue.service';
+import { ModalSelectServicepointsComponent } from './modal-select-servicepoints/modal-select-servicepoints.component';
 
 @NgModule({
-  declarations: [ModalAddServicePointComponent, ModalAddUserComponent],
   imports: [
     CommonModule,
     NgbModule,
     FormsModule
   ],
-  exports: [ModalAddServicePointComponent, ModalAddUserComponent],
-  providers: [ServicePointService, AuthGuardService, LoginService]
+  declarations: [ModalAddServicePointComponent, ModalAddUserComponent, ModalRoomsComponent, ModalSelectServicepointsComponent],
+  exports: [ModalAddServicePointComponent, ModalAddUserComponent, ModalRoomsComponent, ModalSelectServicepointsComponent],
+  providers: [ServicePointService, ServiceRoomService, PriorityService, QueueService, AuthGuardService, LoginService]
 })
 export class SharedModule { }

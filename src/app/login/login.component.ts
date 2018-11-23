@@ -22,13 +22,26 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  doLogin() {
-    if (this.username === 'admin' && this.password === 'admin') {
-      sessionStorage.setItem('token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJJQ1QgTU9QSCIsImlhdCI6MTU0MTMxNTgwMywiZXhwIjoxNjA0NDc0MjAzLCJhdWQiOiJpY3QubW9waC5nby50aCIsInN1YiI6InJpYW5waXRAZ21haWwuY29tIiwiZnVsbG5hbWUiOiJTYXRpdCBSaWFucGl0Iiwic2VydmljZVBvaW50SWQiOiIxIiwic2VydmljZVBvaW50TmFtZSI6IuC4nOC4ueC5ieC4m-C5iOC4p-C4ouC4meC4reC4gSJ9.P6H9p_f59XeH6otmpfr7WAtj9v7XvKBVXBZs3lzQxgY')
-      this.router.navigate(['/admin']);
+  async doLogin() {
+    if (this.username && this.password) {
+      try {
+        const rs: any = await this.loginService.doLogin(this.username, this.password);
+        if (rs.token) {
+          const token = rs.token;
+          sessionStorage.setItem('token', token);
+          this.router.navigate(['/admin']);
+        } else {
+          const message = rs.message || 'เกิดข้อผิดพลาด';
+          this.alertService.error(message);
+        }
+      } catch (error) {
+        console.log(error);
+        this.alertService.error('เกิดข้อผิดพลาด');
+      }
     } else {
-      this.alertService.error('กรุณาระบุข้อมูลให้ถูกต้อง');
+      this.alertService.error('เกิดข้อผิดพลาด');
     }
+
   }
 
 }

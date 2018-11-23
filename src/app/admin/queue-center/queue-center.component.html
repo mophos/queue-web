@@ -2,8 +2,11 @@
   <!-- partial:../../partials/_navbar.html -->
   <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-      <img src="./assets/images/h4u.png" style="margin-right: 10px;" width="50" height="50" alt="logo" />
-      <span class="font-weight-bold" style="font-size: 2rem;">โรงพยาบาลเขื่องใน</span>
+      <a class="navbar-brand brand-logo" href="javascript://">
+        <img style="width: 40px; height: 40px;" src="./assets/images/iconQ4U100.png" alt=""></a>
+      <span class="font-weight-bold" style="font-size: 1.5rem;">
+        ระบบคิวออนไลน์
+      </span>
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-stretch">
 
@@ -36,9 +39,9 @@
         <div class="col-md-12 stretch-card grid-margin">
           <table class="table">
             <thead>
-              <tr>
+              <!-- <tr>
                 <th colspan="2">คิวที่กำลังให้บริการ</th>
-              </tr>
+              </tr> -->
               <tr>
                 <th><strong>แผนกให้บริการ</strong></th>
                 <th><strong>คิวทั้งหมด</strong></th>
@@ -93,55 +96,32 @@
             <table class="table">
               <thead>
                 <tr>
+                  <th><strong>จุดให้บริการ</strong></th>
+                  <th><strong>ช่องบริการ</strong></th>
                   <th><strong>คิวปัจจุบัน</strong></th>
-                  <th><strong>แผนกให้บริการ</strong></th>
-                  <th><strong>ชื่อ - สกุล</strong></th>
+                  <th><strong>HN, ชื่อ - สกุล</strong></th>
+                  <th><strong>อัปเดท</strong></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>
-                    <button class="btn btn-rounded btn-sm btn-gradient-primary">
-                      <span class="h3 font-weight-bold" style="letter-spacing: 3px;">B410</span>
-                    </button>
+                    <span class="h4 font-weight-bold">แพทย์แผนไทย</span>
                   </td>
                   <td>
-                    <span class="h3">แพทย์แผนไทย</span>
+                    <span class="h4">1 - ห้องตรวจพิเศษ</span>
+                  </td>
+                  <td>
+                    <span class="h3 font-weight-bold text-danger" style="letter-spacing: 3px;">B410</span>
+                  </td>
+                  <td>
+                    <span class="h4 font-weight-bold">HN: 0041223 - นายสุรชัย ศรีอาราม</span>
                   </td>
 
                   <td>
-                    <span class="h3">นายสุรชัย ศรีอาราม</span>
+                    <span class="h4">13:00:54</span>
                   </td>
                 </tr>
-                <tr>
-                  <td>
-                    <button class="btn btn-rounded btn-sm btn-gradient-info">
-                      <span class="h3 font-weight-bold" style="letter-spacing: 3px;">B310</span>
-                    </button>
-                  </td>
-                  <td>
-                    <span class="h3">กายภาพบำบัด</span>
-                  </td>
-
-                  <td>
-                    <span class="h3">นายสถิตย์ เรียนพิศ</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <button class="btn btn-rounded btn-sm btn-gradient-danger">
-                      <span class="h3 font-weight-bold" style="letter-spacing: 3px;">C310</span>
-                    </button>
-                  </td>
-                  <td>
-                    <span class="h3">ทันตกรรม</span>
-                  </td>
-
-                  <td>
-                    <span class="h3">นางพรมณี จิตใจดี</span>
-                  </td>
-                </tr>
-
               </tbody>
             </table>
           </div>

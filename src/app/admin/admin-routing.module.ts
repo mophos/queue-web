@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ServicePointComponent } from './settings/service-point/service-point.component';
 import { UserComponent } from './settings/user/user.component';
 import { AuthGuardService } from '../shared/auth-guard.service';
+import { VisitComponent } from './visit/visit.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'service-point', component: ServicePointComponent },
       { path: 'users', component: UserComponent },
+      { path: 'visit', component: VisitComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ]
   },
