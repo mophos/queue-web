@@ -3,7 +3,7 @@
  */
 
  html, body {
-   font-size: 1.2rem;
+   font-size: 1.0rem;
  }
 
 .ps {
@@ -170,6 +170,16 @@ select.form-control {
     padding: .25rem 0;
     width: 72px;
 }
+
+p {
+    font-size: 1.2rem;
+    line-height: 1.5;
+}
+
+.btn {
+  font-size: 1.2rem;
+}
+
 /* 
 .modal .modal-dialog .modal-content .modal-body {
     padding: 0px 10px;

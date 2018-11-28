@@ -12,11 +12,6 @@
 
       <ul class="navbar-nav navbar-nav-right">
         <li class="nav-item d-none d-lg-block full-screen-link">
-          <a class="nav-link" href="javascript://">
-            <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
-          </a>
-        </li>
-        <li class="nav-item d-none d-lg-block full-screen-link">
           <a class="nav-link" (click)="logout()" href="javascript://">
             <i class="mdi mdi-power text-danger" id="fullscreen-button"></i>
           </a>
@@ -43,10 +38,16 @@
             <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
           </a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
+        <!-- <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" href="javascript://" routerLink="/admin/dashboard">
             <span class="menu-title">Dashboard</span>
             <i class="mdi mdi-home menu-icon"></i>
+          </a>
+        </li> -->
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" href="javascript://" routerLink="/admin/queue-center">
+            <span class="menu-title">แสดงคิวทั้งหมด</span>
+            <i class="mdi mdi-animation-play menu-icon"></i>
           </a>
         </li>
         <li class="nav-item" routerLinkActive="active">
@@ -72,18 +73,13 @@
 
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" href="javascript://" routerLink="/display-queue">
-            <span class="menu-title">แสดงคิวรายแผนก</span>
+            <span class="menu-title">แสดงคิว</span>
             <i class="mdi mdi-airplay menu-icon"></i>
           </a>
         </li>
+
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/queue-center">
-            <span class="menu-title">แสดงคิวทั้งหมด</span>
-            <i class="mdi mdi-animation-play menu-icon"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/queue-caller">
+          <a class="nav-link" href="javascript://" routerLink="/admin/queue-caller">
             <span class="menu-title">เรียกคิวห้องตรวจ</span>
             <i class="mdi mdi-cast menu-icon"></i>
           </a>

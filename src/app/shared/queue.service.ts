@@ -8,8 +8,8 @@ export class QueueService {
 
   constructor(@Inject('API_URL') private apiUrl: string, private httpClient: HttpClient) { }
 
-  async visitList(limit: number = 20, offset: number = 0) {
-    const _url = `${this.apiUrl}/queue/his-visit?limit=${limit}&offset=${offset}`;
+  async visitList(servicePointCode: any = '', limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/his-visit?servicePointCode=${servicePointCode}&limit=${limit}&offset=${offset}`;
     return this.httpClient.get(_url).toPromise();
   }
 
@@ -21,8 +21,8 @@ export class QueueService {
     }).toPromise();
   }
 
-  async getWaiting(servicePointId: any) {
-    const _url = `${this.apiUrl}/queue/waiting/${servicePointId}`;
+  async getWaiting(servicePointId: any, limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/waiting/${servicePointId}?limit=${limit}&offset=${offset}`;
     return this.httpClient.get(_url).toPromise();
   }
 
@@ -56,6 +56,11 @@ export class QueueService {
       birthDate: data.birthDate,
       sex: data.sex,
     }).toPromise();
+  }
+
+  async getCurrentQueueList() {
+    const _url = `${this.apiUrl}/queue/current-list`;
+    return this.httpClient.get(_url).toPromise();
   }
 
 }

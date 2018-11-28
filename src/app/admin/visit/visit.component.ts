@@ -4,6 +4,7 @@ import { AlertService } from 'src/app/shared/alert.service';
 import { QueueService } from 'src/app/shared/queue.service';
 
 import * as moment from 'moment';
+import { ServicePointService } from 'src/app/shared/service-point.service';
 
 @Component({
   selector: 'app-visit',
@@ -20,16 +21,20 @@ export class VisitComponent implements OnInit {
   maxSizePage = 5;
   currentPage = 1;
   offset = 0;
+  servicePointCode: any = '';
+  servicePoints: any = [];
 
   constructor(
     private priorityService: PriorityService,
     private queueService: QueueService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private servicePointService: ServicePointService
   ) { }
 
   ngOnInit() {
     this.getPriorities();
     this.getVisit();
+    this.getServicePoints();
   }
 
   refresh() {
@@ -50,9 +55,28 @@ export class VisitComponent implements OnInit {
     }
   }
 
+  async getServicePoints() {
+    try {
+      const rs: any = await this.servicePointService.list();
+      if (rs.statusCode === 200) {
+        this.servicePoints = rs.results;
+      } else {
+        this.alertService.error(rs.message);
+      }
+    } catch (error) {
+      console.error(error);
+      this.alertService.error('เกิดข้อผิดพลาด');
+    }
+  }
+
+  changeServicePoints(event: any) {
+    this.servicePointCode = event.target.value;
+    this.getVisit();
+  }
+
   async getVisit() {
     try {
-      const rs: any = await this.queueService.visitList(this.pageSize, this.offset);
+      const rs: any = await this.queueService.visitList(this.servicePointCode, this.pageSize, this.offset);
       if (rs.statusCode === 200) {
         this.visit = rs.results;
         this.total = rs.total;

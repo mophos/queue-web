@@ -12,6 +12,8 @@ import { ServiceRoomService } from './service-room.service';
 import { PriorityService } from './priority.service';
 import { QueueService } from './queue.service';
 import { ModalSelectServicepointsComponent } from './modal-select-servicepoints/modal-select-servicepoints.component';
+import { ShortTimePipe } from './short-time.pipe';
+import { ThaiDatePipe } from './thai-date.pipe';
 
 @NgModule({
   imports: [
@@ -19,8 +21,8 @@ import { ModalSelectServicepointsComponent } from './modal-select-servicepoints/
     NgbModule,
     FormsModule
   ],
-  declarations: [ModalAddServicePointComponent, ModalAddUserComponent, ModalRoomsComponent, ModalSelectServicepointsComponent],
-  exports: [ModalAddServicePointComponent, ModalAddUserComponent, ModalRoomsComponent, ModalSelectServicepointsComponent],
+  declarations: [ModalAddServicePointComponent, ModalAddUserComponent, ModalRoomsComponent, ModalSelectServicepointsComponent, ShortTimePipe, ThaiDatePipe],
+  exports: [ModalAddServicePointComponent, ModalAddUserComponent, ModalRoomsComponent, ModalSelectServicepointsComponent, ShortTimePipe, ThaiDatePipe],
   providers: [ServicePointService, ServiceRoomService, PriorityService, QueueService, AuthGuardService, LoginService]
 })
 export class SharedModule { }

@@ -17,11 +17,27 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-body">
+        <h4 class="card-title">รายชื่อผู้ป่วยที่รอรับบริการ</h4>
+        <p class="card-description">
+          แสดงเฉพาะรายชื่อจุดให้บริการที่มีการ <code>เปิดให้บริการ</code> เท่านั้น
+        </p>
         <div class="row">
-          <div class="col-md-12">
-            <button (click)="refresh()" class="float-right btn-lg btn btn-sm btn-gradient-success"> <i class="mdi mdi-refresh"></i>
+          <div class="col-md-9">
+
+          </div>
+          <div class="col-md-3">
+            <!-- <button (click)="refresh()" class="float-right btn-lg btn btn-sm btn-gradient-success"> <i class="mdi mdi-refresh"></i>
               Refresh
-            </button>
+            </button> -->
+            <div class="form-group">
+              <select aria-placeholder="เลือกจุดให้บริการ" (change)="changeServicePoints($event)" class="form-control form-control-sm"
+                name="servicePointId" [(ngModel)]="servicePointId">
+                <option value="">เลือกจุดให้บริการ</option>
+                <option *ngFor="let s of servicePoints" [value]="s.local_code">{{s.local_code}} -
+                  {{s.service_point_name}}</option>
+                <option value="">ทั้งหมด</option>
+              </select>
+            </div>
           </div>
         </div>
         <table class="table table-hover">

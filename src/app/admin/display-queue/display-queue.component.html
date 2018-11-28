@@ -11,33 +11,16 @@
     <div class="navbar-menu-wrapper d-flex align-items-stretch">
 
       <ul class="navbar-nav navbar-nav-right">
-
         <li class="nav-item d-none d-lg-block full-screen-link">
-          <a class="nav-link">
-            <span class="h1 text-primary font-weight-bold">{{servicePointName || 'กรุณาเลือกจุดบริการ'}}</span>
+          <a class="nav-link" href="javascript://" routerLink="/admin">
+            <i class="mdi mdi-home text-success"></i>
           </a>
         </li>
-
         <li class="nav-item d-none d-lg-block full-screen-link">
-          <a class="nav-link" href="javascript://" (click)="selectServicePoint()">
-            <i class="mdi mdi-refresh text-success"></i> <span style="font-size: 1.4rem;">เปลี่ยนจุดให้บริการ</span>
+          <a class="nav-link" (click)="logout()" href="javascript://">
+            <i class="mdi mdi-power text-danger"></i>
           </a>
         </li>
-
-        <li class="nav-item d-none d-lg-block full-screen-link">
-          <a class="nav-link">
-            <i class="mdi mdi-home text-success" routerLink="/admin"></i>
-            <span style="font-size: 1.4rem;">กลับหน้าหลัก</span>
-          </a>
-        </li>
-
-        <li class="nav-item d-none d-lg-block full-screen-link">
-          <a class="nav-link">
-            <i class="mdi mdi-fullscreen text-success" id="fullscreen-button"></i>
-            <span style="font-size: 1.4rem;">เต็มหน้าจอ</span>
-          </a>
-        </li>
-
       </ul>
     </div>
   </nav>
@@ -45,90 +28,71 @@
   <div class="container-fluid page-body-wrapper">
     <!-- partial:../../partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
-
-      <ul class="nav">
-
-        <li class="nav-item nav-profile">
-          <a href="#" class="nav-link">
-            <div class="nav-profile-image">
-              <img src="./assets/images/faces/face1.jpg" alt="profile">
-              <span class="login-status online"></span>
-              <!--change to offline or busy as needed-->
-            </div>
-            <div class="nav-profile-text d-flex flex-column">
-              <span class="font-weight-bold mb-2">David Grey. H</span>
-              <span class="text-secondary text-small">Project Manager</span>
-            </div>
-            <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/admin/dashboard">
-            <span class="menu-title">Dashboard</span>
-            <i class="mdi mdi-home menu-icon"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/admin/visit">
-            <span class="menu-title">ทะเบียนผู้รับบริการ</span>
-            <i class="mdi mdi-human-male-female menu-icon"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/admin/service-point">
-            <span class="menu-title">จุดให้บริการ</span>
-            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/admin/users">
-            <span class="menu-title">ผู้ใช้งานระบบ</span>
-            <i class="mdi mdi-account-group menu-icon"></i>
-          </a>
-        </li>
-
-        <div class="border-bottom"></div>
-
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/display-queue">
-            <span class="menu-title">แสดงคิวรายแผนก</span>
-            <i class="mdi mdi-airplay menu-icon"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/queue-center">
-            <span class="menu-title">แสดงคิวทั้งหมด</span>
-            <i class="mdi mdi-animation-play menu-icon"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/queue-caller">
-            <span class="menu-title">เรียกคิวห้องตรวจ</span>
-            <i class="mdi mdi-cast menu-icon"></i>
-          </a>
-        </li>
-      </ul>
-
+      <div class="mr-2 ml-2">
+        <table class="table">
+          <thead>
+            <tr>
+              <th><span class="h1">คิว</span></th>
+              <th><span class="h1">ช่อง</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="!workingItems.length">
+              <td colspan="2">กรุณาเลือกจุดบริการ</td>
+            </tr>
+            <tr *ngFor="let item of workingItems">
+              <td style="text-align: center;">
+                <label style="font-size: 3.5rem; letter-spacing: 5px;" class="badge badge-danger font-weight-bold">{{item.queue_number}}</label>
+              </td>
+              <td style="text-align: center;">
+                <label style="font-size: 3.5rem;" class="badge badge-success font-weight-bold">{{item.room_number}}</label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </nav>
     <!-- partial -->
     <div class="main-panel">
       <div class="content-wrapper">
 
+        <div class="card card-inverse-danger" *ngIf="isOffline">
+          <div class="card-body">
+            <p class="mb-4">
+              เกิดข้อผิดพลาดในการเชื่อมต่อกับ Notify Server.
+            </p>
+            <button class="btn btn-danger" (click)="connectWebSocket()">เชื่อมต่อใหม่ (<strong>
+                <countdown [config]="{leftTime: 15, template: '$!s!'}" (finished)="onFinished()" (notify)="onNotify($event)"></countdown>
+              </strong>)</button>
+          </div>
+        </div>
+
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <span class="h1 text-primary font-weight-bold">{{servicePointName || 'กรุณาเลือกจุดบริการ'}}</span>
+              &nbsp; | &nbsp;
+              <a href="javascript://" (click)="selectServicePoint()">
+                <span style="font-size: 1.4rem;">เปลี่ยนจุดบริการ</span>
+              </a>
+            </li>
+          </ol>
+        </nav>
         <div class="card">
           <div class="card-body">
-            <!-- <h4 class="card-title">รายการคิว</h4> -->
-
+            <h1 class="card-title">คิวที่เรียกปัจจุบัน</h1>
             <div class="row">
               <div class="col-md-8 stretch-card grid-margin">
-                <div class="card bg-gradient-primary card-img-holder text-white">
+                <div class="card bg-gradient-danger card-img-holder text-white">
                   <div class="card-body">
                     <img src="./assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
                     <h1 class="font-weight-normal mb-2">คิวบริการ
                       <i class="mdi mdi-chart-line mdi-24px float-right"></i>
                     </h1>
                     <!-- <h2 class="mb-5">$ 15,0000</h2> -->
-                    <span class="font-weight-bold mb-5" style="letter-spacing: 20px; font-size: 10rem;">A999</span>
-                    <h1 class="card-text">HN: 0041223</h1>
+                    <span class="font-weight-bold mb-5" style="letter-spacing: 20px; font-size: 10rem;">{{currentQueueNumber
+                      || '-'}}</span>
+                    <h1 class="card-text">HN: {{currentHn || '-'}}</h1>
                   </div>
                 </div>
               </div>
@@ -139,106 +103,30 @@
                     <h1 class="font-weight-normal mb-3">ช่องบริการ
                       <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                     </h1>
-                    <span class="font-weight-bold mb-5" style="letter-spacing: 20px; font-size: 10rem;">3</span>
-                    <h1 class="card-text">ทันตกรรมพิเศษ 1</h1>
+                    <span class="font-weight-bold mb-5" style="letter-spacing: 20px; font-size: 10rem;">{{currentRoomNumber
+                      || '-'}}</span>
+                    <h1 class="card-text">{{currentRoomName || '-'}}</h1>
                   </div>
                 </div>
               </div>
             </div>
-
-            <div class="row">
-              <div class="col-md-8 stretch-card grid-margin">
-                <div class="card bg-gradient-primary card-img-holder text-white">
-                  <div class="card-body">
-                    <img src="./assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h1 class="font-weight-normal mb-2">คิวบริการ
-                      <i class="mdi mdi-chart-line mdi-24px float-right"></i>
-                    </h1>
-                    <!-- <h2 class="mb-5">$ 15,0000</h2> -->
-                    <span class="font-weight-bold mb-5" style="letter-spacing: 20px; font-size: 10rem;">A088</span>
-                    <h1 class="card-text">HN: 0141883</h1>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 stretch-card grid-margin">
-                <div class="card bg-gradient-success card-img-holder text-white">
-                  <div class="card-body">
-                    <img src="./assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h1 class="font-weight-normal mb-3">ช่องบริการ
-                      <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
-                    </h1>
-                    <span class="font-weight-bold mb-5" style="letter-spacing: 20px; font-size: 10rem;">2</span>
-                    <h1 class="card-text">ทันตกรรมพิเศษ 2</h1>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-8 stretch-card grid-margin">
-                <div class="card bg-gradient-primary card-img-holder text-white">
-                  <div class="card-body">
-                    <img src="./assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h1 class="font-weight-normal mb-2">คิวบริการ
-                      <i class="mdi mdi-chart-line mdi-24px float-right"></i>
-                    </h1>
-                    <!-- <h2 class="mb-5">$ 15,0000</h2> -->
-                    <span class="font-weight-bold mb-5" style="letter-spacing: 20px; font-size: 8rem;">A888</span>
-                    <h1 class="card-text">HN: 0041883</h1>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 stretch-card grid-margin">
-                <div class="card bg-gradient-success card-img-holder text-white">
-                  <div class="card-body">
-                    <img src="./assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h1 class="font-weight-normal mb-3">ช่องบริการ
-                      <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
-                    </h1>
-                    <span class="font-weight-bold mb-5" style="letter-spacing: 20px; font-size: 8rem;">4</span>
-                    <h1 class="card-text">ทันตกรรมพิเศษ 4</h1>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- <table class="table">
-              <thead>
-                <tr>
-
-                  <th>
-                    <span class="font-weight-bold" style="font-size: 5rem;">คิวบริการ</span>
-                  </th>
-                  <th>
-                    <span class="font-weight-bold" style="font-size: 5rem;">ช่องบริการ</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <label style="width: 400px;" class="badge badge-danger">
-                      <span class="font-weight-bold" style="letter-spacing: 20px; font-size: 8rem;">A999</span>
-                    </label>
-                  </td>
-                  <td>
-                    <label style="width: 300px;" class="badge badge-danger">
-                      <span style="font-size: 8rem;" class="font-weight-bold">99</span>
-                    </label>
-                  </td>
-                </tr>
-
-              </tbody>
-            </table> -->
           </div>
         </div>
 
       </div>
-
+      <!-- content-wrapper ends -->
+      <!-- partial:../../partials/_footer.html -->
+      <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.moph.go.th/"
+              target="_blank">Ministry Of Public Health (MOPH)</a>. All rights reserved.</span>
+          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Made with <i class="mdi mdi-heart text-danger"></i></span>
+        </div>
+      </footer>
+      <!-- partial -->
     </div>
     <!-- main-panel ends -->
   </div>
-
   <!-- page-body-wrapper ends -->
 </div>
 

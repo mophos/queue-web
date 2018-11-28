@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CountdownModule } from 'ngx-countdown';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { LayoutComponent } from './layout/layout.component';
@@ -15,13 +16,22 @@ import { QueueCenterComponent } from './queue-center/queue-center.component';
 import { VisitComponent } from './visit/visit.component';
 
 @NgModule({
-  declarations: [LayoutComponent, DashboardComponent, DisplayQueueComponent, QueueCallerComponent, ServicePointComponent, UserComponent, QueueCenterComponent, VisitComponent],
+  declarations: [
+    LayoutComponent,
+    DashboardComponent,
+    DisplayQueueComponent,
+    QueueCallerComponent,
+    ServicePointComponent,
+    UserComponent,
+    QueueCenterComponent,
+    VisitComponent],
   imports: [
     CommonModule,
     NgbModule,
     FormsModule,
+    CountdownModule,
     AdminRoutingModule,
-    SharedModule
+    SharedModule,
   ]
 })
 export class AdminModule { }
