@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import * as Random from 'random-js';
 
 import { CountdownComponent } from 'ngx-countdown';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-display-queue',
@@ -38,24 +39,43 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     private queueService: QueueService,
     private alertService: AlertService,
     private zone: NgZone,
-    @Inject('NOTIFY_URL') private notifyUrl: string
+    @Inject('NOTIFY_URL') private notifyUrl: string,
+    @Inject('PREFIX_TOPIC') private prefixTopic: string,
+    private router: Router
   ) { }
 
   public unsafePublish(topic: string, message: string): void {
-    this.client.end(true);
+    try {
+      this.client.end(true);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   public ngOnDestroy() {
-    this.client.end(true);
+    try {
+      this.client.end(true);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  logout() {
+    sessionStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 
   connectWebSocket() {
     const rnd = new Random();
-    const strRnd = rnd.uuid4();
-    const clientId = `qu4-sp-${this.currentTopic}-${strRnd}`;
+    const username = sessionStorage.getItem('username');
+    const strRnd = rnd.integer(1111111111, 9999999999);
+    const clientId = `${username}-${strRnd}`;
+
     this.client = mqttClient.connect(this.notifyUrl, {
       clientId: clientId
     });
+
+    const topic = `${this.prefixTopic}/sp/${this.currentTopic}`;
 
     const that = this;
 
@@ -64,17 +84,12 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     });
 
     this.client.on('connect', () => {
-      console.log('Connected!');
       that.zone.run(() => {
         that.isOffline = false;
       });
 
-      const topic = `q4u/sp/${this.currentTopic}`;
-      console.log('TOPIC: ', topic);
-
       that.client.subscribe(topic, (error) => {
         if (error) {
-          console.log('Subscibe error!!');
           that.zone.run(() => {
             that.isOffline = true;
             try {

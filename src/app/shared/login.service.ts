@@ -13,4 +13,9 @@ export class LoginService {
     return this.httpClient.post(_url, { username: username, password: password }).toPromise();
   }
 
+  async getInfo() {
+    const _url = `${this.apiUrl}/info`;
+    return this.httpClient.get(_url).toPromise();
+  }
+
 }

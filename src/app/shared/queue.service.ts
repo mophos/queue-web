@@ -31,6 +31,16 @@ export class QueueService {
     return this.httpClient.get(_url).toPromise();
   }
 
+  async getPending(servicePointId: any) {
+    const _url = `${this.apiUrl}/queue/pending/${servicePointId}`;
+    return this.httpClient.get(_url).toPromise();
+  }
+
+  async markPending(queueId: any) {
+    const _url = `${this.apiUrl}/queue/pending`;
+    return this.httpClient.post(_url, { queueId: queueId }).toPromise();
+  }
+
   async callQueue(servicePointId: any, queueNumber: any, roomId: any, queueId: any) {
     const _url = `${this.apiUrl}/queue/caller/${queueId}`;
     return this.httpClient.post(_url, {

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod --base-href=./",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -30,7 +30,7 @@
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
     "mqtt": "^2.18.8",
-    "ng2-mqtt": "^0.1.2",
+    "ngx-clipboard": "^11.1.9",
     "ngx-countdown": "^3.1.0",
     "random-js": "^1.0.8",
     "rxjs": "~6.3.3",

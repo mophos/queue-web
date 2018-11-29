@@ -50,6 +50,7 @@
                 <th>ชื่อ - สกุล</th>
                 <th>ความสำคัญ</th>
                 <th>คิวปัจจุบัน</th>
+                <th>#</th>
               </tr>
             </thead>
             <tbody>
@@ -76,6 +77,9 @@
                 </td>
                 <td>
                   <span class="h3 font-weight-bold text-danger" style="letter-spacing: 5px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-inverse-primary" (click)="markPendin(item)">พักคิว</button>
                 </td>
               </tr>
 
@@ -153,6 +157,74 @@
               [boundaryLinks]="true" [pageSize]="pageSize" (pageChange)="onPageChange($event)" [(page)]="currentPage"
               aria-label="pagination"></ngb-pagination>
           </div>
+
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      <span class="h3">
+        คิวที่ถูกพัก
+        <label class="badge badge-danger">
+          <span class="h3 font-weight-bold">{{pendingItems.length || 0 | number}}</span>
+        </label>
+      </span>
+    </ng-template>
+    <ng-template ngbTabContent>
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">รายการคิวที่ถูกพัก</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>HN</th>
+                <th>เวลา</th>
+                <th>ชื่อ - สกุล</th>
+                <th>ความสำคัญ</th>
+                <th>คิวตรวจ</th>
+                <th>ช่องบริการเดิม</th>
+                <th>#</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="pendingItems.length === 0">
+                <td colspan="7">ไม่พบรายการ</td>
+              </tr>
+              <tr *ngFor="let item of pendingItems">
+                <td>
+                  <span>{{item.hn}}</span>
+                </td>
+                <td>
+                  <span>{{item.time_serv}}</span>
+                </td>
+                <td>
+                  <span>{{item.title}} {{item.first_name}} {{item.last_name}}</span>
+                </td>
+                <td>
+                  <span>{{item.priority_name}}</span>
+                </td>
+                <td>
+                  <label class="badge badge-danger" style="width: 100px;">
+                    <span class="h3 font-weight-bold" style="letter-spacing: 5px;">{{item.queue_number}}</span>
+                  </label>
+                </td>
+                <td>
+                  <span class="h3">{{item.room_number}}</span>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-gradient-success" (click)="setQueueForCall(item)" [ngbPopover]="popContent"
+                    popoverTitle="เลือกช่องรับบริการ">
+                    <span class="h4">
+                      เรียกคิว
+                      <i class="mdi mdi-send"></i>
+                    </span>
+                  </button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
 
         </div>
       </div>

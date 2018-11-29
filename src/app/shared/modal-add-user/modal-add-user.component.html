@@ -25,11 +25,13 @@
           <input type="text" name="fullname" id="fullname" class="form-control" name="fullname" [(ngModel)]="fullname">
         </div>
       </div>
+
       <div class="form-row">
         <div class="form-group col-md-12">
-          <label for="password" class="required">จุดให้บริการ</label>
-          <select class="form-control" name="servicePointId" [(ngModel)]="servicePointId">
-            <option *ngFor="let item of servicePointItems" [value]="item.service_point_id">{{item.service_point_name}}</option>
+          <label for="password" class="required">สถานะ</label>
+          <select class="form-control" name="isActive" [(ngModel)]="isActive">
+            <option value="Y">เปิดใช้งาน</option>
+            <option value="N">ยกเลิกใช้งาน</option>
           </select>
         </div>
       </div>

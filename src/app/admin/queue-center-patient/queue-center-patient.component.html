@@ -28,28 +28,13 @@
   <div class="container-fluid page-body-wrapper">
     <!-- partial:../../partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
-      <div class="mr-2 ml-2">
-        <table class="table">
-          <thead>
-            <tr>
-              <th><span class="h1">คิว</span></th>
-              <th><span class="h1">ช่อง</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="!workingItems.length">
-              <td colspan="2">กรุณาเลือกจุดบริการ</td>
-            </tr>
-            <tr *ngFor="let item of workingItems">
-              <td style="text-align: center;">
-                <label style="font-size: 3.5rem; letter-spacing: 5px;" class="badge badge-danger font-weight-bold">{{item.queue_number}}</label>
-              </td>
-              <td style="text-align: center;">
-                <label style="font-size: 3.5rem;" class="badge badge-success font-weight-bold">{{item.room_number}}</label>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div style="text-align: center; margin-top: 50px;">
+        <span class="h1 font-weight-bold text-primary">วันที่ {{ currentDate }} </span>
+        <p></p>
+        <span class="h1 text-success font-weight-bold" style="letter-spacing: 5px;">{{ currentTime | shortTime }}
+        </span>
+        <p></p>
+        <span class="h2">last updated: {{lastupdateTime | shortTime}}</span>
       </div>
     </nav>
     <!-- partial -->
@@ -77,11 +62,7 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <span class="h1 text-primary font-weight-bold">{{servicePointName || 'กรุณาเลือกจุดบริการ'}}</span>
-                &nbsp; | &nbsp;
-                <a href="javascript://" (click)="selectServicePoint()">
-                  <span style="font-size: 1.4rem;">เปลี่ยนจุดบริการ</span>
-                </a>
+
               </li>
             </ol>
           </nav>
@@ -89,38 +70,54 @@
 
         <div class="card">
           <div class="card-body">
-            <h1 class="card-title">คิวที่เรียกปัจจุบัน</h1>
-            <div class="row">
-              <div class="col-md-8 stretch-card grid-margin">
-                <div class="card bg-gradient-danger card-img-holder text-white">
-                  <div class="card-body">
-                    <img src="./assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h1 class="font-weight-normal mb-2">คิวบริการ
-                      <i class="mdi mdi-chart-line mdi-24px float-right"></i>
-                    </h1>
-                    <!-- <h2 class="mb-5">$ 15,0000</h2> -->
-                    <span class="font-weight-bold mb-5" style="letter-spacing: 20px; font-size: 10rem;">{{currentQueueNumber
-                      || '-'}}</span>
-                    <h1 class="card-text">HN: {{currentHn || '-'}}</h1>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 stretch-card grid-margin">
-                <div class="card bg-gradient-success card-img-holder text-white">
-                  <div class="card-body">
-                    <img src="./assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h1 class="font-weight-normal mb-3">ช่องบริการ
-                      <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
-                    </h1>
-                    <span class="font-weight-bold mb-5" style="letter-spacing: 20px; font-size: 10rem;">{{currentRoomNumber
-                      || '-'}}</span>
-                    <h1 class="card-text">{{currentRoomName || '-'}}</h1>
-                  </div>
-                </div>
-              </div>
+            <div class="card-title">
+              <span style="font-size: 2rem;">แสดงรายการคิวของทุกช่องบริการ</span>
+            </div>
+            <div class="table-responsive">
+
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>
+                      <span style="font-size: 2rem;">จุดให้บริการ</span>
+                    </th>
+                    <th>
+                      <span style="font-size: 2rem;">ช่องบริการ</span>
+                    </th>
+                    <th>
+                      <span style="font-size: 2rem;">คิวปัจจุบัน</span>
+                    </th>
+                    <th>
+                      <span style="font-size: 2rem;">รอเรียก</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="!items.length">
+                    <td colspan="4">ไม่พบคิวให้บริการ</td>
+                  </tr>
+                  <tr *ngFor="let item of items">
+                    <td>
+                      <span style="font-size: 3rem;">{{item.service_point_name}}</span>
+                    </td>
+                    <td>
+                      <span class="badge badge-success font-weight-bold" style="letter-spacing: 5px; font-size: 3rem;">{{
+                        item.room_number }}</span>
+                    </td>
+                    <td>
+                      <span class="font-weight-bold badge badge-danger" style="letter-spacing: 5px; font-size: 3rem;">{{item.queue_number}}</span>
+                    </td>
+                    <td>
+                      <span class="font-weight-bold text-danger" style="letter-spacing: 5px; font-size: 3rem;">{{item.total
+                        | number}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
+
 
       </div>
       <!-- content-wrapper ends -->
@@ -138,6 +135,3 @@
   </div>
   <!-- page-body-wrapper ends -->
 </div>
-
-
-<app-modal-select-servicepoints (onSelected)="onSelectedPoint($event)" #mdlServicePoint></app-modal-select-servicepoints>

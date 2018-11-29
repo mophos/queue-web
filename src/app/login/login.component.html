@@ -4,13 +4,19 @@
       <div class="row w-100">
         <div class="col-lg-4 mx-auto">
           <div class="auth-form-light text-left p-5">
+
             <div class="brand-logo" style="text-align: center;">
-              <img src="./assets/images/h4u.png" style="width: 80px;">
+              <img src="./assets/images/iconQ4U100.png" style="width: 80px;">
             </div>
-            <div style="text-align: center;">
+            <div style="text-align: center;" *ngIf="hosname">
               <h2>ระบบบริหารจัดการคิว</h2>
-              <h6 class="font-weight-light">กรุณาลงชื่อเข้าใช้งาน.</h6>
+              <h3 class="font-weight-light">{{hosname}}</h3>
             </div>
+
+            <div class="alert alert-warning" role="alert" *ngIf="!hosname">
+              กรุณากำหนดค่าการเชื่อมต่อฐานข้อมูล
+            </div>
+
             <form class="pt-3" action="#">
               <div class="form-group">
                 <input type="text" class="form-control form-control-lg" name="username" [(ngModel)]="username" id="username"
@@ -21,12 +27,13 @@
                   placeholder="Password">
               </div>
               <div class="mt-3">
-                <button type="submit" [disabled]="!username || !password" (click)="doLogin()" class="btn btn-block btn-gradient-success btn-lg font-weight-medium auth-form-btn">
+                <button type="submit" [disabled]="!username || !password || !hosname" (click)="doLogin()" class="btn btn-block btn-gradient-success btn-lg font-weight-medium auth-form-btn">
                   เข้าใช้งานระบบ
                 </button>
               </div>
 
             </form>
+
           </div>
         </div>
       </div>

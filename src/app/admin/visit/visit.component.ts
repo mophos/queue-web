@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, Inject } from '@angular/core';
 import { PriorityService } from 'src/app/shared/priority.service';
 import { AlertService } from 'src/app/shared/alert.service';
 import { QueueService } from 'src/app/shared/queue.service';
+import * as mqttClient from '../../../vendor/mqtt';
+import { MqttClient } from 'mqtt';
+import * as Random from 'random-js';
 
 import * as moment from 'moment';
 import { ServicePointService } from 'src/app/shared/service-point.service';
+import { CountdownComponent } from 'ngx-countdown';
 
 @Component({
   selector: 'app-visit',
@@ -24,22 +28,108 @@ export class VisitComponent implements OnInit {
   servicePointCode: any = '';
   servicePoints: any = [];
 
+  isOffline = false;
+
+  client: MqttClient;
+
+  @ViewChild(CountdownComponent) counter: CountdownComponent;
+
+
   constructor(
     private priorityService: PriorityService,
     private queueService: QueueService,
     private alertService: AlertService,
-    private servicePointService: ServicePointService
+    private servicePointService: ServicePointService,
+    private zone: NgZone,
+    @Inject('NOTIFY_URL') private notifyUrl: string,
+    @Inject('PREFIX_TOPIC') private prefixTopic: string
   ) { }
 
   ngOnInit() {
     this.getPriorities();
     this.getVisit();
     this.getServicePoints();
+
+    this.connectWebSocket();
   }
 
   refresh() {
     this.getVisit();
   }
+
+  connectWebSocket() {
+    const rnd = new Random();
+    const username = sessionStorage.getItem('username');
+    const strRnd = rnd.integer(1111111111, 9999999999);
+    const clientId = `${username}-${strRnd}`;
+
+    this.client = mqttClient.connect(this.notifyUrl, {
+      clientId: clientId
+    });
+
+    const that = this;
+    const topic = `${this.prefixTopic}/visit`;
+
+    this.client.on('connect', () => {
+      console.log('Connected!');
+      that.zone.run(() => {
+        that.isOffline = false;
+      });
+
+      that.client.subscribe(topic, (error) => {
+        if (error) {
+          console.log('Subscibe error!!');
+          that.zone.run(() => {
+            that.isOffline = true;
+            try {
+              that.counter.restart();
+            } catch (error) {
+              console.log(error);
+            }
+          });
+        }
+      });
+
+    });
+
+    this.client.on('message', (topic, payload) => {
+      console.log(topic);
+      this.getVisit();
+    });
+
+    this.client.on('close', () => {
+      console.log('Close');
+    });
+
+    this.client.on('error', (error) => {
+      console.log('Error');
+      that.zone.run(() => {
+        that.isOffline = true;
+        that.counter.restart();
+      });
+    });
+
+    this.client.on('offline', () => {
+      console.log('Offline');
+      that.zone.run(() => {
+        that.isOffline = true;
+        try {
+          that.counter.restart();
+        } catch (error) {
+          console.log(error);
+        }
+      });
+    })
+  }
+
+  publishTopic() {
+    const topic = `${this.prefixTopic}/visit`;
+    this.client.publish(topic, 'update queue!');
+
+    const topicCenter = `${this.prefixTopic}/queue-center`;
+    this.client.publish(topicCenter, 'update queue!');
+  }
+
 
   async getPriorities() {
     try {
@@ -112,7 +202,7 @@ export class VisitComponent implements OnInit {
       person.priorityId = prorityId;
       person.dateServ = moment(visit.date_serv).format('YYYY-MM-DD');
       person.timeServ = visit.time_serv;
-      person.hisQueue = '';
+      person.hisQueue = visit.his_queue || '';
       person.firstName = visit.first_name;
       person.lastName = visit.last_name;
       person.title = visit.title;
@@ -125,11 +215,13 @@ export class VisitComponent implements OnInit {
         if (rs.statusCode === 200) {
           this.alertService.success();
           this.getVisit();
+          this.publishTopic();
         } else {
           this.alertService.error(rs.message);
         }
       }
     } catch (error) {
+      console.log(error);
       this.alertService.error('เกิดข้อผิดพลาด');
     }
   }

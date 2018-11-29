@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ViewChild, NgZone, Inject } from '@angula
 import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as Random from 'random-js';
-
 import { Howl, Howler } from 'howler';
 
 import { ModalSelectServicepointsComponent } from 'src/app/shared/modal-select-servicepoints/modal-select-servicepoints.component';
@@ -26,6 +25,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   servicePointName: any;
   waitingItems: any = [];
   workingItems: any = [];
+  pendingItems: any = [];
   rooms: any = [];
   queueNumber: any;
   roomNumber: any;
@@ -50,34 +50,43 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     private roomService: ServiceRoomService,
     private alertService: AlertService,
     private zone: NgZone,
-    @Inject('NOTIFY_URL') private notifyUrl: string
+    @Inject('NOTIFY_URL') private notifyUrl: string,
+    @Inject('PREFIX_TOPIC') private prefixTopic: string,
   ) {
 
   }
 
   public unsafePublish(topic: string, message: string): void {
-    this.client.end(true);
+    try {
+      this.client.end(true);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   public ngOnDestroy() {
-    this.client.end(true);
+    try {
+      this.client.end(true);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   ngOnInit() { }
 
   connectWebSocket() {
     const rnd = new Random();
-    const strRnd = rnd.uuid4();
-    const clientId = `qu4-${strRnd}`;
+    const username = sessionStorage.getItem('username');
+    const strRnd = rnd.integer(1111111111, 9999999999);
+    const clientId = `${username}-${strRnd}`;
+
     this.client = mqttClient.connect(this.notifyUrl, {
       clientId: clientId
     });
 
     const that = this;
-
-    this.client.on('message', (topic, payload) => {
-      console.log(topic);
-    });
+    const topic = `${this.prefixTopic}/sp/${this.currentTopic}`;
+    const visitTopic = `${this.prefixTopic}/visit`;
 
     this.client.on('connect', () => {
       console.log('Connected!');
@@ -85,10 +94,22 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
         that.isOffline = false;
       });
 
-      const topic = `q4u/sp/${this.currentTopic}`;
       that.client.subscribe(topic, (error) => {
         if (error) {
           console.log('Subscibe error!!');
+          that.zone.run(() => {
+            that.isOffline = true;
+            try {
+              that.counter.restart();
+            } catch (error) {
+              console.log(error);
+            }
+          });
+        }
+      });
+
+      that.client.subscribe(visitTopic, (error) => {
+        if (error) {
           that.zone.run(() => {
             that.isOffline = true;
             try {
@@ -103,6 +124,14 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
 
     this.client.on('close', () => {
       console.log('Close');
+    });
+
+    this.client.on('message', (topic, payload) => {
+      console.log(topic);
+      const _topic = `${this.prefixTopic}/sp/${this.currentTopic}`;
+      if (_topic === topic) {
+        this.getAllList();
+      }
     });
 
     this.client.on('error', (error) => {
@@ -127,8 +156,11 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   }
 
   publishTopic() {
-    const topic = `q4u/sp/${this.currentTopic}`;
+    const topic = `${this.prefixTopic}/sp/${this.currentTopic}`;
     this.client.publish(topic, 'update queue!');
+
+    const topicCenter = `${this.prefixTopic}/queue-center`;
+    this.client.publish(topicCenter, 'update queue!');
   }
 
   // connectWebSocket() {
@@ -203,7 +235,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
 
     var howlerBank = [];
 
-    console.log(audioFiles);
+    // console.log(audioFiles);
 
     var loop = false;
 
@@ -218,7 +250,6 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
       }
     };
 
-    // build up howlerBank:     
     audioFiles.forEach(function (current, i) {
       howlerBank.push(new Howl({
         src: [audioFiles[i]],
@@ -228,13 +259,11 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
       }));
     });
 
-    // initiate the whole :
     howlerBank[0].play();
 
   }
 
   onPageChange(event: any) {
-    console.log(event);
     const _currentPage = +event;
     var _offset = 0;
     if (_currentPage > 1) {
@@ -244,7 +273,6 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.offset = _offset;
     this.getWaiting();
   }
-
 
   onFinished() {
     console.log('Time finished!');
@@ -314,6 +342,21 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     }
   }
 
+  async getPending() {
+    try {
+      const rs: any = await this.queueService.getPending(this.servicePointId);
+      if (rs.statusCode === 200) {
+        this.pendingItems = rs.results;
+      } else {
+        console.log(rs.message);
+        this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
+    }
+  }
+
   async getRooms() {
     try {
       const rs: any = await this.roomService.list(this.servicePointId);
@@ -340,10 +383,15 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.currentTopic = event.topic;
 
     this.connectWebSocket();
+    this.getAllList();
 
+  }
+
+  getAllList() {
     this.getWaiting();
     this.getWorking();
     this.getRooms();
+    this.getPending();
   }
 
   setQueueForCall(item: any) {
@@ -367,14 +415,32 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
           // tigger queue list
           this.publishTopic();
           // get queue list
-          this.getWaiting();
-          this.getWorking();
+          this.getAllList();
         } else {
           this.alertService.error(rs.message);
         }
       } catch (error) {
         console.error(error);
         this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    }
+  }
+
+  async markPendin(item: any) {
+    console.log(item);
+    const _confirm = await this.alertService.confirm(`ต้องการพักคิวนี้ [${item.queue_number}] ใช่หรือไม่?`);
+    if (_confirm) {
+      try {
+        const rs: any = await this.queueService.markPending(item.queue_id);
+        if (rs.statusCode === 200) {
+          this.alertService.success();
+          this.getAllList();
+        } else {
+          this.alertService.error(rs.message);
+        }
+      } catch (error) {
+        console.log(error);
+        this.alertService.error();
       }
     }
   }

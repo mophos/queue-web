@@ -8,7 +8,7 @@ import { AuthGuardService } from '../shared/auth-guard.service';
 import { VisitComponent } from './visit/visit.component';
 import { QueueCallerComponent } from './queue-caller/queue-caller.component';
 import { QueueCenterComponent } from './queue-center/queue-center.component';
-import { DisplayQueueComponent } from './display-queue/display-queue.component';
+import { GenerateTokenComponent } from './settings/generate-token/generate-token.component';
 
 const routes: Routes = [
   {
@@ -21,6 +21,7 @@ const routes: Routes = [
       { path: 'visit', component: VisitComponent },
       { path: 'queue-caller', component: QueueCallerComponent },
       { path: 'queue-center', component: QueueCenterComponent },
+      { path: 'generate-token', component: GenerateTokenComponent },
       { path: '', redirectTo: 'visit', pathMatch: 'full' },
 
     ]

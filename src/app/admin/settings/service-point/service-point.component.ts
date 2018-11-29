@@ -80,4 +80,8 @@ export class ServicePointComponent implements OnInit {
     }
   }
 
+
+  onSaveRoom(event: any) {
+
+  }
 }
