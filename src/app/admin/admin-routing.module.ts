@@ -5,16 +5,25 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ServicePointComponent } from './settings/service-point/service-point.component';
 import { UserComponent } from './settings/user/user.component';
 import { AuthGuardService } from '../shared/auth-guard.service';
+import { VisitComponent } from './visit/visit.component';
+import { QueueCallerComponent } from './queue-caller/queue-caller.component';
+import { QueueCenterComponent } from './queue-center/queue-center.component';
+import { GenerateTokenComponent } from './settings/generate-token/generate-token.component';
 
 const routes: Routes = [
   {
     path: 'admin', component: LayoutComponent,
     canActivate: [AuthGuardService],
     children: [
-      { path: 'dashboard', component: DashboardComponent },
+      // { path: 'dashboard', component: DashboardComponent },
       { path: 'service-point', component: ServicePointComponent },
       { path: 'users', component: UserComponent },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'visit', component: VisitComponent },
+      { path: 'queue-caller', component: QueueCallerComponent },
+      { path: 'queue-center', component: QueueCenterComponent },
+      { path: 'generate-token', component: GenerateTokenComponent },
+      { path: '', redirectTo: 'visit', pathMatch: 'full' },
+
     ]
   },
 

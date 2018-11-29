@@ -1,0 +1,52 @@
+<div class="page-header">
+  <h1 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-key"></i>
+    </span>
+    <span style="font-size: 1.4rem;">Generate token keys</span>
+  </h1>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript://" routerLink="/admin/dashboard">Dashboard</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Generate token keys</li>
+    </ol>
+  </nav>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="h3 card-title">รายการ Token ที่ถูกสร้างขึ้น</div>
+    <div class="row">
+      <div class="col-md-12">
+        <button class="float-right btn btn-sm btn-primary" (click)="generateToken()">+ New token</button>
+      </div>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>วันที่สร้าง</th>
+          <th>วันหมดอายุ</th>
+          <th>#</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let token of tokens">
+          <td>{{token.token.split('.')[2]}}</td>
+          <td>{{token.created_date | thaiDate}} {{token.created_date | shortTime}}</td>
+          <td>{{token.expired_date | thaiDate}} {{token.expired_date | shortTime}}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-inverse-success" (click)="copyToken(token.token)">
+                <i class="mdi mdi-content-copy"></i>
+              </button>
+              <button class="btn btn-sm btn-inverse-danger" (click)="removeToken(token.token)">
+                <i class="mdi mdi-delete"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

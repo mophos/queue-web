@@ -60,7 +60,7 @@ export class AlertService {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'ใช่, ดำเนินการ!',
-      cancelButtonText: 'ยกเลิก'
+      cancelButtonText: 'ยกเลิก',
     };
 
     let result = await swal(option);

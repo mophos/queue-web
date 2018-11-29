@@ -1,0 +1,137 @@
+<div class="container-scroller">
+  <!-- partial:../../partials/_navbar.html -->
+  <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+      <a class="navbar-brand brand-logo" href="javascript://">
+        <img style="width: 40px; height: 40px;" src="./assets/images/iconQ4U100.png" alt=""></a>
+      <span class="font-weight-bold" style="font-size: 1.5rem;">
+        ระบบคิวออนไลน์
+      </span>
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-stretch">
+
+      <ul class="navbar-nav navbar-nav-right">
+        <li class="nav-item d-none d-lg-block full-screen-link">
+          <a class="nav-link" href="javascript://" routerLink="/admin">
+            <i class="mdi mdi-home text-success"></i>
+          </a>
+        </li>
+        <li class="nav-item d-none d-lg-block full-screen-link">
+          <a class="nav-link" (click)="logout()" href="javascript://">
+            <i class="mdi mdi-power text-danger"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:../../partials/_sidebar.html -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <div style="text-align: center; margin-top: 50px;">
+        <span class="h1 font-weight-bold text-primary">วันที่ {{ currentDate }} </span>
+        <p></p>
+        <span class="h1 text-success font-weight-bold" style="letter-spacing: 5px;">{{ currentTime | shortTime }}
+        </span>
+        <p></p>
+        <span class="h2">last updated: {{lastupdateTime | shortTime}}</span>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+
+        <div class="card card-inverse-danger" *ngIf="isOffline">
+          <div class="card-body">
+            <p class="mb-4">
+              เกิดข้อผิดพลาดในการเชื่อมต่อกับ Notify Server.
+            </p>
+            <button class="btn btn-danger" (click)="connectWebSocket()">เชื่อมต่อใหม่ (<strong>
+                <countdown [config]="{leftTime: 15, template: '$!s!'}" (finished)="onFinished()" (notify)="onNotify($event)"></countdown>
+              </strong>)</button>
+          </div>
+        </div>
+
+        <div class="page-header">
+          <h1 class="page-title">
+            <span class="page-title-icon bg-gradient-primary text-white mr-2">
+              <i class="mdi mdi-cast"></i>
+            </span>
+            <span style="font-size: 1.4rem;">คิวรับบริการปัจจุบัน</span>
+          </h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+
+              </li>
+            </ol>
+          </nav>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">
+              <span style="font-size: 2rem;">แสดงรายการคิวของทุกช่องบริการ</span>
+            </div>
+            <div class="table-responsive">
+
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>
+                      <span style="font-size: 2rem;">จุดให้บริการ</span>
+                    </th>
+                    <th>
+                      <span style="font-size: 2rem;">ช่องบริการ</span>
+                    </th>
+                    <th>
+                      <span style="font-size: 2rem;">คิวปัจจุบัน</span>
+                    </th>
+                    <th>
+                      <span style="font-size: 2rem;">รอเรียก</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="!items.length">
+                    <td colspan="4">ไม่พบคิวให้บริการ</td>
+                  </tr>
+                  <tr *ngFor="let item of items">
+                    <td>
+                      <span style="font-size: 3rem;">{{item.service_point_name}}</span>
+                    </td>
+                    <td>
+                      <span class="badge badge-success font-weight-bold" style="letter-spacing: 5px; font-size: 3rem;">{{
+                        item.room_number }}</span>
+                    </td>
+                    <td>
+                      <span class="font-weight-bold badge badge-danger" style="letter-spacing: 5px; font-size: 3rem;">{{item.queue_number}}</span>
+                    </td>
+                    <td>
+                      <span class="font-weight-bold text-danger" style="letter-spacing: 5px; font-size: 3rem;">{{item.total
+                        | number}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:../../partials/_footer.html -->
+      <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.moph.go.th/"
+              target="_blank">Ministry Of Public Health (MOPH)</a>. All rights reserved.</span>
+          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Made with <i class="mdi mdi-heart text-danger"></i></span>
+        </div>
+      </footer>
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>

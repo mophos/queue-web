@@ -24,28 +24,26 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Username</th>
+              <th>ชื่อผู้ใช้งาน</th>
               <th>ชื่อ - สกุล</th>
-              <th>แผนก</th>
               <th>สถานะ</th>
               <th style="width: 150px;">#</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>admin</td>
-              <td>สถิตย์ เรียนพิศ</td>
-              <td>ศูนย์คอมพิวเตอร์</td>
-              <td><i class="mdi mdi-check text-success"></i></td>
+            <tr *ngFor="let item of items">
+              <td>{{item.username}}</td>
+              <td>{{item.fullname}}</td>
+              <td>
+                <i class="mdi mdi-check text-success" *ngIf="item.is_active === 'Y'"></i>
+                <i class="mdi mdi-close text-danger" *ngIf="item.is_active === 'N'"></i>
+              </td>
               <td>
                 <div class="btn-group">
-                  <button class="btn btn-sm btn-icon-append btn-gradient-success">
+                  <button class="btn btn-sm btn-icon-append btn-gradient-success" (click)="openEdit(item)">
                     <i class="mdi mdi-pencil"></i> แก้ไข
                   </button>
-                  <button class="btn btn-sm btn-gradient-primary">
-                    <i class="mdi mdi-key"></i> เปลี่ยนรหัส
-                  </button>
-                  <button class="btn btn-sm btn-gradient-danger">
+                  <button class="btn btn-sm btn-gradient-danger" (click)="remove(item)">
                     <i class="mdi mdi-delete-outline"></i> ลบ
                   </button>
                 </div>
@@ -58,4 +56,4 @@
   </div>
 </div>
 
-<app-modal-add-user [userId]="userId" #mdlUser (onSave)="onSave($event)"></app-modal-add-user>
+<app-modal-add-user #mdlUser (onSave)="onSave($event)"></app-modal-add-user>

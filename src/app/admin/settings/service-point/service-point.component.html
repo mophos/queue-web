@@ -24,48 +24,31 @@
         <table class="table">
           <thead>
             <tr>
-              <th>จุดบริการ</th>
+              <th>รหัสใน HIS</th>
+              <th>ชื่อจุดบริการ</th>
+              <th>ชื่อย่อจุดบริการ</th>
               <th style="width: 150px;">#</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                แผนกผู้ป่วยนอก
-              </td>
+            <tr *ngFor="let item of items">
+              <td>{{ item.local_code }}</td>
+              <td>{{ item.service_point_name }}</td>
+              <td>{{ item.service_point_abbr }}</td>
               <td>
                 <div class="btn-group">
-                  <button class="btn btn-sm btn-icon-append btn-gradient-success">
+                  <button class="btn btn-sm btn-icon-append btn-gradient-success" (click)="openEdit(item)">
                     <i class="mdi mdi-pencil"></i> แก้ไข
                   </button>
-                  <button class="btn btn-sm btn-gradient-primary">
+                  <button class="btn btn-sm btn-gradient-primary" (click)="showRooms(item)">
                     <i class="mdi mdi-format-list-bulleted"></i> ช่องบริการ
                   </button>
-                  <button class="btn btn-sm btn-gradient-danger">
+                  <button class="btn btn-sm btn-gradient-danger" (click)="remove(item)">
                     <i class="mdi mdi-delete-outline"></i> ลบ
                   </button>
                 </div>
               </td>
             </tr>
-            <tr>
-              <td>
-                ทันตกรรม
-              </td>
-              <td>
-                <div class="btn-group">
-                  <button class="btn btn-sm btn-icon-append btn-gradient-success">
-                    <i class="mdi mdi-pencil"></i> แก้ไข
-                  </button>
-                  <button class="btn btn-sm btn-gradient-primary">
-                    <i class="mdi mdi-format-list-bulleted"></i> ช่องบริการ
-                  </button>
-                  <button class="btn btn-sm btn-gradient-danger">
-                    <i class="mdi mdi-delete-outline"></i> ลบ
-                  </button>
-                </div>
-              </td>
-            </tr>
-
           </tbody>
         </table>
       </div>
@@ -73,5 +56,5 @@
   </div>
 </div>
 
-<app-modal-add-service-point [servicePointId]="servicePointId" [servicePointName]="servicePointName" #mdlServicePoint
-  (onSave)="onSave($event)"></app-modal-add-service-point>
+<app-modal-add-service-point [info]="info" #mdlServicePoint (onSave)="onSave($event)"></app-modal-add-service-point>
+<app-modal-rooms [servicePointId]="servicePointId" [servicePointName]="servicePointName" #mdlRooms (onSave)="onSaveRoom($event)"></app-modal-rooms>

@@ -10,31 +10,31 @@ import { UserService } from '../user.service';
 })
 export class ModalAddUserComponent implements OnInit {
 
-  @Input('userId')
-  set setId(value: any) {
-    this.userId = value;
-  }
-
   @Output('onSave') onSave: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild('content') public content: any;
 
   modalReference: NgbModalRef;
+  users: any = [];
+  info: any = {};
+
   userId: any;
   username: any;
   password: any;
   fullname: any;
-  servicePointId: any;
-  servicePointsItems: any = [];
+  isActive: any;
+  // servicePointId: any;
+  // servicePointsItems: any = [];
 
   constructor(
     private modalService: NgbModal,
     private alertService: AlertService,
     private userService: UserService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
-  open() {
+  open(info: any = null) {
     this.modalReference = this.modalService.open(this.content, {
       ariaLabelledBy: 'modal-basic-title',
       keyboard: false,
@@ -43,6 +43,13 @@ export class ModalAddUserComponent implements OnInit {
       centered: true
     });
 
+    if (info) {
+      this.userId = info.user_id;
+      this.username = info.username;
+      this.fullname = info.fullname;
+      this.isActive = info.is_active || 'N';
+    }
+
     this.modalReference.result.then((result) => { });
   }
 
@@ -50,36 +57,43 @@ export class ModalAddUserComponent implements OnInit {
     this.modalReference.close();
   }
 
-  async getServicePoints() {
-    this.servicePointsItems = [];
-  }
-
   async save() {
-    if (this.username && this.fullname && this.servicePointId) {
+    if (this.username && this.fullname) {
       try {
         const data: any = {
           username: this.username,
-          servicePoint: this.servicePointId,
-          fullname: this.fullname
+          fullname: this.fullname,
+          isActive: this.isActive || 'N'
         };
 
+        var isError = false;
+
         if (!this.userId) {
-          data.password = this.password;
+          if (!this.password) {
+            isError = true;
+          } else {
+            isError = false;
+            data.password = this.password;
+          }
         }
 
         var rs: any;
 
-        if (this.userId) {
-          rs = await this.userService.update(this.userId, data);
-        } else {
-          rs = await this.userService.save(data);
-        }
+        if (!isError) {
+          if (this.userId) {
+            rs = await this.userService.update(this.userId, data);
+          } else {
+            rs = await this.userService.save(data);
+          }
 
-        if (rs.ok) {
-          this.modalReference.close();
-          this.onSave.emit();
+          if (rs.statusCode === 200) {
+            this.modalReference.close();
+            this.onSave.emit();
+          } else {
+            this.alertService.error(rs.message);
+          }
         } else {
-          this.alertService.error(rs.message);
+          this.alertService.error('กรุณากรอกรหัสผ่าน')
         }
       } catch (error) {
         console.log(error);

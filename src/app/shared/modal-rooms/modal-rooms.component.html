@@ -1,0 +1,70 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-basic-title">จัดการช่องรับบริการ : {{ servicePointName }}</h3>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="input-group mb-3">
+              <select class="form-control" style="width: 20px;" name="roomNumber" [(ngModel)]="roomNumber">
+                <option value="" selected>หมายเลข</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+              <input type="text" class="form-control" name="roomName" [(ngModel)]="roomName" placeholder="ชื่อห้องตรวจ"
+                aria-label="ระบุชื่อห้องตรวจ">
+              <div class="input-group-append">
+                <button class="btn btn-sm btn-gradient-primary" [disabled]="!roomName || !roomNumber" (click)="addRoom()">
+                  <i class="mdi mdi-content-save"></i>
+                </button>
+                <button class="btn btn-sm btn-gradient-danger" title="ยกเลิก" (click)="clear()">
+                  <i class="mdi mdi-refresh"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ช่องบริการ</th>
+              <th style="width: 50px;">#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let room of rooms">
+              <td>{{room.room_number}} - {{room.room_name}}</td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-icon-append btn-gradient-success" (click)="edit(room)">
+                    <i class="mdi mdi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-gradient-danger" (click)="remove(room)">
+                    <i class="mdi mdi-delete-outline"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <!-- <button type="button" class="btn btn-primary" (click)="save()">บันทึก</button> -->
+    <button type="button" class="btn btn-outline-danger" (click)="dismiss()">ปิดหน้าต่าง</button>
+  </div>
+</ng-template>

@@ -13,13 +13,14 @@ export class UserComponent implements OnInit {
   @ViewChild('mdlUser') private mdlUser: ModalAddUserComponent;
 
   items: any = [];
+  info: any = {};
 
   userId: any;
 
   constructor(private alertService: AlertService, private userService: UserService) { }
 
   ngOnInit() {
-    // this.getList();
+    this.getList();
   }
 
   openRegister() {
@@ -28,8 +29,8 @@ export class UserComponent implements OnInit {
   }
 
   openEdit(item: any) {
-    this.userId = item.service_point_id;
-    this.mdlUser.open();
+    console.log(item);
+    this.mdlUser.open(item);
   }
 
   onSave(event: any) {
@@ -42,7 +43,7 @@ export class UserComponent implements OnInit {
     if (confirm) {
       try {
         let rs: any = await this.userService.remove(item.user_id);
-        if (rs.ok) {
+        if (rs.statusCode === 200) {
           this.alertService.success();
           this.getList();
         } else {
@@ -58,7 +59,7 @@ export class UserComponent implements OnInit {
   async getList() {
     try {
       const rs: any = await this.userService.list();
-      if (rs.ok) {
+      if (rs.statusCode === 200) {
         this.items = rs.results;
       } else {
         console.log(rs.message);

@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CountdownModule } from 'ngx-countdown';
+import { ClipboardModule } from 'ngx-clipboard';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { LayoutComponent } from './layout/layout.component';
@@ -12,15 +14,30 @@ import { SharedModule } from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { UserComponent } from './settings/user/user.component';
 import { QueueCenterComponent } from './queue-center/queue-center.component';
+import { VisitComponent } from './visit/visit.component';
+import { QueueCenterPatientComponent } from './queue-center-patient/queue-center-patient.component';
+import { GenerateTokenComponent } from './settings/generate-token/generate-token.component';
 
 @NgModule({
-  declarations: [LayoutComponent, DashboardComponent, DisplayQueueComponent, QueueCallerComponent, ServicePointComponent, UserComponent, QueueCenterComponent],
+  declarations: [
+    LayoutComponent,
+    DashboardComponent,
+    DisplayQueueComponent,
+    QueueCallerComponent,
+    ServicePointComponent,
+    UserComponent,
+    QueueCenterComponent,
+    VisitComponent,
+    QueueCenterPatientComponent,
+    GenerateTokenComponent],
   imports: [
     CommonModule,
     NgbModule,
     FormsModule,
+    ClipboardModule,
+    CountdownModule,
     AdminRoutingModule,
-    SharedModule
+    SharedModule,
   ]
 })
 export class AdminModule { }

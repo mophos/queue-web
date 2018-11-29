@@ -6,16 +6,34 @@
     </button>
   </div>
   <div class="modal-body">
-    <form>
-      <div class="form-row">
-        <div class="form-group col-md-12">
-          <label for="servicePointName" class="required">ชื่อจุดให้บริการ</label>
-          <input type="text" name="servicePointName" id="servicePointName" class="form-control" name="servicePointName"
-            [(ngModel)]="servicePointName">
-        </div>
-      </div>
+    <div class="card">
+      <div class="card-body">
+        <form>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="servicePointName" class="required">ชื่อจุดให้บริการ</label>
+              <input type="text" name="servicePointName" id="servicePointName" class="form-control" name="servicePointName"
+                [(ngModel)]="servicePointName">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="localCode" class="required">รหัสใน HIS</label>
+              <input type="text" maxlength="6" name="localCode" id="localCode" class="form-control" name="localCode"
+                [(ngModel)]="localCode">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="servicePointAbbr" class="required">ชื่อย่อจุดบริการ</label>
+              <input type="text" name="servicePointAbbr" id="servicePointAbbr" class="form-control" name="servicePointAbbr"
+                [(ngModel)]="servicePointAbbr">
+            </div>
+          </div>
 
-    </form>
+        </form>
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="save()">บันทึก</button>

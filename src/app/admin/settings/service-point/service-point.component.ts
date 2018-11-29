@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalAddServicePointComponent } from 'src/app/shared/modal-add-service-point/modal-add-service-point.component';
 import { AlertService } from 'src/app/shared/alert.service';
 import { ServicePointService } from 'src/app/shared/service-point.service';
+import { ModalRoomsComponent } from 'src/app/shared/modal-rooms/modal-rooms.component';
 
 @Component({
   selector: 'app-service-point',
@@ -11,27 +12,33 @@ import { ServicePointService } from 'src/app/shared/service-point.service';
 export class ServicePointComponent implements OnInit {
 
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalAddServicePointComponent;
+  @ViewChild('mdlRooms') private mdlRooms: ModalRoomsComponent;
 
   items: any = [];
-
+  info: any = {};
   servicePointId: any;
   servicePointName: any;
 
   constructor(private alertService: AlertService, private servicePointService: ServicePointService) { }
 
   ngOnInit() {
-    // this.getList();
+    this.getList();
   }
 
   openRegister() {
-    this.servicePointId = null;
-    this.servicePointName = null;
+    this.info = {};
     this.mdlServicePoint.open();
   }
 
-  openEdit(item: any) {
+  showRooms(item: any) {
+    console.log(item);
     this.servicePointId = item.service_point_id;
     this.servicePointName = item.service_point_name;
+    this.mdlRooms.open(this.servicePointId);
+  }
+
+  openEdit(item: any) {
+    this.info = item;
     this.mdlServicePoint.open();
   }
 
@@ -45,7 +52,7 @@ export class ServicePointComponent implements OnInit {
     if (confirm) {
       try {
         let rs: any = await this.servicePointService.remove(item.service_point_id);
-        if (rs.ok) {
+        if (rs.statusCode === 200) {
           this.alertService.success();
           this.getList();
         } else {
@@ -61,7 +68,7 @@ export class ServicePointComponent implements OnInit {
   async getList() {
     try {
       const rs: any = await this.servicePointService.list();
-      if (rs.ok) {
+      if (rs.statusCode === 200) {
         this.items = rs.results;
       } else {
         console.log(rs.message);
@@ -73,4 +80,8 @@ export class ServicePointComponent implements OnInit {
     }
   }
 
+
+  onSaveRoom(event: any) {
+
+  }
 }
