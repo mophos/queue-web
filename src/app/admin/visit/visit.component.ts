@@ -42,7 +42,8 @@ export class VisitComponent implements OnInit {
     private servicePointService: ServicePointService,
     private zone: NgZone,
     @Inject('NOTIFY_URL') private notifyUrl: string,
-    @Inject('PREFIX_TOPIC') private prefixTopic: string
+    @Inject('PREFIX_TOPIC') private prefixTopic: string,
+    @Inject('API_URL') private apiUrl: string,
   ) { }
 
   ngOnInit() {
@@ -55,6 +56,10 @@ export class VisitComponent implements OnInit {
 
   refresh() {
     this.getVisit();
+  }
+
+  printQueue(queueId: any) {
+    window.open(`${this.apiUrl}/print/queue?queueId=${queueId}`, '_blank');
   }
 
   connectWebSocket() {
@@ -213,9 +218,16 @@ export class VisitComponent implements OnInit {
       if (isConfirm) {
         const rs: any = await this.queueService.register(person);
         if (rs.statusCode === 200) {
-          this.alertService.success();
+
+          const queueId: any = rs.queueId;
+          // this.alertService.success();
           this.getVisit();
           this.publishTopic();
+          const confirm = await this.alertService.confirm('ต้องการพิมพ์บัตรคิว หรือไม่?');
+          if (confirm) {
+            // print queue
+            this.printQueue(queueId);
+          }
         } else {
           this.alertService.error(rs.message);
         }
