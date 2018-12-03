@@ -9,6 +9,7 @@ import * as Random from 'random-js';
 
 import { CountdownComponent } from 'ngx-countdown';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-display-queue',
@@ -22,6 +23,9 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectServicepointsComponent;
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
+  jwtHelper = new JwtHelperService();
+  servicePointTopic = null;
+
   servicePointId: any;
   servicePointName: any;
   workingItems: any = [];
@@ -34,15 +38,22 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   isOffline = false;
 
   client: MqttClient;
+  notifyUser = null;
+  notifyPassword = null;
 
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,
     private zone: NgZone,
     @Inject('NOTIFY_URL') private notifyUrl: string,
-    @Inject('PREFIX_TOPIC') private prefixTopic: string,
     private router: Router
-  ) { }
+  ) {
+    const token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(token);
+    this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
+    this.notifyUser = decodedToken.NOTIFY_USER;
+    this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
+  }
 
   public unsafePublish(topic: string, message: string): void {
     try {
@@ -72,10 +83,12 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     const clientId = `${username}-${strRnd}`;
 
     this.client = mqttClient.connect(this.notifyUrl, {
-      clientId: clientId
+      clientId: clientId,
+      username: this.notifyUser,
+      password: this.notifyPassword
     });
 
-    const topic = `${this.prefixTopic}/sp/${this.currentTopic}`;
+    const topic = `${this.servicePointTopic}/${this.servicePointId}`;
 
     const that = this;
 
@@ -150,7 +163,6 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     this.getWorking();
     this.getCurrentQueue();
   }
-
 
   async getWorking() {
     try {

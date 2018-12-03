@@ -13,11 +13,12 @@ export class QueueService {
     return this.httpClient.get(_url).toPromise();
   }
 
-  async changeRoom(queueId: any, roomId: any) {
+  async changeRoom(queueId: any, roomId: any, servicePointId: any) {
     const _url = `${this.apiUrl}/queue/change-room`;
     return this.httpClient.post(_url, {
       roomId: roomId,
-      queueId: queueId
+      queueId: queueId,
+      servicePointId: servicePointId
     }).toPromise();
   }
 
@@ -36,9 +37,9 @@ export class QueueService {
     return this.httpClient.get(_url).toPromise();
   }
 
-  async markPending(queueId: any) {
+  async markPending(queueId: any, servicePointId: any) {
     const _url = `${this.apiUrl}/queue/pending`;
-    return this.httpClient.post(_url, { queueId: queueId }).toPromise();
+    return this.httpClient.post(_url, { queueId: queueId, servicePointId: servicePointId }).toPromise();
   }
 
   async callQueue(servicePointId: any, queueNumber: any, roomId: any, queueId: any) {

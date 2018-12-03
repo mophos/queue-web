@@ -7,6 +7,7 @@ import { MqttClient } from 'mqtt';
 import * as Random from 'random-js';
 import { CountdownComponent } from 'ngx-countdown';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 
 @Component({
@@ -26,6 +27,10 @@ export class QueueCenterPatientComponent implements OnInit {
   isOffline = false;
 
   client: MqttClient;
+  jwtHelper = new JwtHelperService();
+  queueCenterTopic = null;
+  notifyUser = null;
+  notifyPassword = null;
 
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
@@ -34,9 +39,14 @@ export class QueueCenterPatientComponent implements OnInit {
     private alertService: AlertService,
     private zone: NgZone,
     @Inject('NOTIFY_URL') private notifyUrl: string,
-    @Inject('PREFIX_TOPIC') private prefixTopic: string,
     private router: Router
   ) {
+    const token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(token);
+    this.queueCenterTopic = decodedToken.QUEUE_CENTER_TOPIC;
+    this.notifyUser = decodedToken.NOTIFY_USER;
+    this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
+
     setInterval(() => {
       this.currentTime = new Date();
     }, 1);
@@ -69,7 +79,9 @@ export class QueueCenterPatientComponent implements OnInit {
     const strRnd = rnd.integer(1111111111, 9999999999);
     const clientId = `qu4-${strRnd}`;
     this.client = mqttClient.connect(this.notifyUrl, {
-      clientId: clientId
+      clientId: clientId,
+      username: this.notifyUser,
+      password: this.notifyPassword
     });
 
     const that = this;
@@ -84,8 +96,7 @@ export class QueueCenterPatientComponent implements OnInit {
         that.isOffline = false;
       });
 
-      const topic = `${this.prefixTopic}/queue-center`;
-      that.client.subscribe(topic, (error) => {
+      that.client.subscribe(this.queueCenterTopic, (error) => {
         if (error) {
           console.log('Subscibe error!!');
           that.zone.run(() => {
@@ -129,11 +140,6 @@ export class QueueCenterPatientComponent implements OnInit {
       });
     })
   }
-
-  // publishTopic() {
-  //   const topic = `q4u/queue-center`;
-  //   this.client.publish(topic, 'update queue!');
-  // }
 
   ngOnInit() {
     this.getList();
