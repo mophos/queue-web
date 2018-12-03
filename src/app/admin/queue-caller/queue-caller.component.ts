@@ -10,6 +10,7 @@ import { AlertService } from 'src/app/shared/alert.service';
 import { ServiceRoomService } from 'src/app/shared/service-room.service';
 
 import { CountdownComponent } from 'ngx-countdown';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-queue-caller',
@@ -37,11 +38,16 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   currentPage = 1;
   offset = 0;
 
-  currentTopic: any;
+  // currentTopic: any;
 
   isOffline = false;
 
   client: MqttClient;
+  jwtHelper = new JwtHelperService();
+  servicePointTopic = null;
+  globalTopic = null;
+  notifyUser = null;
+  notifyPassword = null;
 
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
@@ -51,9 +57,13 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private zone: NgZone,
     @Inject('NOTIFY_URL') private notifyUrl: string,
-    @Inject('PREFIX_TOPIC') private prefixTopic: string,
   ) {
-
+    const token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(token);
+    this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
+    this.globalTopic = decodedToken.QUEUE_CENTER_TOPIC;
+    this.notifyUser = decodedToken.NOTIFY_USER;
+    this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
   }
 
   public unsafePublish(topic: string, message: string): void {
@@ -81,12 +91,14 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     const clientId = `${username}-${strRnd}`;
 
     this.client = mqttClient.connect(this.notifyUrl, {
-      clientId: clientId
+      clientId: clientId,
+      username: this.notifyUser,
+      password: this.notifyPassword
     });
 
     const that = this;
-    const topic = `${this.prefixTopic}/sp/${this.currentTopic}`;
-    const visitTopic = `${this.prefixTopic}/visit`;
+    const topic = `${this.servicePointTopic}/${this.servicePointId}`;
+    const visitTopic = this.globalTopic;
 
     this.client.on('connect', () => {
       console.log('Connected!');
@@ -127,11 +139,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     });
 
     this.client.on('message', (topic, payload) => {
-      console.log(topic);
-      const _topic = `${this.prefixTopic}/sp/${this.currentTopic}`;
-      if (_topic === topic) {
-        this.getAllList();
-      }
+      this.getAllList();
     });
 
     this.client.on('error', (error) => {
@@ -155,13 +163,13 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     })
   }
 
-  publishTopic() {
-    const topic = `${this.prefixTopic}/sp/${this.currentTopic}`;
-    this.client.publish(topic, 'update queue!');
+  // publishTopic() {
+  //   const topic = `${this.prefixTopic}/sp/${this.currentTopic}`;
+  //   this.client.publish(topic, 'update queue!');
 
-    const topicCenter = `${this.prefixTopic}/queue-center`;
-    this.client.publish(topicCenter, 'update queue!');
-  }
+  //   const topicCenter = `${this.prefixTopic}/queue-center`;
+  //   this.client.publish(topicCenter, 'update queue!');
+  // }
 
   // connectWebSocket() {
 
@@ -296,7 +304,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
       try {
         const isConfirm = await this.alertService.confirm('ต้องการเปลี่ยนช่องบริการ ใช่หรือไม่')
         if (isConfirm) {
-          const rs: any = await this.queueService.changeRoom(queueId, roomId);
+          const rs: any = await this.queueService.changeRoom(queueId, roomId, this.servicePointId);
           if (rs.statusCode === 200) {
             this.alertService.success();
             this.getWorking();
@@ -380,7 +388,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     console.log(event);
     this.servicePointName = event.service_point_name;
     this.servicePointId = event.service_point_id;
-    this.currentTopic = event.topic;
+    // this.currentTopic = event.topic;
 
     this.connectWebSocket();
     this.getAllList();
@@ -413,7 +421,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
           this.playSound(this.queueNumber, this.roomNumber.toString());
 
           // tigger queue list
-          this.publishTopic();
+          // this.publishTopic();
           // get queue list
           this.getAllList();
         } else {
@@ -426,12 +434,12 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     }
   }
 
-  async markPendin(item: any) {
+  async markPending(item: any) {
     console.log(item);
     const _confirm = await this.alertService.confirm(`ต้องการพักคิวนี้ [${item.queue_number}] ใช่หรือไม่?`);
     if (_confirm) {
       try {
-        const rs: any = await this.queueService.markPending(item.queue_id);
+        const rs: any = await this.queueService.markPending(item.queue_id, this.servicePointId);
         if (rs.statusCode === 200) {
           this.alertService.success();
           this.getAllList();

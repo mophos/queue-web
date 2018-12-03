@@ -9,6 +9,7 @@ import * as Random from 'random-js';
 import * as moment from 'moment';
 import { ServicePointService } from 'src/app/shared/service-point.service';
 import { CountdownComponent } from 'ngx-countdown';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-visit',
@@ -16,6 +17,9 @@ import { CountdownComponent } from 'ngx-countdown';
   styles: []
 })
 export class VisitComponent implements OnInit {
+
+  jwtHelper = new JwtHelperService();
+  globalTopic: string = null;
 
   priorities: any = [];
   visit: any = [];
@@ -32,8 +36,10 @@ export class VisitComponent implements OnInit {
 
   client: MqttClient;
 
-  @ViewChild(CountdownComponent) counter: CountdownComponent;
+  notifyUser = null;
+  notifyPassword = null;
 
+  @ViewChild(CountdownComponent) counter: CountdownComponent;
 
   constructor(
     private priorityService: PriorityService,
@@ -42,9 +48,15 @@ export class VisitComponent implements OnInit {
     private servicePointService: ServicePointService,
     private zone: NgZone,
     @Inject('NOTIFY_URL') private notifyUrl: string,
-    @Inject('PREFIX_TOPIC') private prefixTopic: string,
     @Inject('API_URL') private apiUrl: string,
-  ) { }
+  ) {
+    const token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(token);
+    this.notifyUser = decodedToken.NOTIFY_USER;
+    this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
+
+    this.globalTopic = decodedToken.QUEUE_CENTER_TOPIC;
+  }
 
   ngOnInit() {
     this.getPriorities();
@@ -69,11 +81,13 @@ export class VisitComponent implements OnInit {
     const clientId = `${username}-${strRnd}`;
 
     this.client = mqttClient.connect(this.notifyUrl, {
-      clientId: clientId
+      clientId: clientId,
+      username: this.notifyUser,
+      password: this.notifyPassword
     });
 
+
     const that = this;
-    const topic = `${this.prefixTopic}/visit`;
 
     this.client.on('connect', () => {
       console.log('Connected!');
@@ -81,7 +95,7 @@ export class VisitComponent implements OnInit {
         that.isOffline = false;
       });
 
-      that.client.subscribe(topic, (error) => {
+      that.client.subscribe(this.globalTopic, (error) => {
         if (error) {
           console.log('Subscibe error!!');
           that.zone.run(() => {
@@ -127,13 +141,13 @@ export class VisitComponent implements OnInit {
     })
   }
 
-  publishTopic() {
-    const topic = `${this.prefixTopic}/visit`;
-    this.client.publish(topic, 'update queue!');
+  // publishTopic() {
+  //   const topic = `${this.prefixTopic}/visit`;
+  //   this.client.publish(topic, 'update queue!');
 
-    const topicCenter = `${this.prefixTopic}/queue-center`;
-    this.client.publish(topicCenter, 'update queue!');
-  }
+  //   const topicCenter = `${this.prefixTopic}/queue-center`;
+  //   this.client.publish(topicCenter, 'update queue!');
+  // }
 
 
   async getPriorities() {
@@ -222,7 +236,7 @@ export class VisitComponent implements OnInit {
           const queueId: any = rs.queueId;
           // this.alertService.success();
           this.getVisit();
-          this.publishTopic();
+          // this.publishTopic();
           const confirm = await this.alertService.confirm('ต้องการพิมพ์บัตรคิว หรือไม่?');
           if (confirm) {
             // print queue
