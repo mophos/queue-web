@@ -10,13 +10,15 @@ RUN npm i -g pm2
 
 COPY . .
 
-RUN npm i
-
-RUN npm run build
+COPY ./config/environment.prod.ts src/environment/environment.prod.ts
 
 COPY ./config/nginx.conf /etc/nginx
 
 COPY ./config/process.json .
+
+RUN npm i
+
+RUN npm run build
 
 CMD /usr/sbin/nginx && /usr/bin/pm2-runtime process.json
 
