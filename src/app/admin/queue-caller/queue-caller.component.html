@@ -138,8 +138,20 @@
                   </label>
                 </td>
                 <td>
-                  <button class="btn btn-sm btn-gradient-success" (click)="setQueueForCall(item)" [ngbPopover]="popContent"
-                    popoverTitle="เลือกช่องรับบริการ">
+                  <button *ngIf="rooms.length > 1" class="btn btn-sm btn-gradient-success" (click)="setQueueForCall(item)"
+                    [ngbPopover]="popContent" popoverTitle="เลือกช่องรับบริการ">
+                    <span class="h4">
+                      เรียกคิว
+                      <i class="mdi mdi-send"></i>
+                    </span>
+                  </button>
+                  <button *ngIf="rooms.length === 1" class="btn btn-sm btn-gradient-success" (click)="setCallDetail(item)">
+                    <span class="h4">
+                      เรียกคิว
+                      <i class="mdi mdi-send"></i>
+                    </span>
+                  </button>
+                  <button disabled="disabled" *ngIf="rooms.length === 0" class="btn btn-sm btn-gradient-success">
                     <span class="h4">
                       เรียกคิว
                       <i class="mdi mdi-send"></i>
