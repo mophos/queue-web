@@ -10,8 +10,6 @@ RUN npm i -g pm2
 
 COPY . .
 
-COPY ./config/environment.prod.ts src/environment/environment.prod.ts
-
 COPY ./config/nginx.conf /etc/nginx
 
 COPY ./config/process.json .
