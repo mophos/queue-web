@@ -1,0 +1,12 @@
+build: 
+  image: docker:stable 
+  services: 
+   - docker:dind 
+  variables: 
+    DOCKER_HOST: tcp://docker:2375 
+    DOCKER_DRIVER: overlay2 
+  stage: build 
+  script: 
+   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com 
+   - docker build -t registry.gitlab.com/moph/queue/queue-web .
+   - docker push registry.gitlab.com/moph/queue/queue-web

@@ -25,6 +25,7 @@
     "@ng-bootstrap/ng-bootstrap": "^4.0.0",
     "@ng-bootstrap/schematics": "^2.0.0-alpha.1",
     "bootstrap": "^4.0.0",
+    "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.4",
     "howler": "^2.0.15",
     "lodash": "^4.17.11",
@@ -35,6 +36,7 @@
     "random-js": "^1.0.8",
     "rxjs": "~6.3.3",
     "sweetalert2": "^7.28.11",
+    "web-animations-js": "^2.3.1",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
