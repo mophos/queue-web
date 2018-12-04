@@ -1,0 +1,8 @@
+{
+  "apps": [
+    {
+      "name": "q4u-web",
+      "script": "./server.js"
+    }
+  ]
+}
