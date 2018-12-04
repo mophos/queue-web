@@ -408,6 +408,14 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     console.log(item);
   }
 
+  setCallDetail(item: any) {
+    this.queueId = item.queue_id;
+    this.queueNumber = item.queue_number;
+    if (this.rooms.length === 1) {
+      this.doCallQueue(this.rooms[0]);
+    }
+  }
+
   async doCallQueue(room: any) {
     if (this.isOffline) {
       this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
