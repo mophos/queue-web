@@ -79,7 +79,7 @@
                   <span class="h3 font-weight-bold text-danger" style="letter-spacing: 5px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
                 </td>
                 <td>
-                  <button class="btn btn-sm btn-inverse-primary" (click)="markPending(item)">พักคิว</button>
+                  <button class="btn btn-sm btn-inverse-primary" (click)="showSelectPointForMarkPending(item)">พักคิว</button>
                 </td>
               </tr>
 
@@ -196,6 +196,7 @@
                 <th>ความสำคัญ</th>
                 <th>คิวตรวจ</th>
                 <th>ช่องบริการเดิม</th>
+                <th>แผนกที่ส่งต่อ</th>
                 <th>#</th>
               </tr>
             </thead>
@@ -223,6 +224,9 @@
                 </td>
                 <td>
                   <span class="h3">{{item.room_number}}</span>
+                </td>
+                <td>
+                  <span class="h3">{{item.pending_to_service_point_name}}</span>
                 </td>
                 <td>
                   <button class="btn btn-sm btn-gradient-success" (click)="setQueueForCall(item)" [ngbPopover]="popContent"

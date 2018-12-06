@@ -8,8 +8,8 @@ export class QueueService {
 
   constructor(@Inject('API_URL') private apiUrl: string, private httpClient: HttpClient) { }
 
-  async visitList(servicePointCode: any = '', limit: number = 20, offset: number = 0) {
-    const _url = `${this.apiUrl}/queue/his-visit?servicePointCode=${servicePointCode}&limit=${limit}&offset=${offset}`;
+  async visitList(servicePointCode: any, query: any, limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/his-visit?servicePointCode=${servicePointCode}&query=${query}&limit=${limit}&offset=${offset}`;
     return this.httpClient.get(_url).toPromise();
   }
 
