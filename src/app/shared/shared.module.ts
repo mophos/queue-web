@@ -22,8 +22,30 @@ import { TokenService } from './token.service';
     NgbModule,
     FormsModule
   ],
-  declarations: [ModalAddServicePointComponent, ModalAddUserComponent, ModalRoomsComponent, ModalSelectServicepointsComponent, ShortTimePipe, ThaiDatePipe],
-  exports: [ModalAddServicePointComponent, ModalAddUserComponent, ModalRoomsComponent, ModalSelectServicepointsComponent, ShortTimePipe, ThaiDatePipe],
-  providers: [ServicePointService, ServiceRoomService, PriorityService, QueueService, AuthGuardService, LoginService, TokenService]
+  declarations: [
+    ModalAddServicePointComponent,
+    ModalAddUserComponent,
+    ModalRoomsComponent,
+    ModalSelectServicepointsComponent,
+    ShortTimePipe,
+    ThaiDatePipe,
+  ],
+  exports: [
+    ModalAddServicePointComponent,
+    ModalAddUserComponent,
+    ModalRoomsComponent,
+    ModalSelectServicepointsComponent,
+    ShortTimePipe,
+    ThaiDatePipe,
+  ],
+  providers: [
+    ServicePointService,
+    ServiceRoomService,
+    PriorityService,
+    QueueService,
+    AuthGuardService,
+    LoginService,
+    TokenService
+  ]
 })
 export class SharedModule { }

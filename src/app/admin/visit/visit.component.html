@@ -23,7 +23,16 @@
         </p>
         <div class="row">
           <div class="col-md-9">
-
+            <div class="input-group" style="width: 250px;">
+              <input type="text" class="form-control" name="query" [(ngModel)]="query" placeholder="ระบุคำค้นหา.."
+                aria-label="ระบุคำค้นหา" aria-describedby="button-addon2">
+              <div class="input-group-append">
+                <button class="btn btn-primary btn-sm" (click)="getVisit()" type="button" id="button-addon2">
+                  <i class="mdi mdi-account-search"></i>
+                  ค้นหา
+                </button>
+              </div>
+            </div>
           </div>
           <div class="col-md-3">
             <!-- <button (click)="refresh()" class="float-right btn-lg btn btn-sm btn-gradient-success"> <i class="mdi mdi-refresh"></i>
