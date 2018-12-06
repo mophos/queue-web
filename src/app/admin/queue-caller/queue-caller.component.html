@@ -79,7 +79,11 @@
                   <span class="h3 font-weight-bold text-danger" style="letter-spacing: 5px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
                 </td>
                 <td>
-                  <button class="btn btn-sm btn-inverse-primary" (click)="showSelectPointForMarkPending(item)">พักคิว</button>
+                  <div class="btn-group">
+                    <button class="btn btn-sm btn-success" (click)="callAgain(item)">เรียกซ้ำ</button>
+                    <button class="btn btn-sm btn-danger" (click)="showSelectPointForMarkPending(item)">พักคิว</button>
+
+                  </div>
                 </td>
               </tr>
 

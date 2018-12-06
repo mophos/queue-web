@@ -433,6 +433,10 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     }
   }
 
+  callAgain(queue: any) {
+    this.playSound(queue.queue_number, queue.room_number.toString());
+  }
+
   async doCallQueue(room: any) {
     if (this.isOffline) {
       this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
