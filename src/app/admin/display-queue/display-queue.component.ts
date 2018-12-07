@@ -6,6 +6,7 @@ import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as _ from 'lodash';
 import * as Random from 'random-js';
+import { Howl, Howler } from 'howler';
 
 import { CountdownComponent } from 'ngx-countdown';
 import { Router } from '@angular/router';
@@ -41,6 +42,11 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   notifyUser = null;
   notifyPassword = null;
 
+  isSound = false;
+
+  isPlayingSound = false;
+  playlists: any = [];
+
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,
@@ -71,6 +77,94 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     }
   }
 
+  toggleSound() {
+    this.isSound = !this.isSound;
+  }
+
+  prepareSound() {
+    console.log(this.playlists.length);
+    if (!this.isPlayingSound) {
+      if (this.playlists.length) {
+        var queueNumber = this.playlists[0].queueNumber;
+        var roomNumber = this.playlists[0].roomNumber;
+        this.playSound(queueNumber, roomNumber);
+      }
+    }
+  }
+
+  playSound(strQueue: string, strRoomNumber: string) {
+
+    this.isPlayingSound = true;
+
+    var _strQueue = strQueue.split('');
+    var _strRoom = strRoomNumber.split('');
+
+    var audioFiles = [];
+
+    audioFiles.push('./assets/audio/number.mp3')
+    audioFiles.push('./assets/audio/silent.mp3')
+
+    _strQueue.forEach(v => {
+      audioFiles.push(`./assets/audio/${v}.mp3`);
+    });
+
+    audioFiles.push('./assets/audio/silent.mp3');
+    audioFiles.push('./assets/audio/please.mp3');
+    audioFiles.push('./assets/audio/at.mp3');
+    audioFiles.push('./assets/audio/channel.mp3');
+    audioFiles.push('./assets/audio/service.mp3');
+
+    _strRoom.forEach(v => {
+      audioFiles.push(`./assets/audio/${v}.mp3`);
+    });
+
+    audioFiles.push('./assets/audio/ka.mp3');
+
+    var howlerBank = [];
+
+    // console.log(audioFiles);
+
+    var loop = false;
+
+    var onPlay = [false], pCount = 0;
+    const that = this;
+
+    var onEnd = function (e) {
+
+      if (loop === true) {
+        pCount = (pCount + 1 !== howlerBank.length) ? pCount + 1 : 0;
+      } else {
+        pCount = pCount + 1;
+      }
+
+      if (pCount <= audioFiles.length - 1) {
+        howlerBank[pCount].play();
+      } else {
+        this.isPlayingSound = false;
+        // remove queue in playlist
+        const idx = _.findIndex(that.playlists, { queueNumber: strQueue, roomNumber: strRoomNumber });
+        if (idx > -1) that.playlists.splice(idx, 1);
+        // call sound again
+        setTimeout(() => {
+          that.isPlayingSound = false;
+          that.prepareSound();
+        }, 1000)
+      }
+    };
+
+    audioFiles.forEach(function (current, i) {
+      howlerBank.push(new Howl({
+        src: [audioFiles[i]],
+        onend: onEnd,
+        preload: true,
+        html5: true,
+      }));
+    });
+
+    howlerBank[0].play();
+
+  }
+
   logout() {
     sessionStorage.removeItem('token');
     this.router.navigate(['/login']);
@@ -93,7 +187,20 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     const that = this;
 
     this.client.on('message', (topic, payload) => {
-      console.log(topic);
+
+      // this.getWorking();
+      that.getCurrentQueue();
+
+      const _payload = JSON.parse(payload.toString());
+      if (that.isSound) {
+        if (that.servicePointId === +_payload.servicePointId) {
+          // play sound
+          const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString() };
+          that.playlists.push(sound);
+          that.prepareSound();
+        }
+      }
+
     });
 
     this.client.on('connect', () => {
@@ -116,17 +223,11 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     });
 
     this.client.on('close', () => {
-      console.log('Close');
-    });
-
-    this.client.on('message', () => {
-      console.log('Receive message');
-      this.getCurrentQueue();
-      this.getWorking();
+      console.log('MQTT Conection Close');
     });
 
     this.client.on('error', (error) => {
-      console.log('Error');
+      console.log('MQTT Error');
       that.zone.run(() => {
         that.isOffline = true;
         that.counter.restart();
@@ -134,7 +235,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     });
 
     this.client.on('offline', () => {
-      console.log('Offline');
+      console.log('MQTT Offline');
       that.zone.run(() => {
         that.isOffline = true;
         try {
@@ -160,30 +261,30 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     // connect mqtt
     this.connectWebSocket();
     // get list
-    this.getWorking();
+    // this.getWorking();
     this.getCurrentQueue();
   }
 
-  async getWorking() {
-    try {
-      const rs: any = await this.queueService.getWorking(this.servicePointId);
-      if (rs.statusCode === 200) {
-        this.workingItems = rs.results;
-      } else {
-        console.log(rs.message);
-        this.alertService.error('เกิดข้อผิดพลาด');
-      }
-    } catch (error) {
-      console.log(error);
-      this.alertService.error();
-    }
-  }
+  // async getWorking() {
+  //   try {
+  //     const rs: any = await this.queueService.getWorking(this.servicePointId);
+  //     if (rs.statusCode === 200) {
+  //       this.workingItems = rs.results;
+  //     } else {
+  //       console.log(rs.message);
+  //       this.alertService.error('เกิดข้อผิดพลาด');
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     this.alertService.error();
+  //   }
+  // }
 
   async getCurrentQueue() {
     try {
       const rs: any = await this.queueService.getWorking(this.servicePointId);
       if (rs.statusCode === 200) {
-
+        this.workingItems = rs.results;
         const arr = _.sortBy(rs.results, ['update_date']).reverse();
 
         if (arr.length > 0) {

@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ViewChild, NgZone, Inject } from '@angula
 import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as Random from 'random-js';
-import { Howl, Howler } from 'howler';
 
 import { ModalSelectServicepointsComponent } from 'src/app/shared/modal-select-servicepoints/modal-select-servicepoints.component';
 import { QueueService } from 'src/app/shared/queue.service';
@@ -30,6 +29,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   rooms: any = [];
   queueNumber: any;
   roomNumber: any;
+  roomId: any;
   queueId: any;
 
   total = 0;
@@ -213,68 +213,6 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   //   }
   // }
 
-  playSound(strQueue: string, strRoomNumber: string) {
-
-    // var strQueue = '37009';
-    // var strRoomNumber = '5';
-
-    console.log(strRoomNumber);
-
-    var _strQueue = strQueue.split('');
-    var _strRoom = strRoomNumber.split('');
-
-    var audioFiles = [];
-
-    audioFiles.push('./assets/audio/number.mp3')
-    audioFiles.push('./assets/audio/silent.mp3')
-
-    _strQueue.forEach(v => {
-      audioFiles.push(`./assets/audio/${v}.mp3`);
-    });
-
-
-    audioFiles.push('./assets/audio/silent.mp3');
-    audioFiles.push('./assets/audio/please.mp3');
-    audioFiles.push('./assets/audio/at.mp3');
-    audioFiles.push('./assets/audio/channel.mp3');
-    audioFiles.push('./assets/audio/service.mp3');
-
-    _strRoom.forEach(v => {
-      audioFiles.push(`./assets/audio/${v}.mp3`);
-    });
-
-    audioFiles.push('./assets/audio/ka.mp3');
-
-    var howlerBank = [];
-
-    // console.log(audioFiles);
-
-    var loop = false;
-
-    var onPlay = [false], pCount = 0;
-
-    var onEnd = function (e) {
-      if (loop === true) { pCount = (pCount + 1 !== howlerBank.length) ? pCount + 1 : 0; }
-      else { pCount = pCount + 1; }
-
-      if (pCount <= audioFiles.length - 1) {
-        howlerBank[pCount].play();
-      }
-    };
-
-    audioFiles.forEach(function (current, i) {
-      howlerBank.push(new Howl({
-        src: [audioFiles[i]],
-        onend: onEnd,
-        preload: true,
-        html5: true,
-      }));
-    });
-
-    howlerBank[0].play();
-
-  }
-
   onPageChange(event: any) {
     const _currentPage = +event;
     var _offset = 0;
@@ -297,6 +235,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
 
   setChangeRoom(item: any) {
     this.queueId = item.queue_id;
+    this.queueNumber = item.queue_number;
   }
 
   async doChangeRoom(room: any) {
@@ -305,10 +244,12 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     } else {
       const roomId = room.room_id;
       const queueId = this.queueId;
+      const roomNumber = room.room_number;
+      const queueNumber = this.queueNumber;
       try {
         const isConfirm = await this.alertService.confirm('ต้องการเปลี่ยนช่องบริการ ใช่หรือไม่')
         if (isConfirm) {
-          const rs: any = await this.queueService.changeRoom(queueId, roomId, this.servicePointId);
+          const rs: any = await this.queueService.changeRoom(queueId, roomId, this.servicePointId, roomNumber, queueNumber);
           if (rs.statusCode === 200) {
             this.alertService.success();
             this.getWorking();
@@ -396,7 +337,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   }
 
   onSelectedPoint(event: any) {
-    console.log(event);
+    // console.log(event);
     if (event) {
       if (!this.isMarkPending) {
 
@@ -429,30 +370,45 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.queueId = item.queue_id;
     this.queueNumber = item.queue_number;
     if (this.rooms.length === 1) {
-      this.doCallQueue(this.rooms[0]);
+      this.roomId = this.rooms[0].room_id;
+      this.roomNumber = this.rooms[0].room_number;
+      this.doCallQueue();
     }
   }
 
   callAgain(queue: any) {
-    this.playSound(queue.queue_number, queue.room_number.toString());
+    this.roomNumber = queue.room_number;
+    this.roomId = queue.room_id;
+    this.queueNumber = queue.queue_number;
+    this.queueId = queue.queue_id;
+    this.doCallQueue();
+    // this.playSound(queue.queue_number, queue.room_number.toString());
   }
 
-  async doCallQueue(room: any) {
+  prepareQueue(room: any) {
+    this.roomId = room.room_id;
+    this.roomNumber = room.room_number;
+
+    this.doCallQueue();
+  }
+
+  async doCallQueue() {
+    console.log(this.roomId);
+    console.log(this.roomNumber);
+    console.log(this.queueNumber);
+
     if (this.isOffline) {
       this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
     } else {
       try {
-        const rs: any = await this.queueService.callQueue(this.servicePointId, this.queueNumber, room.room_id, this.queueId);
+        const rs: any = await this.queueService.callQueue(this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId);
         if (rs.statusCode === 200) {
           this.alertService.success();
-          this.roomNumber = room.room_number;
-
-          this.playSound(this.queueNumber, this.roomNumber.toString());
-
-          // tigger queue list
-          // this.publishTopic();
-          // get queue list
           this.getAllList();
+          this.roomId = null;
+          this.roomNumber = null;
+          this.queueNumber = null;
+          this.queueId = null;
         } else {
           this.alertService.error(rs.message);
         }
