@@ -1,54 +1,72 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QueueService {
 
-  constructor(@Inject('API_URL') private apiUrl: string, private httpClient: HttpClient) { }
+  token: any;
+  httpOptions: any;
 
-  async visitList(servicePointCode: any = '', limit: number = 20, offset: number = 0) {
-    const _url = `${this.apiUrl}/queue/his-visit?servicePointCode=${servicePointCode}&limit=${limit}&offset=${offset}`;
-    return this.httpClient.get(_url).toPromise();
+  constructor(@Inject('API_URL') private apiUrl: string, private httpClient: HttpClient) {
+    this.token = sessionStorage.getItem('token');
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.token
+      })
+    };
   }
 
-  async changeRoom(queueId: any, roomId: any, servicePointId: any) {
+  async visitList(servicePointCode: any, query: any, limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/his-visit?servicePointCode=${servicePointCode}&query=${query}&limit=${limit}&offset=${offset}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
+  async changeRoom(queueId: any, roomId: any, servicePointId: any, roomNumber: any, queueNumber: any) {
     const _url = `${this.apiUrl}/queue/change-room`;
     return this.httpClient.post(_url, {
       roomId: roomId,
       queueId: queueId,
-      servicePointId: servicePointId
-    }).toPromise();
+      servicePointId: servicePointId,
+      queueNumber: queueNumber,
+      roomNumber: roomNumber
+    }, this.httpOptions).toPromise();
   }
 
   async getWaiting(servicePointId: any, limit: number = 20, offset: number = 0) {
     const _url = `${this.apiUrl}/queue/waiting/${servicePointId}?limit=${limit}&offset=${offset}`;
-    return this.httpClient.get(_url).toPromise();
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
   async getWorking(servicePointId: any) {
     const _url = `${this.apiUrl}/queue/working/${servicePointId}`;
-    return this.httpClient.get(_url).toPromise();
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
   async getPending(servicePointId: any) {
     const _url = `${this.apiUrl}/queue/pending/${servicePointId}`;
-    return this.httpClient.get(_url).toPromise();
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
   async markPending(queueId: any, servicePointId: any) {
     const _url = `${this.apiUrl}/queue/pending`;
-    return this.httpClient.post(_url, { queueId: queueId, servicePointId: servicePointId }).toPromise();
+    return this.httpClient.post(_url, {
+      queueId: queueId,
+      servicePointId: servicePointId
+    }, this.httpOptions).toPromise();
   }
 
-  async callQueue(servicePointId: any, queueNumber: any, roomId: any, queueId: any) {
+  async callQueue(servicePointId: any, queueNumber: any, roomId: any, roomNumber: any, queueId: any) {
+    console.log('xxxxxx : ' + queueId);
     const _url = `${this.apiUrl}/queue/caller/${queueId}`;
     return this.httpClient.post(_url, {
       servicePointId: servicePointId,
       queueNumber: queueNumber,
+      roomNumber: roomNumber,
       roomId: roomId
-    }).toPromise();
+    }, this.httpOptions).toPromise();
   }
 
   async register(data: any) {
@@ -66,12 +84,12 @@ export class QueueService {
       title: data.title,
       birthDate: data.birthDate,
       sex: data.sex,
-    }).toPromise();
+    }, this.httpOptions).toPromise();
   }
 
   async getCurrentQueueList() {
     const _url = `${this.apiUrl}/queue/current-list`;
-    return this.httpClient.get(_url).toPromise();
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
 }

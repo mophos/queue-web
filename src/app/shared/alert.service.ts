@@ -20,6 +20,17 @@ export class AlertService {
 
   }
 
+  info(text: any) {
+
+    const option: SweetAlertOptions = {
+      text: text,
+      type: 'info',
+      confirmButtonText: 'ตกลง'
+    };
+    swal(option);
+
+  }
+
   success(title = 'ดำเนินการเสร็จเรียบร้อย', text = '') {
 
     const option: SweetAlertOptions = {

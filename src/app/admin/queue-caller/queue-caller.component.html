@@ -79,7 +79,10 @@
                   <span class="h3 font-weight-bold text-danger" style="letter-spacing: 5px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
                 </td>
                 <td>
-                  <button class="btn btn-sm btn-inverse-primary" (click)="markPending(item)">พักคิว</button>
+                  <div class="btn-group">
+                    <button class="btn btn-sm btn-success" (click)="callAgain(item)">เรียกซ้ำ</button>
+                    <button class="btn btn-sm btn-danger" (click)="showSelectPointForMarkPending(item)">พักคิว</button>
+                  </div>
                 </td>
               </tr>
 
@@ -196,6 +199,7 @@
                 <th>ความสำคัญ</th>
                 <th>คิวตรวจ</th>
                 <th>ช่องบริการเดิม</th>
+                <th>แผนกที่ส่งต่อ</th>
                 <th>#</th>
               </tr>
             </thead>
@@ -225,6 +229,9 @@
                   <span class="h3">{{item.room_number}}</span>
                 </td>
                 <td>
+                  <span class="h3">{{item.pending_to_service_point_name}}</span>
+                </td>
+                <td>
                   <button class="btn btn-sm btn-gradient-success" (click)="setQueueForCall(item)" [ngbPopover]="popContent"
                     popoverTitle="เลือกช่องรับบริการ">
                     <span class="h4">
@@ -247,7 +254,7 @@
 <ng-template #popContent>
   <div class="text-center">
     <button *ngFor="let room of rooms" type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw"
-      (click)="doCallQueue(room)">
+      (click)="prepareQueue(room)">
       <span class="h4">{{room.room_name}}</span>
     </button>
   </div>

@@ -89,7 +89,15 @@
 
         <div class="card">
           <div class="card-body">
-            <h1 class="card-title">คิวที่เรียกปัจจุบัน</h1>
+            <div class="row">
+              <div class="col-md-6">
+                <h1 class="card-title">คิวที่เรียกปัจจุบัน</h1>
+              </div>
+              <div class="col-md-6">
+                <i style="cursor: pointer;" *ngIf="isSound" (click)="toggleSound()" class="h2 text-danger float-right mdi mdi-bell-ring"></i>
+                <i style="cursor: pointer;" *ngIf="!isSound" (click)="toggleSound()" class="h2 text-muted float-right mdi mdi-bell-off"></i>
+              </div>
+            </div>
             <div class="row">
               <div class="col-md-8 stretch-card grid-margin">
                 <div class="card bg-gradient-danger card-img-holder text-white">

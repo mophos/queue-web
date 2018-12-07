@@ -38,6 +38,7 @@ export class VisitComponent implements OnInit {
 
   notifyUser = null;
   notifyPassword = null;
+  query: any = '';
 
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
@@ -185,7 +186,7 @@ export class VisitComponent implements OnInit {
 
   async getVisit() {
     try {
-      const rs: any = await this.queueService.visitList(this.servicePointCode, this.pageSize, this.offset);
+      const rs: any = await this.queueService.visitList(this.servicePointCode, this.query, this.pageSize, this.offset);
       if (rs.statusCode === 200) {
         this.visit = rs.results;
         this.total = rs.total;
