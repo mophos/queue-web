@@ -432,6 +432,8 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
             this.alertService.success();
             this.selectedQueue = {};
             this.isMarkPending = false;
+            var queueNumber = rs.queueNumber;
+            this.alertService.info(`คิวใหม่ของคุณคือ ${queueNumber}`);
             this.getAllList();
           } else {
             this.alertService.error(rs.message);
