@@ -61,6 +61,8 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private zone: NgZone,
     @Inject('NOTIFY_URL') private notifyUrl: string,
+    @Inject('API_URL') private apiUrl: string,
+
   ) {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
@@ -433,7 +435,11 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
             this.selectedQueue = {};
             this.isMarkPending = false;
             var queueNumber = rs.queueNumber;
-            this.alertService.info(`คิวใหม่ของคุณคือ ${queueNumber}`);
+            var newQueueId = rs.queueId;
+            var confirm = await this.alertService.confirm(`คิวใหม่ของคุณคือ ${queueNumber} ต้องการพิมพ์บัตรคิว หรือไม่?`);
+            if (confirm) {
+              this.printQueue(newQueueId);
+            }
             this.getAllList();
           } else {
             this.alertService.error(rs.message);
@@ -445,5 +451,10 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  printQueue(queueId: any) {
+    window.open(`${this.apiUrl}/print/queue?queueId=${queueId}`, '_blank');
+  }
+
 
 }
