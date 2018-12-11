@@ -5,7 +5,6 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:3002/v1',
-  notifyUrl: 'ws://localhost:8080',
 };
 
 /*

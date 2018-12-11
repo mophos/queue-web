@@ -31,6 +31,7 @@ export class QueueCenterPatientComponent implements OnInit {
   queueCenterTopic = null;
   notifyUser = null;
   notifyPassword = null;
+  notifyUrl: string;
 
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
@@ -38,12 +39,13 @@ export class QueueCenterPatientComponent implements OnInit {
     private queueService: QueueService,
     private alertService: AlertService,
     private zone: NgZone,
-    @Inject('NOTIFY_URL') private notifyUrl: string,
     private router: Router
   ) {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
     this.queueCenterTopic = decodedToken.QUEUE_CENTER_TOPIC;
+
+    this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
     this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
 

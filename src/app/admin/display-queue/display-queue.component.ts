@@ -46,17 +46,19 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
   isPlayingSound = false;
   playlists: any = [];
+  notifyUrl: string;
 
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,
     private zone: NgZone,
-    @Inject('NOTIFY_URL') private notifyUrl: string,
     private router: Router
   ) {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
     this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
+
+    this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
     this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
   }
