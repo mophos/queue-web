@@ -13,7 +13,17 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 @Component({
   selector: 'app-queue-center-patient',
   templateUrl: './queue-center-patient.component.html',
-  styles: []
+  styles: [
+    `
+    .main-panel {
+        transition: width 0.25s ease, margin 0.25s ease;
+        width: 100%;
+        min-height: calc(100vh - 70px);
+        display: flex;
+        flex-direction: column;
+    }
+    `
+  ]
 })
 export class QueueCenterPatientComponent implements OnInit {
 
@@ -21,7 +31,7 @@ export class QueueCenterPatientComponent implements OnInit {
   currentTime: Date = new Date();
   lastupdateTime: Date = new Date();
 
-  currentDate: string = `${moment().locale('th').format('DD MMM')} ${moment().get('year') + 543}`;
+  currentDate: string = `${moment().locale('th').format('DD MMMM')} ${moment().get('year') + 543}`;
   public message: string;
 
   isOffline = false;

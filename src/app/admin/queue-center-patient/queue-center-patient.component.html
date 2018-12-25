@@ -27,7 +27,7 @@
   <!-- partial -->
   <div class="container-fluid page-body-wrapper">
     <!-- partial:../../partials/_sidebar.html -->
-    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <!-- <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <div style="text-align: center; margin-top: 50px;">
         <span class="h1 font-weight-bold text-primary">วันที่ {{ currentDate }} </span>
         <p></p>
@@ -36,7 +36,7 @@
         <p></p>
         <span class="h2">last updated: {{lastupdateTime | shortTime}}</span>
       </div>
-    </nav>
+    </nav> -->
     <!-- partial -->
     <div class="main-panel">
       <div class="content-wrapper">
@@ -62,7 +62,13 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-
+                <div style="text-align: center;">
+                  <span class="h1 font-weight-bold text-primary">วันที่ {{ currentDate }} </span>
+                  <span class="h1 text-success font-weight-bold" style="letter-spacing: 5px;">{{ currentTime |
+                    shortTime }}
+                  </span>
+                  <span class="h2">ปรับปรุงล่าสุด: {{lastupdateTime | shortTime}}</span>
+                </div>
               </li>
             </ol>
           </nav>
