@@ -24,12 +24,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
         display: flex;
         flex-direction: column;
     }
-
-    .table-striped tbody tr:nth-of-type(odd) {
-        background-color: #01579b;
-        color: white;
-    }
-
+    
     .bg-primary, .settings-panel .color-tiles .tiles.primary {
         background-color: #01579b !important;
     }

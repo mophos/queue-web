@@ -24,11 +24,6 @@ import { JwtHelperService } from '@auth0/angular-jwt';
         flex-direction: column;
     }
 
-    .table-striped tbody tr:nth-of-type(odd) {
-        background-color: #01579b;
-        color: white;
-    }
-
     .bg-primary, .settings-panel .color-tiles .tiles.primary {
         background-color: #01579b !important;
     }
@@ -193,13 +188,17 @@ export class QueueCenterPatientComponent implements OnInit {
             this.currentQueueNumber = v.queue_number;
           }
 
-          console.log(_upd, moment(v.update_date).format('YYYY-MM-DD HH:mm:ss'));
-
         });
 
-        var _items = _.chunk(rs.results, 2);
-        this.items1 = _items[0];
-        this.items2 = _items[1];
+        var _items = [];
+        if (rs.results.length >= 2) {
+          _items = _.chunk(rs.results, 2);
+
+        } else {
+          _items = _.chunk(rs.results, 1);
+        }
+        this.items1 = _items[0] || [];
+        this.items2 = _items[1] || [];
         this.lastupdateTime = new Date();
       } else {
         this.alertService.error(rs.message);
