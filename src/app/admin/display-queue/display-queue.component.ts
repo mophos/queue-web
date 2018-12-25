@@ -15,7 +15,32 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 @Component({
   selector: 'app-display-queue',
   templateUrl: './display-queue.component.html',
-  styles: []
+  styles: [
+    `
+    .main-panel {
+        transition: width 0.25s ease, margin 0.25s ease;
+        width: 100%;
+        min-height: calc(100vh - 70px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #0d47a1;
+        color: white;
+    }
+
+    .bg-primary, .settings-panel .color-tiles .tiles.primary {
+        background-color: #0d47a1 !important;
+    }
+
+    .bg-blue, .settings-panel .color-tiles .tiles.danger {
+        background-color: #1a237e !important;
+    }
+
+    `
+
+  ]
 })
 export class DisplayQueueComponent implements OnInit, OnDestroy {
 
