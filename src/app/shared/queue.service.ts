@@ -45,6 +45,11 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
+  async getWorkingHistory(servicePointId: any) {
+    const _url = `${this.apiUrl}/queue/working/history/${servicePointId}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
   async getPending(servicePointId: any) {
     const _url = `${this.apiUrl}/queue/pending/${servicePointId}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();

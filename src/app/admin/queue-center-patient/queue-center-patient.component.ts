@@ -2,13 +2,14 @@ import { Component, OnInit, ViewChild, NgZone, Inject } from '@angular/core';
 import { QueueService } from 'src/app/shared/queue.service';
 import { AlertService } from 'src/app/shared/alert.service';
 import * as moment from 'moment';
+import * as _ from 'lodash';
+
 import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as Random from 'random-js';
 import { CountdownComponent } from 'ngx-countdown';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-
 
 @Component({
   selector: 'app-queue-center-patient',
@@ -24,12 +25,16 @@ import { JwtHelperService } from '@auth0/angular-jwt';
     }
 
     .table-striped tbody tr:nth-of-type(odd) {
-        background-color: #0d47a1;
+        background-color: #01579b;
         color: white;
     }
 
     .bg-primary, .settings-panel .color-tiles .tiles.primary {
-        background-color: #0d47a1 !important;
+        background-color: #01579b !important;
+    }
+
+    .bg-danger, .settings-panel .color-tiles .tiles.primary {
+        background-color: #b71c1c !important;
     }
     `
   ]
@@ -37,6 +42,11 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class QueueCenterPatientComponent implements OnInit {
 
   items: any = [];
+  items1: any = [];
+  items2: any = [];
+
+  currentQueueNumber: string = null;
+
   currentTime: Date = new Date();
   lastupdateTime: Date = new Date();
 
@@ -169,9 +179,27 @@ export class QueueCenterPatientComponent implements OnInit {
 
   async getList() {
     try {
+      var lastItemQueue = null;
+      var updatedDate = 0;
+
       const rs: any = await this.queueService.getCurrentQueueList();
       if (rs.statusCode === 200) {
         this.items = rs.results;
+        // find last items
+        this.items.forEach(v => {
+          let _upd = +moment(v.update_date).format('x');
+          if (_upd > updatedDate) {
+            updatedDate = _upd;
+            this.currentQueueNumber = v.queue_number;
+          }
+
+          console.log(_upd, moment(v.update_date).format('YYYY-MM-DD HH:mm:ss'));
+
+        });
+
+        var _items = _.chunk(rs.results, 2);
+        this.items1 = _items[0];
+        this.items2 = _items[1];
         this.lastupdateTime = new Date();
       } else {
         this.alertService.error(rs.message);

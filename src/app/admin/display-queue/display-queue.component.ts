@@ -26,12 +26,12 @@ import { JwtHelperService } from '@auth0/angular-jwt';
     }
 
     .table-striped tbody tr:nth-of-type(odd) {
-        background-color: #0d47a1;
+        background-color: #01579b;
         color: white;
     }
 
     .bg-primary, .settings-panel .color-tiles .tiles.primary {
-        background-color: #0d47a1 !important;
+        background-color: #01579b !important;
     }
 
     .bg-blue, .settings-panel .color-tiles .tiles.danger {
@@ -43,18 +43,19 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   ]
 })
 export class DisplayQueueComponent implements OnInit, OnDestroy {
-
+  
   ngOnInit(): void { }
-
+  
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectServicepointsComponent;
   @ViewChild(CountdownComponent) counter: CountdownComponent;
-
+  
   jwtHelper = new JwtHelperService();
   servicePointTopic = null;
-
+  
   servicePointId: any;
   servicePointName: any;
   workingItems: any = [];
+  workingItemsHistory: any = [];
   currentQueueNumber: any;
   currentRoomNumber: any;
   currentHn: any;
@@ -217,6 +218,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
       // this.getWorking();
       that.getCurrentQueue();
+      that.getWorkingHistory();
 
       const _payload = JSON.parse(payload.toString());
       if (that.isSound) {
@@ -290,6 +292,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     // get list
     // this.getWorking();
     this.getCurrentQueue();
+    this.getWorkingHistory();
   }
 
   // async getWorking() {
@@ -325,6 +328,21 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
           this.currentRoomName = null;
           this.currentRoomNumber = null;
         }
+      } else {
+        console.log(rs.message);
+        this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
+    }
+  }
+
+  async getWorkingHistory() {
+    try {
+      const rs: any = await this.queueService.getWorkingHistory(this.servicePointId);
+      if (rs.statusCode === 200) {
+        this.workingItemsHistory = rs.results;
       } else {
         console.log(rs.message);
         this.alertService.error('เกิดข้อผิดพลาด');

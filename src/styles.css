@@ -181,6 +181,36 @@ p {
 }
 
 
+@-webkit-keyframes invalid-blink {
+  from { background-color: #b71c1c; }
+  to { background-color: #f05545; }
+}
+@-moz-keyframes invalid-blink {
+  from { background-color: #b71c1c; }
+  to { background-color: #f05545; }
+}
+@-o-keyframes invalid-blink {
+  from { background-color: #b71c1c; }
+  to { background-color: #f05545; }
+}
+@keyframes invalid-blink {
+  from { background-color: #b71c1c; }
+  to { background-color: #f05545; }
+}
+.invalid-blink {
+  -webkit-animation: invalid-blink 1s infinite; /* Safari 4+ */
+  -moz-animation:    invalid-blink 1s infinite; /* Fx 5+ */
+  -o-animation:      invalid-blink 1s infinite; /* Opera 12+ */
+  animation:         invalid-blink 1s infinite; /* IE 10+ */
+  color: #ffffff;
+}
+
+.content-wrapper {
+    background: #e9ebee;
+    padding: 2.75rem 2.25rem;
+    width: 100%;
+    flex-grow: 1;
+}
 /* 
 .modal .modal-dialog .modal-content .modal-body {
     padding: 0px 10px;

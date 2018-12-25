@@ -27,7 +27,7 @@
   <!-- partial -->
   <div class="container-fluid page-body-wrapper">
     <!-- partial:../../partials/_sidebar.html -->
-    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <!-- <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <div class="mr-2 ml-2">
         <table class="table table-striped">
           <thead>
@@ -51,7 +51,7 @@
           </tbody>
         </table>
       </div>
-    </nav>
+    </nav> -->
     <!-- partial -->
     <div class="main-panel">
       <div class="content-wrapper">
@@ -67,80 +67,101 @@
           </div>
         </div>
 
-        <div class="page-header">
-          <h1 class="page-title">
-            <span class="page-title-icon bg-primary text-white mr-2">
-              <i class="mdi mdi-cast"></i>
-            </span>
-            <span style="font-size: 1.4rem;">คิวรับบริการปัจจุบัน</span>
-          </h1>
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <span class="h1 text-primary font-weight-bold">{{servicePointName || 'กรุณาเลือกจุดบริการ'}}</span>
-                &nbsp; | &nbsp;
-                <a href="javascript://" (click)="selectServicePoint()">
-                  <span style="font-size: 1.4rem;">เปลี่ยนจุดบริการ</span>
-                </a>
-              </li>
-            </ol>
-          </nav>
-        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card border-primary">
+              <div class="card-header h2">ประวัติการเรียกเข้าห้องตรวจ</div>
 
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-6">
-                <h1 class="card-title">คิวที่เรียกปัจจุบัน</h1>
-              </div>
-              <div class="col-md-6">
-                <i style="cursor: pointer;" *ngIf="isSound" (click)="toggleSound()" class="h2 text-danger float-right mdi mdi-bell-ring"></i>
-                <i style="cursor: pointer;" *ngIf="!isSound" (click)="toggleSound()" class="h2 text-muted float-right mdi mdi-bell-off"></i>
+              <div class="card-body">
+                <table class="table table-sm table-striped">
+                  <thead>
+                    <tr>
+                      <th><span class="h1">ลำดับที่</span></th>
+                      <th><span class="h1">ช่องบริการ</span></th>
+                      <th><span class="h1">HN</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngIf="!workingItems.length">
+                      <td colspan="3">กรุณาเลือกจุดบริการ</td>
+                    </tr>
+                    <tr *ngFor="let item of workingItems" [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}">
+                      <td>
+                        <label style="font-size: 2.5rem; letter-spacing: 5px;" class="font-weight-bold">{{item.queue_number}}</label>
+                      </td>
+                      <td>
+                        <label style="font-size: 2.5rem;" class="font-weight-bold">{{item.room_number}}</label>
+                      </td>
+                      <td>
+                        <label style="font-size: 2.5rem;" class="font-weight-bold">{{item.hn}}</label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-8 stretch-card grid-margin">
-                <div class="card bg-primary card-img-holder text-white">
-                  <div class="card-body">
-                    <img src="./assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h1 class="font-weight-normal mb-2">คิวบริการ
-                      <i class="mdi mdi-account-circle mdi-24px float-right"></i>
-                    </h1>
-                    <!-- <h2 class="mb-5">$ 15,0000</h2> -->
-                    <span class="font-weight-bold mb-5" style="letter-spacing: 20px; font-size: 10rem;">{{currentQueueNumber
-                      || '-'}}</span>
-                    <h1 class="card-text">HN: {{currentHn || '-'}}</h1>
-                  </div>
-                </div>
+            <div style="margin-top: 20px;"></div>
+            <div class="card">
+              <div class="card-header h2">ประวัติการเรียก</div>
+              <div class="card-body">
+                <table class="table table-sm table-striped">
+                  <thead>
+                    <tr>
+                      <th><span class="h1">ลำดับที่</span></th>
+                      <th><span class="h1">ช่องบริการ</span></th>
+                      <th><span class="h1">HN</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngIf="!workingItemsHistory.length">
+                      <td colspan="3">กรุณาเลือกจุดบริการ</td>
+                    </tr>
+                    <tr *ngFor="let item of workingItemsHistory">
+                      <td>
+                        <label style="font-size: 2.5rem; letter-spacing: 5px;" class="font-weight-bold">{{item.queue_number}}</label>
+                      </td>
+                      <td>
+                        <label style="font-size: 2.5rem;" class="font-weight-bold">{{item.room_number}}</label>
+                      </td>
+                      <td>
+                        <label style="font-size: 2.5rem;" class="font-weight-bold">{{item.hn}}</label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <div class="col-md-4 stretch-card grid-margin">
-                <div class="card bg-blue card-img-holder text-white">
-                  <div class="card-body">
-                    <img src="./assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h1 class="font-weight-normal mb-3">ช่องบริการ
-                      <i class="mdi mdi-doctor mdi-24px float-right"></i>
-                    </h1>
-                    <span class="font-weight-bold mb-5" style="letter-spacing: 20px; font-size: 10rem;">{{currentRoomNumber
-                      || '-'}}</span>
-                    <h1 class="card-text">{{currentRoomName || '-'}}</h1>
-                  </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+
+            <div class="card bg-primary card-img-holder text-white">
+
+              <div class="card-body">
+                <div style="font-size: 3rem;" class="font-weight-normal">ลำดับที่</div>
+                <span class="font-weight-bold" style="letter-spacing: 12px; font-size: 11rem;">{{currentQueueNumber
+                  || '-'}}</span>
+                <!-- <h1 class="card-text">HN: {{currentHn || '-'}}</h1> -->
+                <div style="font-size: 3rem;" class="font-weight-normal">ช่องบริการ</div>
+                <span class="font-weight-bold" style="letter-spacing: 12px; font-size: 11rem;">{{currentRoomNumber
+                  || '-'}}</span>
+                <div style="font-size: 3rem;" class="card-text">{{currentRoomName || '-'}}</div>
+              </div>
+
+              <div class="card-footer">
+                <div class="float-left">
+                  <i style="cursor: pointer;" *ngIf="isSound" (click)="toggleSound()" class="h2 text-warning float-right mdi mdi-bell-ring"></i>
+                  <i style="cursor: pointer;" *ngIf="!isSound" (click)="toggleSound()" class="h2 text-muted float-right mdi mdi-bell-off"></i>
+                </div>
+                <div class="float-right">
+                  <span class="h2 text-white font-weight-bold" style="cursor: pointer" (click)="selectServicePoint()">{{servicePointName
+                    || 'กรุณาเลือกจุดบริการ'}}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
-      <!-- content-wrapper ends -->
-      <!-- partial:../../partials/_footer.html -->
-      <footer class="footer">
-        <div class="d-sm-flex justify-content-center justify-content-sm-between">
-          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.moph.go.th/"
-              target="_blank">Ministry Of Public Health (MOPH)</a>. All rights reserved.</span>
-          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Made with <i class="mdi mdi-heart text-danger"></i></span>
-        </div>
-      </footer>
-      <!-- partial -->
+
     </div>
     <!-- main-panel ends -->
   </div>
