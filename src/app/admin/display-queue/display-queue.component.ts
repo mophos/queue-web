@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, NgZone, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, Inject, OnDestroy, Directive, HostListener } from '@angular/core';
 import { ModalSelectServicepointsComponent } from 'src/app/shared/modal-select-servicepoints/modal-select-servicepoints.component';
 import { QueueService } from 'src/app/shared/queue.service';
 import { AlertService } from 'src/app/shared/alert.service';
@@ -6,6 +6,8 @@ import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as _ from 'lodash';
 import * as Random from 'random-js';
+import * as screenfull from 'screenfull';
+
 import { Howl, Howler } from 'howler';
 
 import { CountdownComponent } from 'ngx-countdown';
@@ -38,15 +40,13 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   ]
 })
 export class DisplayQueueComponent implements OnInit, OnDestroy {
-  
-  ngOnInit(): void { }
-  
+
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectServicepointsComponent;
   @ViewChild(CountdownComponent) counter: CountdownComponent;
-  
+
   jwtHelper = new JwtHelperService();
   servicePointTopic = null;
-  
+
   servicePointId: any;
   servicePointName: any;
   workingItems: any = [];
@@ -73,7 +73,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     private queueService: QueueService,
     private alertService: AlertService,
     private zone: NgZone,
-    private router: Router
+    private router: Router,
   ) {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
@@ -83,6 +83,8 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     this.notifyUser = decodedToken.NOTIFY_USER;
     this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
   }
+
+  ngOnInit(): void { }
 
   public unsafePublish(topic: string, message: string): void {
     try {
@@ -347,4 +349,6 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       this.alertService.error();
     }
   }
+
+
 }
