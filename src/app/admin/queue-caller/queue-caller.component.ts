@@ -418,17 +418,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.roomId = room.room_id;
     this.roomNumber = room.room_number;
     // update interview
-    try {
-      var rs: any = await this.queueService.markInterview(this.queueId);
-      if (rs.statusCode === 200) {
-        this.doCallQueue('N');
-      } else {
-        this.alertService.error();
-      }
-    } catch (error) {
-      console.log(error);
-      this.alertService.error('เกิดข้อผิดพลาด');
-    }
+    this.doCallQueue('N');
   }
 
   async doCallQueue(isCompleted: any = 'Y') {
