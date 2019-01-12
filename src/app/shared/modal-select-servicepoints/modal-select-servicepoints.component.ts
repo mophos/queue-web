@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AlertService } from '../alert.service';
 import { ServicePointService } from '../service-point.service';
@@ -17,6 +17,8 @@ export class ModalSelectServicepointsComponent implements OnInit {
 
   points: any = [];
 
+  isAll: boolean = false;
+
   constructor(
     private modalService: NgbModal,
     private alertService: AlertService,
@@ -25,8 +27,9 @@ export class ModalSelectServicepointsComponent implements OnInit {
 
   ngOnInit() { }
 
-  open() {
+  open(isAll: boolean = false) {
 
+    this.isAll = isAll;
     this.getList();
 
     this.modalReference = this.modalService.open(this.content, {
@@ -46,22 +49,27 @@ export class ModalSelectServicepointsComponent implements OnInit {
   }
 
   async getList() {
-    var _servicePoints = sessionStorage.getItem('servicePoints');
-    var jsonDecoded = JSON.parse(_servicePoints);
+    if (this.isAll) {
+      try {
+        const rs: any = await this.servicePointService.list();
+        if (rs.statusCode === 200) {
+          this.points = rs.results;
+        } else {
+          console.log(rs.message);
+          this.alertService.error('เกิดข้อผิดพลาด');
+        }
+      } catch (error) {
+        console.log(error);
+        this.alertService.error();
+      }
+    } else {
+      var _servicePoints = sessionStorage.getItem('servicePoints');
+      var jsonDecoded = JSON.parse(_servicePoints);
 
-    this.points = jsonDecoded
-    // try {
-    //   const rs: any = await this.servicePointService.list();
-    //   if (rs.statusCode === 200) {
-    //     this.points = rs.results;
-    //   } else {
-    //     console.log(rs.message);
-    //     this.alertService.error('เกิดข้อผิดพลาด');
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   this.alertService.error();
-    // }
+      this.points = jsonDecoded
+    }
+
+
   }
 
   setSelected(point: any) {

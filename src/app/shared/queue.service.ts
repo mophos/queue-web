@@ -40,6 +40,11 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
+  async markInterview(queueId: any) {
+    const _url = `${this.apiUrl}/queue/interview/marked/${queueId}`;
+    return this.httpClient.put(_url, {}, this.httpOptions).toPromise();
+  }
+
   async getWorking(servicePointId: any) {
     const _url = `${this.apiUrl}/queue/working/${servicePointId}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
@@ -63,14 +68,15 @@ export class QueueService {
     }, this.httpOptions).toPromise();
   }
 
-  async callQueue(servicePointId: any, queueNumber: any, roomId: any, roomNumber: any, queueId: any) {
+  async callQueue(servicePointId: any, queueNumber: any, roomId: any, roomNumber: any, queueId: any, isCompleted: any = 'Y') {
     console.log('xxxxxx : ' + queueId);
     const _url = `${this.apiUrl}/queue/caller/${queueId}`;
     return this.httpClient.post(_url, {
       servicePointId: servicePointId,
       queueNumber: queueNumber,
       roomNumber: roomNumber,
-      roomId: roomId
+      roomId: roomId,
+      isCompleted: isCompleted
     }, this.httpOptions).toPromise();
   }
 
