@@ -9,11 +9,13 @@ import { Router } from '@angular/router';
 export class LayoutComponent implements OnInit {
   isCollapsed = true;
   fullname: string;
+  userType: string;
 
   constructor(private router: Router) { }
 
   ngOnInit() {
     this.fullname = sessionStorage.getItem('fullname');
+    this.userType = sessionStorage.getItem('userType');
   }
 
   logout() {

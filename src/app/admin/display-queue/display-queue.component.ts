@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, NgZone, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, Inject, OnDestroy, Directive, HostListener } from '@angular/core';
 import { ModalSelectServicepointsComponent } from 'src/app/shared/modal-select-servicepoints/modal-select-servicepoints.component';
 import { QueueService } from 'src/app/shared/queue.service';
 import { AlertService } from 'src/app/shared/alert.service';
@@ -6,6 +6,8 @@ import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as _ from 'lodash';
 import * as Random from 'random-js';
+import * as screenfull from 'screenfull';
+
 import { Howl, Howler } from 'howler';
 
 import { CountdownComponent } from 'ngx-countdown';
@@ -15,11 +17,29 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 @Component({
   selector: 'app-display-queue',
   templateUrl: './display-queue.component.html',
-  styles: []
+  styles: [
+    `
+    .main-panel {
+        transition: width 0.25s ease, margin 0.25s ease;
+        width: 100%;
+        min-height: calc(100vh - 70px);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .bg-primary, .settings-panel .color-tiles .tiles.primary {
+        background-color: #01579b !important;
+    }
+
+    .bg-blue, .settings-panel .color-tiles .tiles.danger {
+        background-color: #1a237e !important;
+    }
+
+    `
+
+  ]
 })
 export class DisplayQueueComponent implements OnInit, OnDestroy {
-
-  ngOnInit(): void { }
 
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectServicepointsComponent;
   @ViewChild(CountdownComponent) counter: CountdownComponent;
@@ -30,6 +50,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   servicePointId: any;
   servicePointName: any;
   workingItems: any = [];
+  workingItemsHistory: any = [];
   currentQueueNumber: any;
   currentRoomNumber: any;
   currentHn: any;
@@ -46,20 +67,24 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
   isPlayingSound = false;
   playlists: any = [];
+  notifyUrl: string;
 
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,
     private zone: NgZone,
-    @Inject('NOTIFY_URL') private notifyUrl: string,
-    private router: Router
+    private router: Router,
   ) {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
     this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
+
+    this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
     this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
   }
+
+  ngOnInit(): void { }
 
   public unsafePublish(topic: string, message: string): void {
     try {
@@ -190,6 +215,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
       // this.getWorking();
       that.getCurrentQueue();
+      that.getWorkingHistory();
 
       const _payload = JSON.parse(payload.toString());
       if (that.isSound) {
@@ -263,6 +289,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     // get list
     // this.getWorking();
     this.getCurrentQueue();
+    this.getWorkingHistory();
   }
 
   // async getWorking() {
@@ -307,4 +334,21 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       this.alertService.error();
     }
   }
+
+  async getWorkingHistory() {
+    try {
+      const rs: any = await this.queueService.getWorkingHistory(this.servicePointId);
+      if (rs.statusCode === 200) {
+        this.workingItemsHistory = rs.results;
+      } else {
+        console.log(rs.message);
+        this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
+    }
+  }
+
+
 }

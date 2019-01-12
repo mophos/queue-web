@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit {
           const decoded: any = this.jwtHelper.decodeToken(token);
           console.log(decoded);
           sessionStorage.setItem('fullname', decoded.fullname);
+          sessionStorage.setItem('userType', decoded.userType);
           sessionStorage.setItem('username', this.username);
 
           this.router.navigate(['/admin']);

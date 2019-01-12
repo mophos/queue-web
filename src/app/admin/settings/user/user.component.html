@@ -26,14 +26,19 @@
             <tr>
               <th>ชื่อผู้ใช้งาน</th>
               <th>ชื่อ - สกุล</th>
+              <th>ประเภท</th>
               <th>สถานะ</th>
               <th style="width: 150px;">#</th>
             </tr>
           </thead>
           <tbody>
+            <tr *ngIf="!items.length">
+              <td colspan="5">ไม่พบรายการ</td>
+            </tr>
             <tr *ngFor="let item of items">
               <td>{{item.username}}</td>
               <td>{{item.fullname}}</td>
+              <td>{{item.user_type}}</td>
               <td>
                 <i class="mdi mdi-check text-success" *ngIf="item.is_active === 'Y'"></i>
                 <i class="mdi mdi-close text-danger" *ngIf="item.is_active === 'N'"></i>

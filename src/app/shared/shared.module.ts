@@ -15,6 +15,7 @@ import { ModalSelectServicepointsComponent } from './modal-select-servicepoints/
 import { ShortTimePipe } from './short-time.pipe';
 import { ThaiDatePipe } from './thai-date.pipe';
 import { TokenService } from './token.service';
+import { ToggleFullscreenDirective } from './toggle-fullscreen.directive';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { TokenService } from './token.service';
     ModalSelectServicepointsComponent,
     ShortTimePipe,
     ThaiDatePipe,
+    ToggleFullscreenDirective,
   ],
   exports: [
     ModalAddServicePointComponent,
@@ -37,6 +39,7 @@ import { TokenService } from './token.service';
     ModalSelectServicepointsComponent,
     ShortTimePipe,
     ThaiDatePipe,
+    ToggleFullscreenDirective
   ],
   providers: [
     ServicePointService,

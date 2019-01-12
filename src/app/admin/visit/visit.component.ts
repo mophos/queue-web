@@ -40,6 +40,8 @@ export class VisitComponent implements OnInit {
   notifyPassword = null;
   query: any = '';
 
+  notifyUrl: string;
+
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
   constructor(
@@ -48,11 +50,12 @@ export class VisitComponent implements OnInit {
     private alertService: AlertService,
     private servicePointService: ServicePointService,
     private zone: NgZone,
-    @Inject('NOTIFY_URL') private notifyUrl: string,
     @Inject('API_URL') private apiUrl: string,
   ) {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
+
+    this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
     this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
 

@@ -26,6 +26,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   waitingItems: any = [];
   workingItems: any = [];
   pendingItems: any = [];
+  historyItems: any = [];
   rooms: any = [];
   queueNumber: any;
   roomNumber: any;
@@ -52,6 +53,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   pendingToServicePointId: any = null;
 
   selectedQueue: any = {};
+  notifyUrl: string;
 
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
@@ -60,14 +62,14 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     private roomService: ServiceRoomService,
     private alertService: AlertService,
     private zone: NgZone,
-    @Inject('NOTIFY_URL') private notifyUrl: string,
     @Inject('API_URL') private apiUrl: string,
-
   ) {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
     this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
     this.globalTopic = decodedToken.QUEUE_CENTER_TOPIC;
+
+    this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
     this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
   }
@@ -297,6 +299,21 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     }
   }
 
+  async getHistory() {
+    try {
+      const rs: any = await this.queueService.getWorkingHistory(this.servicePointId);
+      if (rs.statusCode === 200) {
+        this.historyItems = rs.results;
+      } else {
+        console.log(rs.message);
+        this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
+    }
+  }
+
   async getPending() {
     try {
       const rs: any = await this.queueService.getPending(this.servicePointId);
@@ -360,6 +377,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.getWorking();
     this.getRooms();
     this.getPending();
+    this.getHistory();
   }
 
   setQueueForCall(item: any) {
