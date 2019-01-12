@@ -18,6 +18,7 @@ export class ModalAddUserComponent implements OnInit {
   users: any = [];
   info: any = {};
 
+  userType: any;
   userId: any;
   username: any;
   password: any;
@@ -40,14 +41,20 @@ export class ModalAddUserComponent implements OnInit {
       keyboard: false,
       backdrop: 'static',
       size: 'sm',
-      centered: true
+      centered: false
     });
 
     if (info) {
       this.userId = info.user_id;
       this.username = info.username;
       this.fullname = info.fullname;
+      this.userType = info.user_type;
       this.isActive = info.is_active || 'N';
+    } else {
+      this.userId = null;
+      this.username = null;
+      this.fullname = null;
+      this.password = null;
     }
 
     this.modalReference.result.then((result) => { });
@@ -63,6 +70,7 @@ export class ModalAddUserComponent implements OnInit {
         const data: any = {
           username: this.username,
           fullname: this.fullname,
+          userType: this.userType,
           isActive: this.isActive || 'N'
         };
 
@@ -73,9 +81,10 @@ export class ModalAddUserComponent implements OnInit {
             isError = true;
           } else {
             isError = false;
-            data.password = this.password;
           }
         }
+
+        data.password = this.password;
 
         var rs: any;
 

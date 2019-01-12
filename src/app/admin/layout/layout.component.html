@@ -56,19 +56,19 @@
             <i class="mdi mdi-human-male-female menu-icon"></i>
           </a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
           <a class="nav-link" href="javascript://" routerLink="/admin/service-point">
             <span class="menu-title">จุดให้บริการ</span>
             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
           </a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
           <a class="nav-link" href="javascript://" routerLink="/admin/users">
             <span class="menu-title">ผู้ใช้งานระบบ</span>
             <i class="mdi mdi-account-group menu-icon"></i>
           </a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
           <a class="nav-link" href="javascript://" routerLink="/admin/generate-token">
             <span class="menu-title">Generate token</span>
             <i class="mdi mdi-key menu-icon"></i>

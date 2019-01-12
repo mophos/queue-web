@@ -26,6 +26,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   waitingItems: any = [];
   workingItems: any = [];
   pendingItems: any = [];
+  historyItems: any = [];
   rooms: any = [];
   queueNumber: any;
   roomNumber: any;
@@ -298,6 +299,21 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     }
   }
 
+  async getHistory() {
+    try {
+      const rs: any = await this.queueService.getWorkingHistory(this.servicePointId);
+      if (rs.statusCode === 200) {
+        this.historyItems = rs.results;
+      } else {
+        console.log(rs.message);
+        this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
+    }
+  }
+
   async getPending() {
     try {
       const rs: any = await this.queueService.getPending(this.servicePointId);
@@ -361,6 +377,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.getWorking();
     this.getRooms();
     this.getPending();
+    this.getHistory();
   }
 
   setQueueForCall(item: any) {

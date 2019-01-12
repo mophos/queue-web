@@ -7,7 +7,6 @@
   </div>
   <div class="modal-body">
     <form>
-
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="username" class="required">ชื่อผู้ใช้งาน</label>
@@ -23,6 +22,16 @@
         <div class="form-group col-md-12">
           <label for="fullname" class="required">ชื่อ - สกุล</label>
           <input type="text" name="fullname" id="fullname" class="form-control" name="fullname" [(ngModel)]="fullname">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="password" class="required">ประเภทผู้ใช้งาน</label>
+          <select class="form-control" name="userType" [(ngModel)]="userType">
+            <option value="ADMIN">ผู้ดูแลระบบ</option>
+            <option value="MEMBER">ผู้ใช้งานทั่วไป</option>
+          </select>
         </div>
       </div>
 
