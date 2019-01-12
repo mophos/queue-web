@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   password: string;
   hosname: string;
   hoscode: string;
-  topic: string;
+  // topic: string;
 
   jwtHelper = new JwtHelperService();
 
@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem('fullname', decoded.fullname);
           sessionStorage.setItem('userType', decoded.userType);
           sessionStorage.setItem('username', this.username);
-
+          sessionStorage.setItem('servicePoints', JSON.stringify(rs.servicePoints));
           this.router.navigate(['/admin']);
         } else {
           const message = rs.message || 'เกิดข้อผิดพลาด';
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
     try {
       const rs: any = await this.loginService.getInfo();
       if (rs.info) {
-        sessionStorage.setItem('topic', rs.info.topic);
+        // sessionStorage.setItem('topic', rs.info.topic);
         sessionStorage.setItem('hoscode', rs.info.hoscode);
         sessionStorage.setItem('hosname', rs.info.hosname);
 

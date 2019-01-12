@@ -41,10 +41,10 @@
             <div class="form-group">
               <select aria-placeholder="เลือกจุดให้บริการ" (change)="changeServicePoints($event)" class="form-control form-control-sm"
                 name="servicePointId">
-                <option value="">เลือกจุดให้บริการ</option>
+                <!-- <option value="">เลือกจุดให้บริการ</option> -->
                 <option *ngFor="let s of servicePoints" [value]="s.local_code">{{s.local_code}} -
                   {{s.service_point_name}}</option>
-                <option value="">ทั้งหมด</option>
+                <!-- <option value="">ทั้งหมด</option> -->
               </select>
             </div>
           </div>

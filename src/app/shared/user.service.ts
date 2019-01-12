@@ -24,6 +24,16 @@ export class UserService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
+  async servicePointList(userId: any) {
+    const _url = `${this.apiUrl}/users/service-points/list/${userId}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
+  async saveServicePointList(userId: any, items: any) {
+    const _url = `${this.apiUrl}/users/service-points/${userId}`;
+    return this.httpClient.put(_url, { items: items }, this.httpOptions).toPromise();
+  }
+
   async info(userId: any) {
     const _url = `${this.apiUrl}/users/${userId}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();

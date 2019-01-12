@@ -46,18 +46,22 @@ export class ModalSelectServicepointsComponent implements OnInit {
   }
 
   async getList() {
-    try {
-      const rs: any = await this.servicePointService.list();
-      if (rs.statusCode === 200) {
-        this.points = rs.results;
-      } else {
-        console.log(rs.message);
-        this.alertService.error('เกิดข้อผิดพลาด');
-      }
-    } catch (error) {
-      console.log(error);
-      this.alertService.error();
-    }
+    var _servicePoints = sessionStorage.getItem('servicePoints');
+    var jsonDecoded = JSON.parse(_servicePoints);
+
+    this.points = jsonDecoded
+    // try {
+    //   const rs: any = await this.servicePointService.list();
+    //   if (rs.statusCode === 200) {
+    //     this.points = rs.results;
+    //   } else {
+    //     console.log(rs.message);
+    //     this.alertService.error('เกิดข้อผิดพลาด');
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    //   this.alertService.error();
+    // }
   }
 
   setSelected(point: any) {

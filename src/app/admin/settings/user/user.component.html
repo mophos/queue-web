@@ -48,6 +48,9 @@
                   <button class="btn btn-sm btn-icon-append btn-gradient-success" (click)="openEdit(item)">
                     <i class="mdi mdi-pencil"></i> แก้ไข
                   </button>
+                  <button class="btn btn-sm btn-gradient-primary" (click)="openServicePoints(item)">
+                    <i class="mdi mdi-delete-outline"></i> จุดบริการ
+                  </button>
                   <button class="btn btn-sm btn-gradient-danger" (click)="remove(item)">
                     <i class="mdi mdi-delete-outline"></i> ลบ
                   </button>
@@ -62,3 +65,4 @@
 </div>
 
 <app-modal-add-user #mdlUser (onSave)="onSave($event)"></app-modal-add-user>
+<app-modal-user-service-points [userId]="userId" [userName]="userName" #mdlUserServicePoints (onSave)="onSaveServicePoints($event)"></app-modal-user-service-points>
