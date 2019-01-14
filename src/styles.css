@@ -211,6 +211,19 @@ p {
     width: 100%;
     flex-grow: 1;
 }
+
+.form-check .form-check-label {
+    display: block;
+    margin-left: 1.75rem;
+    font-size: 1.3rem;
+    line-height: 1.5;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
 /* 
 .modal .modal-dialog .modal-content .modal-body {
     padding: 0px 10px;

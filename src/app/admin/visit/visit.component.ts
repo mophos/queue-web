@@ -64,7 +64,6 @@ export class VisitComponent implements OnInit {
 
   ngOnInit() {
     this.getPriorities();
-    this.getVisit();
     this.getServicePoints();
 
     this.connectWebSocket();
@@ -169,17 +168,15 @@ export class VisitComponent implements OnInit {
   }
 
   async getServicePoints() {
-    try {
-      const rs: any = await this.servicePointService.list();
-      if (rs.statusCode === 200) {
-        this.servicePoints = rs.results;
-      } else {
-        this.alertService.error(rs.message);
-      }
-    } catch (error) {
-      console.error(error);
-      this.alertService.error('เกิดข้อผิดพลาด');
+    var _servicePoints = sessionStorage.getItem('servicePoints');
+    var jsonDecoded = JSON.parse(_servicePoints);
+
+    this.servicePoints = jsonDecoded;
+    if (this.servicePoints) {
+      this.servicePointCode = this.servicePoints[0].local_code;
     }
+
+    await this.getVisit();
   }
 
   changeServicePoints(event: any) {

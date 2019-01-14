@@ -33,6 +33,8 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   roomId: any;
   queueId: any;
 
+  isAllServicePoint: boolean = false;
+
   total = 0;
   pageSize = 10;
   maxSizePage = 5;
@@ -346,13 +348,13 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
 
   selectServicePoint() {
     this.isMarkPending = false;
-    this.mdlServicePoint.open();
+    this.mdlServicePoint.open(false);
   }
 
   showSelectPointForMarkPending(item: any) {
     this.selectedQueue = item;
     this.isMarkPending = true;
-    this.mdlServicePoint.open();
+    this.mdlServicePoint.open(true);
   }
 
   onSelectedPoint(event: any) {
@@ -412,16 +414,19 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.doCallQueue();
   }
 
-  async doCallQueue() {
-    console.log(this.roomId);
-    console.log(this.roomNumber);
-    console.log(this.queueNumber);
+  async interviewQueue(room: any) {
+    this.roomId = room.room_id;
+    this.roomNumber = room.room_number;
+    // update interview
+    this.doCallQueue('N');
+  }
 
+  async doCallQueue(isCompleted: any = 'Y') {
     if (this.isOffline) {
       this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
     } else {
       try {
-        const rs: any = await this.queueService.callQueue(this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId);
+        const rs: any = await this.queueService.callQueue(this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId, isCompleted);
         if (rs.statusCode === 200) {
           this.alertService.success();
           this.getAllList();

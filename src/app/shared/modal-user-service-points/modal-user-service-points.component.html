@@ -1,0 +1,32 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-basic-title">ชื่อผู้ใช้งาน : {{ userName }}</h3>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-body">
+        <form>
+          <label for="selectedServicePointIds">เลือกแผนก</label>
+          <!-- <select name="selectedServicePointIds" [(ngModel)]="selectedServicePointIds" multiple class="form-control">
+            <option *ngFor="let item of servicePoints" [value]="item.service_point_id">{{item.service_point_name}}</option>
+          </select> -->
+          <div class="form-check" *ngFor="let item of servicePoints">
+            <input (change)="toggleServicePoint(item.service_point_id, $event)" class="form-check-input" [checked]="item.is_selected"
+              type="checkbox" id="check-{{item.service_point_id}}">
+            <label class="form-check-label" for="check-{{item.service_point_id}}">
+              {{item.service_point_name}}
+            </label>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="save()">บันทึก</button>
+    <button type="button" class="btn btn-outline-danger" (click)="dismiss()">ปิดหน้าต่าง</button>
+  </div>
+</ng-template>
