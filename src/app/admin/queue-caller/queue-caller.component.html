@@ -159,6 +159,12 @@
                         ซักประวัติ
                       </span>
                     </button>
+                    <button *ngIf="rooms.length === 1" class="btn btn-sm btn-primary" (click)="setCallDetail(item)"
+                      [ngbPopover]="popContentInterview" popoverTitle="เลือกจุดซักประวัติ">
+                      <span class="h4">
+                        ซักประวัติ
+                      </span>
+                    </button>
                     <button *ngIf="rooms.length > 1" class="btn btn-sm btn-success" (click)="setQueueForCall(item)"
                       [ngbPopover]="popContent" popoverTitle="เลือกช่องรับบริการ">
                       <span class="h4">
