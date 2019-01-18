@@ -2,10 +2,10 @@ var express = require('express')
 var path = require('path');
 var app = express()
 
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, './dist/web/')));
 
 app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, './dist/index.html'));
+  res.sendFile(path.join(__dirname, './dist/web/index.html'));
 });
 
 // catch 404 and forward to error handler
@@ -27,7 +27,7 @@ app.use(function (err, req, res, next) {
   res.send({ ok: false, error: err.message })
 });
 
-let port = 3001;
+let port = 4002;
 
 app.listen(port, function () {
   console.log(`Q4U listening on port ${port}!`)
