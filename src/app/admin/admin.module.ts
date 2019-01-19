@@ -17,6 +17,8 @@ import { QueueCenterComponent } from './queue-center/queue-center.component';
 import { VisitComponent } from './visit/visit.component';
 import { QueueCenterPatientComponent } from './queue-center-patient/queue-center-patient.component';
 import { GenerateTokenComponent } from './settings/generate-token/generate-token.component';
+import { DepartmentsComponent } from './settings/departments/departments.component';
+import { PriorityComponent } from './settings/priority/priority.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { GenerateTokenComponent } from './settings/generate-token/generate-token
     QueueCenterComponent,
     VisitComponent,
     QueueCenterPatientComponent,
-    GenerateTokenComponent],
+    GenerateTokenComponent,
+    DepartmentsComponent,
+    PriorityComponent],
   imports: [
     CommonModule,
     NgbModule,
