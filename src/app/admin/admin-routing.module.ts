@@ -9,6 +9,8 @@ import { VisitComponent } from './visit/visit.component';
 import { QueueCallerComponent } from './queue-caller/queue-caller.component';
 import { QueueCenterComponent } from './queue-center/queue-center.component';
 import { GenerateTokenComponent } from './settings/generate-token/generate-token.component';
+import { DepartmentsComponent } from './settings/departments/departments.component';
+import { PriorityComponent } from './settings/priority/priority.component';
 
 const routes: Routes = [
   {
@@ -17,6 +19,8 @@ const routes: Routes = [
     children: [
       // { path: 'dashboard', component: DashboardComponent },
       { path: 'service-point', component: ServicePointComponent },
+      { path: 'departments', component: DepartmentsComponent },
+      { path: 'priority', component: PriorityComponent },
       { path: 'users', component: UserComponent },
       { path: 'visit', component: VisitComponent },
       { path: 'queue-caller', component: QueueCallerComponent },
