@@ -20,6 +20,7 @@ import { ModalUserServicePointsComponent } from './modal-user-service-points/mod
 import { DepartmentService } from './department.service';
 import { ModalAddDepartmentComponent } from './modal-add-department/modal-add-department.component';
 import { ModalAddPriorityComponent } from './modal-add-priority/modal-add-priority.component';
+import { ModalSetPrinterComponent } from './modal-set-printer/modal-set-printer.component';
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import { ModalAddPriorityComponent } from './modal-add-priority/modal-add-priori
     ModalUserServicePointsComponent,
     ModalAddDepartmentComponent,
     ModalAddPriorityComponent,
+    ModalSetPrinterComponent,
   ],
   exports: [
     ModalAddServicePointComponent,
@@ -46,6 +48,7 @@ import { ModalAddPriorityComponent } from './modal-add-priority/modal-add-priori
     ModalSelectServicepointsComponent,
     ModalUserServicePointsComponent,
     ModalAddDepartmentComponent,
+    ModalSetPrinterComponent,
     ShortTimePipe,
     ThaiDatePipe,
     ToggleFullscreenDirective,

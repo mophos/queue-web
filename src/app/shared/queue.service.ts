@@ -19,6 +19,14 @@ export class QueueService {
     };
   }
 
+  async printQueueGateway(queueId: any, topic: any) {
+    const _url = `${this.apiUrl}/print/queue/prepare/print`;
+    return this.httpClient.post(_url, {
+      queueId: queueId,
+      topic: topic
+    }, this.httpOptions).toPromise();
+  }
+
   async visitList(servicePointCode: any, query: any, limit: number = 20, offset: number = 0) {
     const _url = `${this.apiUrl}/queue/his-visit?servicePointCode=${servicePointCode}&query=${query}&limit=${limit}&offset=${offset}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();

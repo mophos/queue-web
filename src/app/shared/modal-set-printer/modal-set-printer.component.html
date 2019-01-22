@@ -1,0 +1,33 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">เลือกเครื่องพิมพ์บัตรคิว</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-body">
+        <form>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="printerId" style="font-size: 1.5rem;" class="required">Printer ID</label>
+              <input type="text" name="printerId" id="printerId" class="form-control" name="printerId" [(ngModel)]="printerId">
+            </div>
+
+          </div>
+          <div class="form-row">
+            <div class="form-group form-check col-md-12">
+              <input type="checkbox" class="form-check-input" id="usePrinter" name="usePrinter" [(ngModel)]="usePrinter">
+              <label class="form-check-label" for="usePrinter">พิมพ์บัตรคิวเครื่องพิมพ์นี้</label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="save()">บันทึก</button>
+    <button type="button" class="btn btn-outline-danger" (click)="dismiss()">ยกเลิก</button>
+  </div>
+</ng-template>
