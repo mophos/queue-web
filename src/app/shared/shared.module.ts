@@ -17,6 +17,10 @@ import { ThaiDatePipe } from './thai-date.pipe';
 import { TokenService } from './token.service';
 import { ToggleFullscreenDirective } from './toggle-fullscreen.directive';
 import { ModalUserServicePointsComponent } from './modal-user-service-points/modal-user-service-points.component';
+import { DepartmentService } from './department.service';
+import { ModalAddDepartmentComponent } from './modal-add-department/modal-add-department.component';
+import { ModalAddPriorityComponent } from './modal-add-priority/modal-add-priority.component';
+import { ModalSetPrinterComponent } from './modal-set-printer/modal-set-printer.component';
 
 @NgModule({
   imports: [
@@ -33,6 +37,9 @@ import { ModalUserServicePointsComponent } from './modal-user-service-points/mod
     ThaiDatePipe,
     ToggleFullscreenDirective,
     ModalUserServicePointsComponent,
+    ModalAddDepartmentComponent,
+    ModalAddPriorityComponent,
+    ModalSetPrinterComponent,
   ],
   exports: [
     ModalAddServicePointComponent,
@@ -40,9 +47,12 @@ import { ModalUserServicePointsComponent } from './modal-user-service-points/mod
     ModalRoomsComponent,
     ModalSelectServicepointsComponent,
     ModalUserServicePointsComponent,
+    ModalAddDepartmentComponent,
+    ModalSetPrinterComponent,
     ShortTimePipe,
     ThaiDatePipe,
-    ToggleFullscreenDirective
+    ToggleFullscreenDirective,
+    ModalAddPriorityComponent
   ],
   providers: [
     ServicePointService,
@@ -51,7 +61,8 @@ import { ModalUserServicePointsComponent } from './modal-user-service-points/mod
     QueueService,
     AuthGuardService,
     LoginService,
-    TokenService
+    TokenService,
+    DepartmentService
   ]
 })
 export class SharedModule { }

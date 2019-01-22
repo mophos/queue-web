@@ -45,7 +45,17 @@ export class GenerateTokenComponent implements OnInit {
     try {
       const rs: any = await this.tokenService.list();
       if (rs.statusCode === 200) {
-        this.tokens = rs.results;
+        var data = [];
+        rs.results.forEach(v => {
+          var obj: any = {};
+          obj.token = v.token;
+          obj.short_token = v.token.split('.')[2];
+          obj.created_date = v.created_date;
+          obj.expired_date = v.expired_date;
+
+          data.push(obj);
+        });
+        this.tokens = data;
       } else {
         this.alertService.error(rs.message);
       }

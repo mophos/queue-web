@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { ServicePointService } from 'src/app/shared/service-point.service';
 import { CountdownComponent } from 'ngx-countdown';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { ModalSetPrinterComponent } from 'src/app/shared/modal-set-printer/modal-set-printer.component';
 
 @Component({
   selector: 'app-visit',
@@ -43,6 +44,7 @@ export class VisitComponent implements OnInit {
   notifyUrl: string;
 
   @ViewChild(CountdownComponent) counter: CountdownComponent;
+  @ViewChild('mdlSetPrinter') mdlSetPrinter: ModalSetPrinterComponent;
 
   constructor(
     private priorityService: PriorityService,
@@ -69,12 +71,42 @@ export class VisitComponent implements OnInit {
     this.connectWebSocket();
   }
 
+  onSelectedPrinter(event) {
+    if (event) {
+      console.log(event);
+    }
+  }
+
+  openPrinter() {
+    this.mdlSetPrinter.open();
+  }
+
   refresh() {
     this.getVisit();
   }
 
-  printQueue(queueId: any) {
-    window.open(`${this.apiUrl}/print/queue?queueId=${queueId}`, '_blank');
+  async printQueue(queueId: any) {
+    var usePrinter = localStorage.getItem('clientUserPrinter');
+    var printerId = localStorage.getItem('clientPrinterId');
+
+    if (usePrinter === 'Y') {
+      var topic = `/printer/${printerId}`;
+      console.log(topic);
+      try {
+        var rs: any = await this.queueService.printQueueGateway(queueId, topic);
+        if (rs.statusCode === 200) {
+          //success
+        } else {
+          this.alertService.error('ไม่สามารถพิมพ์บัตรคิวได้')
+        }
+      } catch (error) {
+        console.log(error);
+        this.alertService.error('ไม่สามารถพิมพ์บัตรคิวได้');
+      }
+      //
+    } else {
+      window.open(`${this.apiUrl}/print/queue?queueId=${queueId}`, '_blank');
+    }
   }
 
   connectWebSocket() {

@@ -32,7 +32,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let token of tokens">
-          <td>{{token.token.split('.')[2]}}</td>
+          <td>{{token.short_token}}</td>
           <td>{{token.created_date | thaiDate}} {{token.created_date | shortTime}}</td>
           <td>{{token.expired_date | thaiDate}} {{token.expired_date | shortTime}}</td>
           <td>
