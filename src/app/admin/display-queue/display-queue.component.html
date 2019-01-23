@@ -84,7 +84,7 @@
                     <tr>
                       <th><span class="h1">ลำดับที่</span></th>
                       <th><span class="h1">ช่องบริการ</span></th>
-                      <th><span class="h1">HN</span></th>
+                      <!-- <th><span class="h1">HN</span></th> -->
                     </tr>
                   </thead>
                   <tbody>
@@ -93,14 +93,14 @@
                     </tr>
                     <tr *ngFor="let item of workingItems" [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}">
                       <td>
-                        <label style="font-size: 2.5rem; letter-spacing: 5px;" class="font-weight-bold">{{item.queue_number}}</label>
+                        <label style="font-size: 3.5rem; letter-spacing: 2px;" class="font-weight-bold">{{item.queue_number}}</label>
                       </td>
                       <td>
-                        <label style="font-size: 2.5rem;" class="font-weight-bold">{{item.room_number}}</label>
+                        <label style="font-size: 3.5rem;" class="font-weight-bold">{{item.room_number}}</label>
                       </td>
-                      <td>
+                      <!-- <td>
                         <label style="font-size: 2.5rem;" class="font-weight-bold">{{item.hn}}</label>
-                      </td>
+                      </td> -->
                     </tr>
                   </tbody>
                 </table>
@@ -115,7 +115,7 @@
                     <tr>
                       <th><span class="h1">ลำดับที่</span></th>
                       <th><span class="h1">ช่องบริการ</span></th>
-                      <th><span class="h1">HN</span></th>
+                      <!-- <th><span class="h1">HN</span></th> -->
                     </tr>
                   </thead>
                   <tbody>
@@ -124,14 +124,14 @@
                     </tr>
                     <tr *ngFor="let item of workingItemsHistory">
                       <td>
-                        <label style="font-size: 2.5rem; letter-spacing: 5px;" class="font-weight-bold">{{item.queue_number}}</label>
+                        <label style="font-size: 3.5rem; letter-spacing: 2px;" class="font-weight-bold">{{item.queue_number}}</label>
                       </td>
                       <td>
-                        <label style="font-size: 2.5rem;" class="font-weight-bold">{{item.room_number}}</label>
+                        <label style="font-size: 3.5rem;" class="font-weight-bold">{{item.room_number}}</label>
                       </td>
-                      <td>
+                      <!-- <td>
                         <label style="font-size: 2.5rem;" class="font-weight-bold">{{item.hn}}</label>
-                      </td>
+                      </td> -->
                     </tr>
                   </tbody>
                 </table>
