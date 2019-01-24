@@ -28,6 +28,7 @@
               <th>ชื่อจุดบริการ</th>
               <th>แผนก</th>
               <th>PREFIX</th>
+              <th>KIOS</th>
               <th style="width: 150px;">#</th>
             </tr>
           </thead>
@@ -37,6 +38,10 @@
               <td>{{ item.service_point_name }}</td>
               <td>{{ item.department_name }}</td>
               <td>{{ item.prefix }}</td>
+              <td>
+                <i class="mdi mdi-check text-success" *ngIf="item.kios === 'Y'"></i>
+                <i class="mdi mdi-close text-danger" *ngIf="item.kios === 'N'"></i>
+              </td>
               <td>
                 <div class="btn-group">
                   <button class="btn btn-sm btn-icon-append btn-gradient-success" (click)="openEdit(item)">
