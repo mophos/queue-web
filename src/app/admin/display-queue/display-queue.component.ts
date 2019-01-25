@@ -121,23 +121,24 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
     this.isPlayingSound = true;
 
-    var _strQueue = strQueue.split('');
+    var _queue = strQueue.replace(' ', '');
+    var _strQueue = _queue.split('');
     var _strRoom = strRoomNumber.split('');
 
     var audioFiles = [];
 
-    audioFiles.push('./assets/audio/number.mp3')
+    audioFiles.push('./assets/audio/please.mp3')
     audioFiles.push('./assets/audio/silent.mp3')
 
     _strQueue.forEach(v => {
       audioFiles.push(`./assets/audio/${v}.mp3`);
     });
 
-    audioFiles.push('./assets/audio/silent.mp3');
-    audioFiles.push('./assets/audio/please.mp3');
-    audioFiles.push('./assets/audio/at.mp3');
+    // audioFiles.push('./assets/audio/silent.mp3');
+    // audioFiles.push('./assets/audio/please.mp3');
+    // audioFiles.push('./assets/audio/at.mp3');
     audioFiles.push('./assets/audio/channel.mp3');
-    audioFiles.push('./assets/audio/service.mp3');
+    // audioFiles.push('./assets/audio/service.mp3');
 
     _strRoom.forEach(v => {
       audioFiles.push(`./assets/audio/${v}.mp3`);
@@ -212,7 +213,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     const that = this;
 
     this.client.on('message', (topic, payload) => {
-
+      console.log('MQTT payload: ' + payload.toString());
       // this.getWorking();
       that.getCurrentQueue();
       that.getWorkingHistory();
@@ -230,6 +231,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     });
 
     this.client.on('connect', () => {
+      console.log('Connected!');
       that.zone.run(() => {
         that.isOffline = false;
       });
@@ -278,8 +280,6 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   }
 
   onSelectedPoint(event: any) {
-    console.log(event);
-    // set service info
     this.servicePointName = event.service_point_name;
     this.servicePointId = event.service_point_id;
     this.currentTopic = event.topic;
@@ -291,21 +291,6 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     this.getCurrentQueue();
     this.getWorkingHistory();
   }
-
-  // async getWorking() {
-  //   try {
-  //     const rs: any = await this.queueService.getWorking(this.servicePointId);
-  //     if (rs.statusCode === 200) {
-  //       this.workingItems = rs.results;
-  //     } else {
-  //       console.log(rs.message);
-  //       this.alertService.error('เกิดข้อผิดพลาด');
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     this.alertService.error();
-  //   }
-  // }
 
   async getCurrentQueue() {
     try {
@@ -349,6 +334,5 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       this.alertService.error();
     }
   }
-
 
 }

@@ -117,8 +117,9 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
       });
 
       that.client.subscribe(topic, (error) => {
+        console.log('Subscribe : ' + topic);
+
         if (error) {
-          console.log('Subscibe error!!');
           that.zone.run(() => {
             that.isOffline = true;
             try {
@@ -131,6 +132,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
       });
 
       that.client.subscribe(visitTopic, (error) => {
+        console.log('Subscribe : ' + visitTopic);
         if (error) {
           that.zone.run(() => {
             that.isOffline = true;
@@ -149,6 +151,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     });
 
     this.client.on('message', (topic, payload) => {
+      console.log('Message receive: ' + payload.toString())
       this.getAllList();
     });
 

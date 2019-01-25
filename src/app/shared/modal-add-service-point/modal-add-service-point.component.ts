@@ -19,6 +19,7 @@ export class ModalAddServicePointComponent implements OnInit {
     this.localCode = value.local_code;
     this.prefix = value.prefix;
     this.departmentId = value.department_id;
+    this.kios = value.kios === 'Y' ? true : false;
   }
 
   @Output('onSave') onSave: EventEmitter<any> = new EventEmitter<any>();
@@ -32,6 +33,9 @@ export class ModalAddServicePointComponent implements OnInit {
   servicePointAbbr: any;
   departmentId: any;
   prefix: any;
+  prefixes: any = [];
+
+  kios: any;
 
   departments: any[];
 
@@ -39,7 +43,12 @@ export class ModalAddServicePointComponent implements OnInit {
     private modalService: NgbModal,
     private alertService: AlertService,
     private servicePointService: ServicePointService,
-    private departmentService: DepartmentService) { }
+    private departmentService: DepartmentService) {
+    this.prefixes = [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+      'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    ];
+  }
 
   ngOnInit(): void { }
 
@@ -75,11 +84,14 @@ export class ModalAddServicePointComponent implements OnInit {
   async save() {
     if (this.servicePointName && this.localCode && this.prefix && this.departmentId) {
       try {
+        var kios = this.kios ? 'Y' : 'N';
+
         const data: any = {
           servicePointName: this.servicePointName,
           localCode: this.localCode,
           prefix: this.prefix.toUpperCase(),
-          departmentId: this.departmentId
+          departmentId: this.departmentId,
+          kios: kios
         };
 
         var rs: any;

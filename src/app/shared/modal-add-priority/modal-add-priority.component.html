@@ -19,8 +19,10 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="priorityPrefix" class="required">PREFIX</label>
-              <input type="text" name="priorityPrefix" id="priorityPrefix" class="form-control" name="priorityPrefix"
-                [(ngModel)]="priorityPrefix">
+              <select class="form-control" name="priorityPrefix" [(ngModel)]="priorityPrefix">
+                <option value="" selected>เลือก</option>
+                <option *ngFor="let item of prefixes" [value]="item">{{item}}</option>
+              </select>
             </div>
           </div>
         </form>

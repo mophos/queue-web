@@ -26,14 +26,25 @@
           <div class="form-row">
             <div class="form-group col-md-4">
               <label for="prefix" class="required">PREFIX</label>
-              <input type="text" name="prefix" id="prefix" class="form-control" name="prefix" [(ngModel)]="prefix">
+              <select class="form-control" name="prefix" [(ngModel)]="prefix">
+                <option value="" selected>เลือก</option>
+                <option *ngFor="let item of prefixes" [value]="item">{{item}}</option>
+              </select>
             </div>
             <div class="form-group col-md-8">
               <label for="prefix" class="required">แผนกหลัก</label>
               <select class="form-control" name="departmentId" [(ngModel)]="departmentId">
                 <option value="" selected>เลือกแผนก</option>
                 <option *ngFor="let item of departments" [value]="item.department_id">{{item.department_name}}</option>
-              </select> </div>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group form-check col-md-12">
+              <input type="checkbox" class="form-check-input" id="kios" name="kios" [(ngModel)]="kios">
+              <label class="form-check-label" for="kios">สำหรับ KIOS</label>
+            </div>
           </div>
 
         </form>

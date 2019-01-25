@@ -62,7 +62,7 @@
                   <button (click)="setChangeRoom(item)" class="btn btn-sm btn-success" [ngbPopover]="popContentChangeRoom"
                     popoverTitle="เปลี่ยนช่องบริการ">
                     <span class="h4">
-                      ช่องบริการ {{item.room_number}} - {{item.room_name}}
+                      ช่องบริการ {{item.room_number}}
                     </span>
                   </button>
                 </td>
@@ -76,7 +76,7 @@
                   <span class="h4">{{item.priority_name}}</span>
                 </td>
                 <td>
-                  <span class="h3 font-weight-bold text-danger" style="letter-spacing: 5px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
+                  <span class="h3 font-weight-bold text-danger" style="letter-spacing: 2px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
                 </td>
                 <td>
                   <div class="btn-group">
@@ -139,12 +139,12 @@
                 </td>
                 <td>
                   <label class="badge badge-danger" style="width: 100px;">
-                    <span class="h3-x font-weight-bold" style="letter-spacing: 5px;">{{item.queue_number}}</span>
+                    <span class="h3-x font-weight-bold" style="letter-spacing: 2px;">{{item.queue_number}}</span>
                   </label>
                 </td>
                 <td>
                   <label class="badge badge-primary">
-                    <span class="h3-x font-weight-bold" style="letter-spacing: 5px;">{{item.queue_id}}</span>
+                    <span class="h3-x font-weight-bold" style="letter-spacing: 2px;">{{item.queue_id}}</span>
                   </label>
                 </td>
                 <td>
@@ -245,7 +245,7 @@
                 </td>
                 <td>
                   <label class="badge badge-danger" style="width: 100px;">
-                    <span class="h3 font-weight-bold" style="letter-spacing: 5px;">{{item.queue_number}}</span>
+                    <span class="h3 font-weight-bold" style="letter-spacing: 2px;">{{item.queue_number}}</span>
                   </label>
                 </td>
                 <td>
@@ -302,7 +302,7 @@
               <tr *ngFor="let item of historyItems">
                 <td>
                   <span class="h4">
-                    {{item.room_number}} - {{item.room_name}}
+                    {{item.room_number}}
                   </span>
                 </td>
                 <td>
@@ -315,7 +315,7 @@
                   <span class="h4">{{item.priority_name}}</span>
                 </td>
                 <td>
-                  <span class="h3 font-weight-bold text-danger" style="letter-spacing: 5px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
+                  <span class="h3 font-weight-bold text-danger" style="letter-spacing: 2px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
                 </td>
                 <td>
                   <div class="btn-group">
