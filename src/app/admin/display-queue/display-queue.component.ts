@@ -124,6 +124,8 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     var _queue = strQueue.replace(' ', '');
     var _strQueue = _queue.split('');
     var _strRoom = strRoomNumber.split('');
+    console.log(_queue);
+    console.log(_strQueue);
 
     var audioFiles = [];
 
