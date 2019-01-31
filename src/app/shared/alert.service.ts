@@ -81,4 +81,18 @@ export class AlertService {
     return false;
   }
 
+  async showLoading() {
+    const resp = await swal({
+      title: 'ประมวลผล!',
+      html: 'กรุณารอซักครู่ระบบกำลังประมวลผล.',
+      allowOutsideClick: false,
+      onBeforeOpen: () => {
+        swal.showLoading();
+      }
+    });
+    if (resp.dismiss === swal.DismissReason.timer) { }
+
+  }
+
+
 }

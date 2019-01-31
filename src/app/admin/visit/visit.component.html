@@ -7,16 +7,17 @@
         </h4> -->
         <p class="card-description">
           แสดงเฉพาะรายชื่อจุดให้บริการที่มีการ <code>เปิดให้บริการ</code> เท่านั้น
-          <button (click)="openPrinter()" class="float-right btn btn-sm btn-success"> <i class="mdi mdi-printer"></i></button>
+          <button (click)="openPrinter()" class="float-right btn btn-sm btn-success"> <i class="mdi mdi-printer"></i>
+            ตั้งค่าเครื่องพิมพ์</button>
 
         </p>
         <div class="row">
           <div class="col-md-9">
             <div class="input-group" style="width: 250px;">
-              <input type="text" class="form-control" name="query" [(ngModel)]="query" placeholder="ระบุคำค้นหา.."
-                aria-label="ระบุคำค้นหา" aria-describedby="button-addon2">
+              <input type="text" class="form-control" name="query" (keyup)="doSearch($event)" [(ngModel)]="query"
+                placeholder="ระบุคำค้นหา.." aria-label="ระบุคำค้นหา" aria-describedby="button-addon2">
               <div class="input-group-append">
-                <button class="btn btn-primary btn-sm" (click)="getVisit()" type="button" id="button-addon2">
+                <button class="btn btn-primary btn-sm" [disabled]="!query" (click)="getVisit()" type="button" id="button-addon2">
                   <i class="mdi mdi-account-search"></i>
                   ค้นหา
                 </button>

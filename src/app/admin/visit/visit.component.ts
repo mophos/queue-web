@@ -5,6 +5,7 @@ import { QueueService } from 'src/app/shared/queue.service';
 import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as Random from 'random-js';
+import { default as swal, SweetAlertType, SweetAlertOptions } from 'sweetalert2';
 
 import * as moment from 'moment';
 import { ServicePointService } from 'src/app/shared/service-point.service';
@@ -83,6 +84,15 @@ export class VisitComponent implements OnInit {
 
   refresh() {
     this.getVisit();
+  }
+
+
+  doSearch(event: any) {
+    if (this.query) {
+      if (event.keyCode === 13) {
+        this.getVisit();
+      }
+    }
   }
 
   async printQueue(queueId: any) {
@@ -218,7 +228,11 @@ export class VisitComponent implements OnInit {
 
   async getVisit() {
     try {
+      this.alertService.showLoading();
       const rs: any = await this.queueService.visitList(this.servicePointCode, this.query, this.pageSize, this.offset);
+
+      swal.close();
+
       if (rs.statusCode === 200) {
         this.visit = rs.results;
         this.total = rs.total;
@@ -226,6 +240,7 @@ export class VisitComponent implements OnInit {
         this.alertService.error(rs.message);
       }
     } catch (error) {
+      swal.close();
       console.error(error);
       this.alertService.error('เกิดข้อผิดพลาด');
     }
@@ -261,23 +276,21 @@ export class VisitComponent implements OnInit {
       person.birthDate = moment(visit.birthdate).format('YYYY-MM-DD');
       person.sex = visit.sex;
 
-      const isConfirm = await this.alertService.confirm(`ต้องการสร้างคิวสำหรับ ${person.firstName} ${person.lastName} ใช่หรือไม่?`);
-      if (isConfirm) {
-        const rs: any = await this.queueService.register(person);
-        if (rs.statusCode === 200) {
+      const rs: any = await this.queueService.register(person);
 
-          const queueId: any = rs.queueId;
-          // this.alertService.success();
-          this.getVisit();
-          // this.publishTopic();
-          const confirm = await this.alertService.confirm('ต้องการพิมพ์บัตรคิว หรือไม่?');
-          if (confirm) {
-            // print queue
-            this.printQueue(queueId);
-          }
-        } else {
-          this.alertService.error(rs.message);
+      if (rs.statusCode === 200) {
+
+        const queueId: any = rs.queueId;
+        // this.alertService.success();
+        this.getVisit();
+        // this.publishTopic();
+        const confirm = await this.alertService.confirm('ต้องการพิมพ์บัตรคิว หรือไม่?');
+        if (confirm) {
+          // print queue
+          this.printQueue(queueId);
         }
+      } else {
+        this.alertService.error(rs.message);
       }
     } catch (error) {
       console.log(error);
