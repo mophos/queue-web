@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginModule } from './login/login.module';
 import { SharedModule } from './shared/shared.module';
 import { environment } from '../environments/environment';
+import { QueueOnlineModule } from './queue-online/queue-online.module';
 
 export function tokenGetter() {
   return sessionStorage.getItem('token');
@@ -37,6 +38,7 @@ export const whitelistedDomains = [new RegExp('[\s\S]*')] as RegExp[];
     }),
     SharedModule,
     AdminModule,
+    QueueOnlineModule,
     LoginModule
   ],
   providers: [
