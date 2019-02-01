@@ -5,12 +5,14 @@ import { QueueService } from 'src/app/shared/queue.service';
 import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as Random from 'random-js';
+import { default as swal, SweetAlertType, SweetAlertOptions } from 'sweetalert2';
 
 import * as moment from 'moment';
 import { ServicePointService } from 'src/app/shared/service-point.service';
 import { CountdownComponent } from 'ngx-countdown';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ModalSetPrinterComponent } from 'src/app/shared/modal-set-printer/modal-set-printer.component';
+import { ModalSelectPriorityComponent } from 'src/app/shared/modal-select-priority/modal-select-priority.component';
 
 @Component({
   selector: 'app-visit',
@@ -41,10 +43,16 @@ export class VisitComponent implements OnInit {
   notifyPassword = null;
   query: any = '';
 
+  selectedVisit: any;
+  patientName: any;
+
+  isSearch = false;
+
   notifyUrl: string;
 
   @ViewChild(CountdownComponent) counter: CountdownComponent;
   @ViewChild('mdlSetPrinter') mdlSetPrinter: ModalSetPrinterComponent;
+  @ViewChild('mdlSelectPriority') mdlSelectPriority: ModalSelectPriorityComponent;
 
   constructor(
     private priorityService: PriorityService,
@@ -65,10 +73,19 @@ export class VisitComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getPriorities();
     this.getServicePoints();
-
     this.connectWebSocket();
+  }
+
+
+  onSelectedPriority(priority: any) {
+    this.doRegister(priority.priority_id, this.selectedVisit);
+  }
+
+  openPriority(visit: any) {
+    this.patientName = `${visit.first_name} ${visit.last_name} (${visit.hn})`;
+    this.selectedVisit = visit;
+    this.mdlSelectPriority.open();
   }
 
   onSelectedPrinter(event) {
@@ -83,6 +100,16 @@ export class VisitComponent implements OnInit {
 
   refresh() {
     this.getVisit();
+  }
+
+
+  doSearch(event: any) {
+    if (this.query) {
+      if (event.keyCode === 13) {
+        this.isSearch = true;
+        this.getVisit();
+      }
+    }
   }
 
   async printQueue(queueId: any) {
@@ -176,29 +203,6 @@ export class VisitComponent implements OnInit {
     })
   }
 
-  // publishTopic() {
-  //   const topic = `${this.prefixTopic}/visit`;
-  //   this.client.publish(topic, 'update queue!');
-
-  //   const topicCenter = `${this.prefixTopic}/queue-center`;
-  //   this.client.publish(topicCenter, 'update queue!');
-  // }
-
-
-  async getPriorities() {
-    try {
-      const rs: any = await this.priorityService.list();
-      if (rs.statusCode === 200) {
-        this.priorities = rs.results;
-      } else {
-        this.alertService.error(rs.message);
-      }
-    } catch (error) {
-      console.error(error);
-      this.alertService.error('เกิดข้อผิดพลาด');
-    }
-  }
-
   async getServicePoints() {
     var _servicePoints = sessionStorage.getItem('servicePoints');
     var jsonDecoded = JSON.parse(_servicePoints);
@@ -219,9 +223,16 @@ export class VisitComponent implements OnInit {
   async getVisit() {
     try {
       const rs: any = await this.queueService.visitList(this.servicePointCode, this.query, this.pageSize, this.offset);
+
       if (rs.statusCode === 200) {
         this.visit = rs.results;
         this.total = rs.total;
+
+        if (this.isSearch) {
+          if (this.visit.length === 1) {
+            this.openPriority(this.visit[0])
+          }
+        }
       } else {
         this.alertService.error(rs.message);
       }
@@ -243,7 +254,6 @@ export class VisitComponent implements OnInit {
     this.getVisit();
   }
 
-
   async doRegister(prorityId: any, visit: any) {
     try {
 
@@ -261,23 +271,23 @@ export class VisitComponent implements OnInit {
       person.birthDate = moment(visit.birthdate).format('YYYY-MM-DD');
       person.sex = visit.sex;
 
-      const isConfirm = await this.alertService.confirm(`ต้องการสร้างคิวสำหรับ ${person.firstName} ${person.lastName} ใช่หรือไม่?`);
-      if (isConfirm) {
-        const rs: any = await this.queueService.register(person);
-        if (rs.statusCode === 200) {
+      const rs: any = await this.queueService.register(person);
 
-          const queueId: any = rs.queueId;
-          // this.alertService.success();
-          this.getVisit();
-          // this.publishTopic();
-          const confirm = await this.alertService.confirm('ต้องการพิมพ์บัตรคิว หรือไม่?');
-          if (confirm) {
-            // print queue
-            this.printQueue(queueId);
-          }
-        } else {
-          this.alertService.error(rs.message);
+      if (rs.statusCode === 200) {
+
+        const queueId: any = rs.queueId;
+        const confirm = await this.alertService.confirm('ต้องการพิมพ์บัตรคิว หรือไม่?');
+        if (confirm) {
+          this.printQueue(queueId);
         }
+
+        this.isSearch = false;
+        this.query = '';
+        this.getVisit();
+        this.selectedVisit = null;
+
+      } else {
+        this.alertService.error(rs.message);
       }
     } catch (error) {
       console.log(error);

@@ -21,6 +21,7 @@ import { DepartmentService } from './department.service';
 import { ModalAddDepartmentComponent } from './modal-add-department/modal-add-department.component';
 import { ModalAddPriorityComponent } from './modal-add-priority/modal-add-priority.component';
 import { ModalSetPrinterComponent } from './modal-set-printer/modal-set-printer.component';
+import { ModalSelectPriorityComponent } from './modal-select-priority/modal-select-priority.component';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { ModalSetPrinterComponent } from './modal-set-printer/modal-set-printer.
     ModalAddDepartmentComponent,
     ModalAddPriorityComponent,
     ModalSetPrinterComponent,
+    ModalSelectPriorityComponent,
   ],
   exports: [
     ModalAddServicePointComponent,
@@ -52,7 +54,8 @@ import { ModalSetPrinterComponent } from './modal-set-printer/modal-set-printer.
     ShortTimePipe,
     ThaiDatePipe,
     ToggleFullscreenDirective,
-    ModalAddPriorityComponent
+    ModalAddPriorityComponent,
+    ModalSelectPriorityComponent
   ],
   providers: [
     ServicePointService,
