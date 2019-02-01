@@ -14,10 +14,10 @@
         <div class="row">
           <div class="col-md-9">
             <div class="input-group" style="width: 250px;">
-              <input type="text" class="form-control" name="query" (keyup)="doSearch($event)" [(ngModel)]="query"
-                placeholder="ระบุคำค้นหา.." aria-label="ระบุคำค้นหา" aria-describedby="button-addon2">
+              <input type="text" (click)="$event.target.select()" class="form-control" name="query" (keyup)="doSearch($event)"
+                [(ngModel)]="query" placeholder="ระบุคำค้นหา.." aria-label="ระบุคำค้นหา" aria-describedby="button-addon2">
               <div class="input-group-append">
-                <button class="btn btn-primary btn-sm" [disabled]="!query" (click)="getVisit()" type="button" id="button-addon2">
+                <button class="btn btn-primary btn-sm" (click)="getVisit()" type="button" id="button-addon2">
                   <i class="mdi mdi-account-search"></i>
                   ค้นหา
                 </button>
@@ -59,15 +59,9 @@
               <td>{{v.first_name}} {{v.last_name}}</td>
               <td>{{v.clinic_code}} - {{v.clinic_name}}</td>
               <td>
-                <div class="d-inline-block" ngbDropdown placement="top-right" #myDrop="ngbDropdown">
-                  <button class="btn btn-sm btn-icon-append btn-gradient-primary" ngbDropdownAnchor (focus)="myDrop.open()">
-                    <i class="mdi mdi-library-plus"></i> สร้างคิว
-                  </button>
-                  <div ngbDropdownMenu aria-labelledby="dropdownManual">
-                    <button class="dropdown-item" *ngFor="let item of priorities" (click)="doRegister(item.priority_id, v)">
-                      ({{item.priority_prefix}}) {{ item.priority_name }}</button>
-                  </div>
-                </div>
+                <button class="btn btn-sm btn-gradient-primary" (click)="openPriority(v)">
+                  <i class="mdi mdi-library-plus"></i> สร้างคิว
+                </button>
               </td>
             </tr>
           </tbody>
@@ -84,5 +78,6 @@
   </div>
 </div>
 
+<app-modal-select-priority #mdlSelectPriority (onSelected)="onSelectedPriority($event)" [patientName]="patientName"></app-modal-select-priority>
 <app-modal-set-printer #mdlSetPrinter (onSave)="onSelectedPrinter($event)"></app-modal-set-printer>
 <!-- <app-modal-add-user [userId]="userId" #mdlUser (onSave)="onSave($event)"></app-modal-add-user> -->

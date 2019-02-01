@@ -1,0 +1,40 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-basic-title">ชื่อ {{patientName}}</h3>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-body">
+        เลือกประเภทผู้ป่วย
+        <table class="table table-sm table-hover">
+          <thead>
+            <tr>
+              <th>PREFIX</th>
+              <th>ประเภทผู้ป่วย</th>
+              <th style="width: 50px;">#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let priority of priorities">
+              <td>{{priority.priority_prefix}}</td>
+              <td>{{priority.priority_name}}</td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-success" (click)="selected(priority)">
+                    เลือก
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="dismiss()">ปิดหน้าต่าง</button>
+  </div> -->
+</ng-template>
