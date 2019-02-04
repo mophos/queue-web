@@ -1,12 +1,23 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
 
-  constructor(@Inject('API_URL') private apiUrl: string, private httpClient: HttpClient) { }
+  token: any;
+  httpOptions: any;
+
+  constructor(@Inject('API_URL') private apiUrl: string, private httpClient: HttpClient) {
+    this.token = sessionStorage.getItem('token');
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.token
+      })
+    };
+  }
 
   async list() {
     const _url = `${this.apiUrl}/token`;
