@@ -100,6 +100,12 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     const strRnd = rnd.integer(1111111111, 9999999999);
     const clientId = `${username}-${strRnd}`;
 
+    try {
+      this.client.end(true);
+    } catch (error) {
+      console.log(error);
+    }
+
     this.client = mqttClient.connect(this.notifyUrl, {
       clientId: clientId,
       username: this.notifyUser,
