@@ -1,0 +1,60 @@
+<div class="page-header">
+  <h1 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-key"></i>
+    </span>
+    <span style="font-size: 1.4rem;">กำหนดช่วงเวลาเปิดให้บริการ</span>
+  </h1>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript://" routerLink="/queue-online">หน้าหลัก</a></li>
+      <li class="breadcrumb-item active" aria-current="page">ช่วงเวลาที่เปิดให้บริการ</li>
+    </ol>
+  </nav>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+
+        <div class="row">
+          <div class="col-md-12">
+            <button class="float-right btn btn-sm btn-primary" (click)="openModalNew()">+ เพิ่มข้อมูล</button>
+          </div>
+        </div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ช่วงเวลา</th>
+              <th>ใช้งาน</th>
+              <th style="width: 80px;">#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="!items.length">
+              <td colspan="3">
+                <p>ไม่พบรายการ</p>
+              </td>
+            </tr>
+            <tr *ngFor="let v of items">
+              <td><span class="h2">{{v.time_start | serviceTime}} - {{v.time_end | serviceTime}}</span></td>
+              <td>
+                <i class="mdi mdi-check text-success" *ngIf="v.is_active === 'Y'"></i>
+                <i class="mdi mdi-close text-danger" *ngIf="v.is_active === 'N'"></i>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-gradient-primary" (click)="openEdit(v)">
+                  <i class="mdi mdi-library-plus"></i> แก้ไข
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<app-modal-add-service-times #mdlAddServiceTime></app-modal-add-service-times>

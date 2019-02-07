@@ -10,6 +10,7 @@ import { ServiceRoomService } from 'src/app/shared/service-room.service';
 
 import { CountdownComponent } from 'ngx-countdown';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { ConsoleReporter } from 'jasmine';
 
 @Component({
   selector: 'app-queue-caller',

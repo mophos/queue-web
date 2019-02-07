@@ -22,6 +22,9 @@ import { ModalAddDepartmentComponent } from './modal-add-department/modal-add-de
 import { ModalAddPriorityComponent } from './modal-add-priority/modal-add-priority.component';
 import { ModalSetPrinterComponent } from './modal-set-printer/modal-set-printer.component';
 import { ModalSelectPriorityComponent } from './modal-select-priority/modal-select-priority.component';
+import { ModalAddServiceTimesComponent } from './queue-online/modal-add-service-times/modal-add-service-times.component';
+import { QueueOnlineServiceTimeService } from './queue-online/service-time.service';
+import { ServiceTimePipe } from './service-time.pipe';
 
 @NgModule({
   imports: [
@@ -36,12 +39,14 @@ import { ModalSelectPriorityComponent } from './modal-select-priority/modal-sele
     ModalSelectServicepointsComponent,
     ShortTimePipe,
     ThaiDatePipe,
+    ServiceTimePipe,
     ToggleFullscreenDirective,
     ModalUserServicePointsComponent,
     ModalAddDepartmentComponent,
     ModalAddPriorityComponent,
     ModalSetPrinterComponent,
     ModalSelectPriorityComponent,
+    ModalAddServiceTimesComponent,
   ],
   exports: [
     ModalAddServicePointComponent,
@@ -53,9 +58,11 @@ import { ModalSelectPriorityComponent } from './modal-select-priority/modal-sele
     ModalSetPrinterComponent,
     ShortTimePipe,
     ThaiDatePipe,
+    ServiceTimePipe,
     ToggleFullscreenDirective,
     ModalAddPriorityComponent,
-    ModalSelectPriorityComponent
+    ModalSelectPriorityComponent,
+    ModalAddServiceTimesComponent
   ],
   providers: [
     ServicePointService,
@@ -65,7 +72,8 @@ import { ModalSelectPriorityComponent } from './modal-select-priority/modal-sele
     AuthGuardService,
     LoginService,
     TokenService,
-    DepartmentService
+    DepartmentService,
+    QueueOnlineServiceTimeService
   ]
 })
 export class SharedModule { }

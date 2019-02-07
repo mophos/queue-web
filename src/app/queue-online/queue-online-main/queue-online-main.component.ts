@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QueueOnlineMainComponent implements OnInit {
 
+  query: any;
+  servicePoints: any = [];
   items = [];
   total = 0;
   pageSize = 20;
@@ -15,5 +17,11 @@ export class QueueOnlineMainComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  doSearch(event: any) { }
+
+  getVisit() { }
+
+  changeServicePoints(event: any) { }
 
 }

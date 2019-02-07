@@ -39,13 +39,13 @@
           </a>
         </li>
 
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
           <a class="nav-link" href="javascript://" routerLink="/queue-online">
             <span class="menu-title">รายการจองคิวออนไลน์</span>
             <i class="mdi mdi-view-list menu-icon"></i>
           </a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
           <a class="nav-link" href="javascript://" routerLink="/admin/visit">
             <span class="menu-title">นำเข้าข้อมูลการจองคิว</span>
             <i class="mdi mdi-database-import menu-icon"></i>
@@ -57,6 +57,12 @@
         <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
           <a class="nav-link" href="javascript://" routerLink="/admin/departments">
             <span class="menu-title">กำหนดค่า TIME SLOT</span>
+            <i class="mdi mdi-timetable menu-icon"></i>
+          </a>
+        </li>
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+          <a class="nav-link" href="javascript://" routerLink="/queue-online/service-times">
+            <span class="menu-title">ช่วงเวลาเปิดให้บริการ</span>
             <i class="mdi mdi-timetable menu-icon"></i>
           </a>
         </li>
@@ -90,15 +96,6 @@
 
       </div>
       <!-- content-wrapper ends -->
-      <!-- partial:../../partials/_footer.html -->
-      <footer class="footer">
-        <div class="d-sm-flex justify-content-center justify-content-sm-between">
-          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.moph.go.th/"
-              target="_blank">Ministry Of Public Health (MOPH)</a>. All rights reserved.</span>
-          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Made with <i class="mdi mdi-heart text-danger"></i></span>
-        </div>
-      </footer>
-      <!-- partial -->
     </div>
     <!-- main-panel ends -->
   </div>

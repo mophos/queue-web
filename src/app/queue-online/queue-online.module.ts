@@ -7,9 +7,10 @@ import { QueueOnlineLayoutComponent } from './queue-online-layout/queue-online-l
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { ServiceTimesComponent } from './service-times/service-times.component';
 
 @NgModule({
-  declarations: [QueueOnlineMainComponent, QueueOnlineLayoutComponent],
+  declarations: [QueueOnlineMainComponent, QueueOnlineLayoutComponent, ServiceTimesComponent],
   imports: [
     CommonModule,
     QueueOnlineRoutingModule,
