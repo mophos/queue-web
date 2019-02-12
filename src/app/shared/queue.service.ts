@@ -77,7 +77,6 @@ export class QueueService {
   }
 
   async callQueue(servicePointId: any, queueNumber: any, roomId: any, roomNumber: any, queueId: any, isCompleted: any = 'Y') {
-    console.log('xxxxxx : ' + queueId);
     const _url = `${this.apiUrl}/queue/caller/${queueId}`;
     return this.httpClient.post(_url, {
       servicePointId: servicePointId,
