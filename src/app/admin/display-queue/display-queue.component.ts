@@ -215,7 +215,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     const that = this;
 
     this.client.on('message', (topic, payload) => {
-      console.log('MQTT payload: ' + payload.toString());
+      // console.log(topic);
       // this.getWorking();
       that.getCurrentQueue();
       that.getWorkingHistory();
