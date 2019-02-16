@@ -18,7 +18,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let point of points">
-              <td>{{point.service_point_name}}</td>
+              <td>{{point.local_code}} - {{point.service_point_name}}</td>
               <td>
                 <button class="btn btn-sm btn-icon-append btn-gradient-success" (click)="setSelected(point)">
                   <i class="mdi mdi-refresh"></i> เปลี่ยน

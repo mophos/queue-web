@@ -107,7 +107,6 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   }
 
   prepareSound() {
-    console.log(this.playlists.length);
     if (!this.isPlayingSound) {
       if (this.playlists.length) {
         var queueNumber = this.playlists[0].queueNumber;
@@ -136,11 +135,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       audioFiles.push(`./assets/audio/${v}.mp3`);
     });
 
-    // audioFiles.push('./assets/audio/silent.mp3');
-    // audioFiles.push('./assets/audio/please.mp3');
-    // audioFiles.push('./assets/audio/at.mp3');
     audioFiles.push('./assets/audio/channel.mp3');
-    // audioFiles.push('./assets/audio/service.mp3');
 
     _strRoom.forEach(v => {
       audioFiles.push(`./assets/audio/${v}.mp3`);
@@ -189,7 +184,11 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       }));
     });
 
-    howlerBank[0].play();
+    try {
+      howlerBank[0].play();
+    } catch (error) {
+      console.log(error);
+    }
 
   }
 
@@ -204,11 +203,15 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     const strRnd = rnd.integer(1111111111, 9999999999);
     const clientId = `${username}-${strRnd}`;
 
-    this.client = mqttClient.connect(this.notifyUrl, {
-      clientId: clientId,
-      username: this.notifyUser,
-      password: this.notifyPassword
-    });
+    try {
+      this.client = mqttClient.connect(this.notifyUrl, {
+        clientId: clientId,
+        username: this.notifyUser,
+        password: this.notifyPassword
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
     const topic = `${this.servicePointTopic}/${this.servicePointId}`;
 
@@ -220,14 +223,18 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       that.getCurrentQueue();
       that.getWorkingHistory();
 
-      const _payload = JSON.parse(payload.toString());
-      if (that.isSound) {
-        if (that.servicePointId === +_payload.servicePointId) {
-          // play sound
-          const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString() };
-          that.playlists.push(sound);
-          that.prepareSound();
+      try {
+        const _payload = JSON.parse(payload.toString());
+        if (that.isSound) {
+          if (that.servicePointId === +_payload.servicePointId) {
+            // play sound
+            const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString() };
+            that.playlists.push(sound);
+            that.prepareSound();
+          }
         }
+      } catch (error) {
+        console.log(error);
       }
 
     });
