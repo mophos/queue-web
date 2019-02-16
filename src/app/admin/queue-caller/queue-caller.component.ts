@@ -484,8 +484,28 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     }
   }
 
-  printQueue(queueId: any) {
-    window.open(`${this.apiUrl}/print/queue?queueId=${queueId}`, '_blank');
+  async printQueue(queueId: any) {
+    var usePrinter = localStorage.getItem('clientUserPrinter');
+    var printerId = localStorage.getItem('clientPrinterId');
+
+    if (usePrinter === 'Y') {
+      var topic = `/printer/${printerId}`;
+      console.log(topic);
+      try {
+        var rs: any = await this.queueService.printQueueGateway(queueId, topic);
+        if (rs.statusCode === 200) {
+          //success
+        } else {
+          this.alertService.error('ไม่สามารถพิมพ์บัตรคิวได้')
+        }
+      } catch (error) {
+        console.log(error);
+        this.alertService.error('ไม่สามารถพิมพ์บัตรคิวได้');
+      }
+      //
+    } else {
+      window.open(`${this.apiUrl}/print/queue?queueId=${queueId}`, '_blank');
+    }
   }
 
 
