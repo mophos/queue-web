@@ -101,6 +101,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     const clientId = `${username}-${strRnd}`;
 
     try {
+      // close old connection
       this.client.end(true);
     } catch (error) {
       console.log(error);
@@ -157,7 +158,6 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     });
 
     this.client.on('message', (topic, payload) => {
-      console.log('Message receive: ' + payload.toString())
       this.getAllList();
     });
 
@@ -181,52 +181,6 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
       });
     })
   }
-
-  // publishTopic() {
-  //   const topic = `${this.prefixTopic}/sp/${this.currentTopic}`;
-  //   this.client.publish(topic, 'update queue!');
-
-  //   const topicCenter = `${this.prefixTopic}/queue-center`;
-  //   this.client.publish(topicCenter, 'update queue!');
-  // }
-
-  // connectWebSocket() {
-
-  //   var that = this;
-
-  //   try {
-  //     this.ws = new WebSocket("ws://localhost:8080/queue");
-  //     this.ws.onopen = function (e) {
-  //       console.log("Connection established");
-  //       that.zone.run(() => {
-  //         that.isOffline = false;
-  //       });
-  //     };
-
-  //     this.ws.onmessage = function (e) {
-  //       console.log("Message received", e, e.data);
-  //     };
-
-  //     this.ws.onerror = function (e) {
-  //       console.log("WebSocket Error: ", e);
-  //       that.zone.run(() => {
-  //         that.isOffline = true;
-  //         that.counter.restart();
-  //       });
-  //     };
-
-  //     this.ws.onclose = function (e) {
-  //       console.log("Connection closed", e);
-  //       that.zone.run(() => {
-  //         that.isOffline = true;
-  //         that.counter.restart();
-  //       });
-  //     };
-  //   } catch (error) {
-  //     this.isOffline = true;
-  //     this.counter.restart();
-  //   }
-  // }
 
   onPageChange(event: any) {
     const _currentPage = +event;
@@ -394,7 +348,6 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   setQueueForCall(item: any) {
     this.queueId = item.queue_id;
     this.queueNumber = item.queue_number;
-    console.log(item);
   }
 
   setCallDetail(item: any) {
@@ -454,7 +407,6 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   }
 
   async doMarkPending(item: any) {
-    console.log(item);
     if (this.servicePointId === this.pendingToServicePointId) {
       this.alertService.error('ไม่สามารถสร้างคิวในแผนกเดียวกันได้');
     } else {
@@ -484,13 +436,30 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     }
   }
 
+  async cancelQueue(queue: any) {
+    const _confirm = await this.alertService.confirm(`ต้องการรยกเลิกคิวนี้ [${queue.queue_number}] ใช่หรือไม่?`);
+    if (_confirm) {
+      try {
+        const rs: any = await this.queueService.markCancel(queue.queue_id);
+        if (rs.statusCode === 200) {
+          this.alertService.success();
+          this.getAllList();
+        } else {
+          this.alertService.error(rs.message);
+        }
+      } catch (error) {
+        console.log(error);
+        this.alertService.error();
+      }
+    }
+  }
+
   async printQueue(queueId: any) {
     var usePrinter = localStorage.getItem('clientUserPrinter');
     var printerId = localStorage.getItem('clientPrinterId');
 
     if (usePrinter === 'Y') {
       var topic = `/printer/${printerId}`;
-      console.log(topic);
       try {
         var rs: any = await this.queueService.printQueueGateway(queueId, topic);
         if (rs.statusCode === 200) {

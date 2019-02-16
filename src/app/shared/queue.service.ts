@@ -76,6 +76,11 @@ export class QueueService {
     }, this.httpOptions).toPromise();
   }
 
+  async markCancel(queueId: any) {
+    const _url = `${this.apiUrl}/queue/cancel/${queueId}`;
+    return this.httpClient.delete(_url, this.httpOptions).toPromise();
+  }
+
   async callQueue(servicePointId: any, queueNumber: any, roomId: any, roomNumber: any, queueId: any, isCompleted: any = 'Y') {
     const _url = `${this.apiUrl}/queue/caller/${queueId}`;
     return this.httpClient.post(_url, {
