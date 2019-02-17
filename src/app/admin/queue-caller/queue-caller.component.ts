@@ -10,6 +10,7 @@ import { ServiceRoomService } from 'src/app/shared/service-room.service';
 
 import { CountdownComponent } from 'ngx-countdown';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { ModalSelectTransferComponent } from 'src/app/shared/modal-select-transfer/modal-select-transfer.component';
 
 @Component({
   selector: 'app-queue-caller',
@@ -19,6 +20,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class QueueCallerComponent implements OnInit, OnDestroy {
 
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectServicepointsComponent;
+  @ViewChild('mdlSelectTransfer') private mdlSelectTransfer: ModalSelectTransferComponent;
 
   message: string;
   servicePointId: any;
@@ -53,6 +55,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   notifyPassword = null;
   isMarkPending = false;
   pendingToServicePointId: any = null;
+  pendingToPriorityId: any = null;
 
   selectedQueue: any = {};
   notifyUrl: string;
@@ -317,7 +320,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   showSelectPointForMarkPending(item: any) {
     this.selectedQueue = item;
     this.isMarkPending = true;
-    this.mdlServicePoint.open(true);
+    this.mdlSelectTransfer.open(true);
   }
 
   onSelectedPoint(event: any) {
@@ -335,6 +338,13 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
         this.doMarkPending(this.selectedQueue);
       }
     }
+  }
+
+  onSelectedTransfer(event: any) {
+    this.pendingToServicePointId = event.servicePointId;
+    this.pendingToPriorityId = event.priorityId;
+
+    this.doMarkPending(this.selectedQueue);
   }
 
   getAllList() {
@@ -412,7 +422,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
       const _confirm = await this.alertService.confirm(`ต้องการพักคิวนี้ [${item.queue_number}] ใช่หรือไม่?`);
       if (_confirm) {
         try {
-          const rs: any = await this.queueService.markPending(item.queue_id, this.pendingToServicePointId);
+          const rs: any = await this.queueService.markPending(item.queue_id, this.pendingToServicePointId, this.pendingToPriorityId);
           if (rs.statusCode === 200) {
             this.alertService.success();
             this.selectedQueue = {};
