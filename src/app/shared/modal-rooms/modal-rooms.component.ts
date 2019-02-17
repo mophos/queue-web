@@ -29,6 +29,7 @@ export class ModalRoomsComponent implements OnInit {
   roomNumber: any;
   modalReference: NgbModalRef;
   rooms: any = [];
+  roomNumbers: any = [];
 
   btnLabel = 'เพิ่ม';
 
@@ -38,7 +39,15 @@ export class ModalRoomsComponent implements OnInit {
     private roomService: ServiceRoomService
   ) { }
 
-  ngOnInit() { }
+  async ngOnInit() {
+    await this.generateRoomNumber();
+  }
+
+  generateRoomNumber() {
+    for (let index = 1; index <= 50; index++) {
+      this.roomNumbers.push(index);
+    }
+  }
 
   open(_servicePointId: any) {
 

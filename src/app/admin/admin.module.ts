@@ -19,6 +19,8 @@ import { QueueCenterPatientComponent } from './queue-center-patient/queue-center
 import { GenerateTokenComponent } from './settings/generate-token/generate-token.component';
 import { DepartmentsComponent } from './settings/departments/departments.component';
 import { PriorityComponent } from './settings/priority/priority.component';
+import { DisplayQueueDepartmentComponent } from './display-queue-department/display-queue-department.component';
+import { ModalSelectTransferComponent } from '../shared/modal-select-transfer/modal-select-transfer.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,10 @@ import { PriorityComponent } from './settings/priority/priority.component';
     QueueCenterPatientComponent,
     GenerateTokenComponent,
     DepartmentsComponent,
-    PriorityComponent],
+    PriorityComponent,
+    DisplayQueueDepartmentComponent,
+    ModalSelectTransferComponent
+  ],
   imports: [
     CommonModule,
     NgbModule,
