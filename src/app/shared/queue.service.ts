@@ -48,6 +48,11 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
+  async getQueueByDepartment(departmentId: any, limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/department/${departmentId}?limit=${limit}&offset=${offset}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
   async markInterview(queueId: any) {
     const _url = `${this.apiUrl}/queue/interview/marked/${queueId}`;
     return this.httpClient.put(_url, {}, this.httpOptions).toPromise();
