@@ -20,6 +20,7 @@ import { GenerateTokenComponent } from './settings/generate-token/generate-token
 import { DepartmentsComponent } from './settings/departments/departments.component';
 import { PriorityComponent } from './settings/priority/priority.component';
 import { DisplayQueueDepartmentComponent } from './display-queue-department/display-queue-department.component';
+import { ModalSelectTransferComponent } from '../shared/modal-select-transfer/modal-select-transfer.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { DisplayQueueDepartmentComponent } from './display-queue-department/disp
     GenerateTokenComponent,
     DepartmentsComponent,
     PriorityComponent,
-    DisplayQueueDepartmentComponent
+    DisplayQueueDepartmentComponent,
+    ModalSelectTransferComponent
   ],
   imports: [
     CommonModule,
