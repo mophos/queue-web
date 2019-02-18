@@ -194,16 +194,16 @@ export class QueueCallerDepartmentComponent implements OnInit {
     });
   }
 
-  // onPageChange(event: any) {
-  //   const _currentPage = +event;
-  //   var _offset = 0;
-  //   if (_currentPage > 1) {
-  //     _offset = (_currentPage - 1) * this.pageSize;
-  //   }
+  onPageChange(event: any) {
+    const _currentPage = +event;
+    let _offset = 0;
+    if (_currentPage > 1) {
+      _offset = (_currentPage - 1) * this.pageSize;
+    }
 
-  //   this.offset = _offset;
-  //   this.getWaiting();
-  // }
+    this.offset = _offset;
+    this.getQueues();
+  }
 
   onFinished() {
     console.log('Time finished!');
@@ -218,32 +218,6 @@ export class QueueCallerDepartmentComponent implements OnInit {
     this.queueId = item.queue_id;
     this.queueNumber = item.queue_number;
   }
-
-  // async doChangeRoom(room: any) {
-  //   if (this.isOffline) {
-  //     this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
-  //   } else {
-  //     const roomId = room.room_id;
-  //     const queueId = this.queueId;
-  //     const roomNumber = room.room_number;
-  //     const queueNumber = this.queueNumber;
-  //     try {
-  //       const isConfirm = await this.alertService.confirm('ต้องการเปลี่ยนช่องบริการ ใช่หรือไม่')
-  //       if (isConfirm) {
-  //         const rs: any = await this.queueService.changeRoom(queueId, roomId, this.servicePointId, roomNumber, queueNumber);
-  //         if (rs.statusCode === 200) {
-  //           this.alertService.success();
-  //           this.getWorking();
-  //         } else {
-  //           this.alertService.error(rs.message);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //       this.alertService.error('เกิดข้อผิดพลาด');
-  //     }
-  //   }
-  // }
 
   async getQueues() {
     try {
@@ -269,36 +243,6 @@ export class QueueCallerDepartmentComponent implements OnInit {
       this.alertService.error();
     }
   }
-
-  // async getWorking() {
-  //   try {
-  //     const rs: any = await this.queueService.getWorking(this.servicePointId);
-  //     if (rs.statusCode === 200) {
-  //       this.workingItems = rs.results;
-  //     } else {
-  //       console.log(rs.message);
-  //       this.alertService.error('เกิดข้อผิดพลาด');
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     this.alertService.error();
-  //   }
-  // }
-
-  // async getHistory() {
-  //   try {
-  //     const rs: any = await this.queueService.getWorkingHistory(this.servicePointId);
-  //     if (rs.statusCode === 200) {
-  //       this.historyItems = rs.results;
-  //     } else {
-  //       console.log(rs.message);
-  //       this.alertService.error('เกิดข้อผิดพลาด');
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     this.alertService.error();
-  //   }
-  // }
 
   async getPending() {
     try {
@@ -329,17 +273,12 @@ export class QueueCallerDepartmentComponent implements OnInit {
 
   onSelectedDepartment(event: any) {
     if (event) {
-      // if (!this.isMarkPending) {
       this.departmentId = event.department_id;
       this.departmentName = event.department_name;
       sessionStorage.setItem('departmentId', this.departmentId);
       sessionStorage.setItem('departmentName', this.departmentName);
       this.connectWebSocket();
       this.getAllList();
-      // } else {
-      // this.pendingToServicePointId = event.service_point_id;
-      // this.doMarkPending(this.selectedQueue);
-      // }
     }
   }
 
@@ -380,22 +319,12 @@ export class QueueCallerDepartmentComponent implements OnInit {
     }
   }
 
-  // getServicePoint() {
-
-  // }
 
   getAllList() {
     this.getQueues();
     this.getPending();
-    // this.getWorking();
-    // this.getRooms();
-    // this.getHistory();
   }
 
-  // setQueueForCall(item: any) {
-  //   this.queueId = item.queue_id;
-  //   this.queueNumber = item.queue_number;
-  // }
 
   setCallDetail(item: any) {
     this.queueId = item.queue_id;
@@ -422,21 +351,12 @@ export class QueueCallerDepartmentComponent implements OnInit {
   }
 
   prepareQueue(room: any) {
-    console.log(room);
-
     this.roomId = room.room_id;
     this.roomNumber = room.room_number;
-    console.log(this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId);
-
     this.doCallQueue();
   }
 
-  // async interviewQueue(room: any) {
-  //   this.roomId = room.room_id;
-  //   this.roomNumber = room.room_number;
-  //   // update interview
-  //   this.doCallQueue('N');
-  // }
+
 
   async doCallQueue(isCompleted: any = 'Y') {
     if (this.isOffline) {

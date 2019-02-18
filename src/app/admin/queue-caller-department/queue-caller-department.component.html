@@ -9,7 +9,6 @@
       </strong>)</button>
   </div>
 </div>
-<!-- <button class="btn btn-primary" (click)="playSound()">Play</button> -->
 <div class="page-header">
   <h3 class="page-title">
     <span class="page-title-icon bg-gradient-primary text-white mr-2">
@@ -102,6 +101,12 @@
 
             </tbody>
           </table>
+
+          <div *ngIf="queues.length" style="padding-top: 25px;">
+            <ngb-pagination class="d-flex justify-content-center" [rotate]="true" [collectionSize]="total"
+              [maxSize]="maxSizePage" [boundaryLinks]="true" [pageSize]="pageSize" (pageChange)="onPageChange($event)"
+              [(page)]="currentPage" aria-label="pagination"></ngb-pagination>
+          </div>
         </div>
       </div>
 
@@ -176,32 +181,6 @@
   </div>
 </ng-template>
 
-<ng-template #popContentServocePoint>
-  <div class="text-center">
-    <button *ngFor="let room of rooms" type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw"
-      (click)="prepareQueue(room)">
-      <span class="h4">{{room.room_name}}</span>
-    </button>
-  </div>
-</ng-template>
-
-<ng-template #popContentInterview>
-  <div class="text-center">
-    <button *ngFor="let room of rooms" type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw"
-      (click)="interviewQueue(room)">
-      <span class="h4">{{room.room_name}}</span>
-    </button>
-  </div>
-</ng-template>
-
-<ng-template #popContentChangeRoom>
-  <div class="text-center">
-    <button (click)="doChangeRoom(room)" *ngFor="let room of rooms" type="button"
-      class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw">
-      <span class="h4">{{room.room_name}}</span>
-    </button>
-  </div>
-</ng-template>
 
 <app-modal-select-department (onSelected)="onSelectedDepartment($event)" #mdlServicePoint></app-modal-select-department>
 <app-modal-select-transfer #mdlSelectTransfer (onSelected)="onSelectedTransfer($event)"></app-modal-select-transfer>
