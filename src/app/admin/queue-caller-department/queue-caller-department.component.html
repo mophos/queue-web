@@ -40,6 +40,16 @@
     </ng-template>
     <ng-template ngbTabContent>
       <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-md-1">
+              <span>ค้นหา : </span>
+            </div>
+            <div class="col-md-10">
+              <input type="text" class="form-control" [(ngModel)]="query" name="query" (keyup)="searchQuery()">
+            </div>
+          </div>
+        </div>
         <div class="card-body">
           <h3 class="card-title">คิวปัจจุบัน</h3>
           <table class="table">

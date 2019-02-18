@@ -61,6 +61,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
 
   selectedQueue: any = {};
   notifyUrl: string;
+  query: any;
 
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
@@ -219,11 +220,11 @@ export class QueueCallerDepartmentComponent implements OnInit {
     this.queueNumber = item.queue_number;
   }
 
-  async getQueues() {
+  async searchQuery() {
     try {
-      const rs: any = await this.queueService.getQueueByDepartment(this.departmentId, this.pageSize, this.offset);
+      this.offset = 0;
+      const rs: any = await this.queueService.searchQueueByDepartment(this.departmentId, this.pageSize, this.offset, this.query);
       if (rs.statusCode === 200) {
-
         for (const i of rs.results) {
           const rm: any = await this.roomService.list(i.service_point_id);
           if (rm.statusCode === 200) {
@@ -234,6 +235,28 @@ export class QueueCallerDepartmentComponent implements OnInit {
         this.total = rs.total;
         console.log(this.queues);
 
+      } else {
+        console.log(rs.message);
+        this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
+    }
+  }
+
+  async getQueues() {
+    try {
+      const rs: any = await this.queueService.getQueueByDepartment(this.departmentId, this.pageSize, this.offset);
+      if (rs.statusCode === 200) {
+        for (const i of rs.results) {
+          const rm: any = await this.roomService.list(i.service_point_id);
+          if (rm.statusCode === 200) {
+            i.rooms = rm.results;
+          }
+        }
+        this.queues = rs.results;
+        this.total = rs.total;
       } else {
         console.log(rs.message);
         this.alertService.error('เกิดข้อผิดพลาด');
