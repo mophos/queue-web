@@ -73,6 +73,11 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
+  async getPendingByDepartment(departmentId: any) {
+    const _url = `${this.apiUrl}/queue/pending/department/${departmentId}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
   async markPending(queueId: any, servicePointId: any, priorityId: any) {
     const _url = `${this.apiUrl}/queue/pending`;
     return this.httpClient.post(_url, {

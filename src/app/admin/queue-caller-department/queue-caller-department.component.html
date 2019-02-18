@@ -46,7 +46,7 @@
           <table class="table">
             <thead>
               <tr>
-                <th>จุดบริการ+ช่องบริการ</th>
+                <th>จุดบริการ</th>
                 <th>HN</th>
                 <th>ชื่อ - สกุล</th>
                 <th>ความสำคัญ</th>
@@ -77,9 +77,25 @@
                 </td>
                 <td>
                   <div class="btn-group">
-                    <button class="btn btn-sm btn-success" (click)="callAgain(item)">เรียกซ้ำ</button>
-                    <button class="btn btn-sm btn-danger"
-                      (click)="showSelectPointForMarkPending(item)">พัก/ส่งต่อ</button>
+                    <!-- <button class="btn btn-sm btn-success" (click)="setQueueForCall(item)">เรียกคิว</button> -->
+                    <button *ngIf="item.rooms.length > 1" class="btn btn-sm btn-success" (click)="setQueueForCall(item)"
+                      [ngbPopover]="popContent" popoverTitle="เลือกช่องรับบริการ">
+                      <span class="h4">
+                        เรียกคิว
+                      </span>
+                    </button>
+                    <button *ngIf="item.rooms.length === 1" class="btn btn-sm btn-success"
+                      (click)="setCallDetail(item)">
+                      <span class="h4">
+                        เรียกคิว
+                      </span>
+                    </button>
+                    <button disabled="disabled" *ngIf="item.rooms.length === 0" class="btn btn-sm btn-success">
+                      <span class="h4">
+                        เรียกคิว
+                      </span>
+                    </button>
+                    <button class="btn btn-sm btn-danger" (click)="showSelectPointForMarkPending(item)">ส่งต่อ</button>
                   </div>
                 </td>
               </tr>
@@ -95,7 +111,7 @@
     <ng-template ngbTabTitle>
       <span class="h3">ส่งต่อ
         <label class="badge badge-danger">
-          <span class="h3 font-weight-bold">{{historyItems.length || 0}}</span>
+          <span class="h3 font-weight-bold">{{pendingItems.length || 0}}</span>
         </label>
       </span>
     </ng-template>
@@ -111,17 +127,17 @@
                 <th>ชื่อ - สกุล</th>
                 <th>ความสำคัญ</th>
                 <th>คิวปัจจุบัน</th>
-                <th>#</th>
+                <th>ส่งต่อ</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngIf="queues.length === 0">
+              <tr *ngIf="pendingItems.length === 0">
                 <td colspan="5">ไม่พบรายการ</td>
               </tr>
-              <tr *ngFor="let item of queues">
+              <tr *ngFor="let item of pendingItems">
                 <td>
                   <span class="h4">
-                    {{item.department_name}}
+                    {{item.service_point_name}}
                   </span>
                 </td>
                 <td>
@@ -138,11 +154,7 @@
                     style="letter-spacing: 2px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
                 </td>
                 <td>
-                  <div class="btn-group">
-                    <button class="btn btn-sm btn-success" (click)="callAgain(item)">เรียกซ้ำ</button>
-                    <button class="btn btn-sm btn-danger"
-                      (click)="showSelectPointForMarkPending(item)">พัก/ส่งต่อ</button>
-                  </div>
+                  <span class="h3">{{item.pending_to_service_point_name}}</span>
                 </td>
               </tr>
 
@@ -154,6 +166,15 @@
     </ng-template>
   </ngb-tab>
 </ngb-tabset>
+
+<ng-template #popContent>
+  <div class="text-center">
+    <button *ngFor="let room of rooms" type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw"
+      (click)="prepareQueue(room)">
+      <span class="h4">{{room.room_name}}</span>
+    </button>
+  </div>
+</ng-template>
 
 <ng-template #popContentServocePoint>
   <div class="text-center">
@@ -182,5 +203,5 @@
   </div>
 </ng-template>
 
-<app-modal-select-department (onSelected)="onSelectedDepartment($event)" #mdlServicePoint>
-</app-modal-select-department>
+<app-modal-select-department (onSelected)="onSelectedDepartment($event)" #mdlServicePoint></app-modal-select-department>
+<app-modal-select-transfer #mdlSelectTransfer (onSelected)="onSelectedTransfer($event)"></app-modal-select-transfer>
