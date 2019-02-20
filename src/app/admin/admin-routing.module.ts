@@ -7,6 +7,7 @@ import { UserComponent } from './settings/user/user.component';
 import { AuthGuardService } from '../shared/auth-guard.service';
 import { VisitComponent } from './visit/visit.component';
 import { QueueCallerComponent } from './queue-caller/queue-caller.component';
+import { QueueCallerDepartmentComponent } from './queue-caller-department/queue-caller-department.component';
 import { QueueCenterComponent } from './queue-center/queue-center.component';
 import { GenerateTokenComponent } from './settings/generate-token/generate-token.component';
 import { DepartmentsComponent } from './settings/departments/departments.component';
@@ -24,6 +25,7 @@ const routes: Routes = [
       { path: 'users', component: UserComponent },
       { path: 'visit', component: VisitComponent },
       { path: 'queue-caller', component: QueueCallerComponent },
+      { path: 'queue-caller-department', component: QueueCallerDepartmentComponent },
       { path: 'queue-center', component: QueueCenterComponent },
       { path: 'generate-token', component: GenerateTokenComponent },
       { path: '', redirectTo: 'visit', pathMatch: 'full' },

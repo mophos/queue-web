@@ -268,7 +268,7 @@ export class VisitComponent implements OnInit {
       person.firstName = visit.first_name;
       person.lastName = visit.last_name;
       person.title = visit.title;
-      person.birthDate = moment(visit.birthdate).format('YYYY-MM-DD');
+      person.birthDate = moment(visit.birthdate).isValid() ? moment(visit.birthdate).format('YYYY-MM-DD') : null;
       person.sex = visit.sex;
 
       const rs: any = await this.queueService.register(person);
