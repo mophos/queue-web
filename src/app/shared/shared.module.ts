@@ -23,6 +23,7 @@ import { ModalAddPriorityComponent } from './modal-add-priority/modal-add-priori
 import { ModalSetPrinterComponent } from './modal-set-printer/modal-set-printer.component';
 import { ModalSelectPriorityComponent } from './modal-select-priority/modal-select-priority.component';
 import { ModalSelectDepartmentComponent } from './modal-select-department/modal-select-department.component';
+import { AlertWarningPrinterComponent } from './alert-warning-printer/alert-warning-printer.component';
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import { ModalSelectDepartmentComponent } from './modal-select-department/modal-
     ModalSetPrinterComponent,
     ModalSelectPriorityComponent,
     ModalSelectDepartmentComponent,
+    AlertWarningPrinterComponent,
   ],
   exports: [
     ModalAddServicePointComponent,
@@ -58,7 +60,8 @@ import { ModalSelectDepartmentComponent } from './modal-select-department/modal-
     ToggleFullscreenDirective,
     ModalAddPriorityComponent,
     ModalSelectPriorityComponent,
-    ModalSelectDepartmentComponent
+    ModalSelectDepartmentComponent,
+    AlertWarningPrinterComponent
   ],
   providers: [
     ServicePointService,

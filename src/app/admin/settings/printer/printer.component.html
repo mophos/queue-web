@@ -1,0 +1,23 @@
+<div class="card">
+  <div class="card-header">
+    ตั้งค่าเครื่องพิมพ์บัตรคิว
+  </div>
+  <div class="card-body">
+    <form>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="printerId" style="font-size: 1.5rem;" class="required">Printer ID</label>
+          <input type="text" name="printerId" id="printerId" class="form-control" name="printerId"
+            [(ngModel)]="printerId">
+        </div>
+        <div class="form-group form-check col-md-12">
+          <input type="checkbox" class="form-check-input" id="usePrinter" name="usePrinter" [(ngModel)]="usePrinter">
+          <label class="form-check-label" for="usePrinter">พิมพ์บัตรคิวเครื่องพิมพ์นี้</label>
+        </div>
+        <div class="col-md-12">
+          <button type="button" class="btn btn-primary" (click)="save()">บันทึก</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
