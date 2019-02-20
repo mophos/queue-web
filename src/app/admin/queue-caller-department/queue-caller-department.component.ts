@@ -76,7 +76,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
     this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
-    this.departmentTopic = decodedToken.DEPARTMENT_TOPIC;
+    this.departmentTopic = decodedToken.DEPARTMENT_TOPIC || 'queue/department';
     this.globalTopic = decodedToken.QUEUE_CENTER_TOPIC;
 
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
