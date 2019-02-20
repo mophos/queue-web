@@ -51,6 +51,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
 
   client: MqttClient;
   jwtHelper = new JwtHelperService();
+  departmentTopic = null;
   servicePointTopic = null;
   globalTopic = null;
   notifyUser = null;
@@ -75,6 +76,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
     this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
+    this.departmentTopic = decodedToken.DEPARTMENT_TOPIC;
     this.globalTopic = decodedToken.QUEUE_CENTER_TOPIC;
 
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
@@ -103,6 +105,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
   ngOnInit() {
     if (this.departmentId) {
       this.getAllList();
+      this.connectWebSocket();
     }
   }
 
@@ -126,9 +129,10 @@ export class QueueCallerDepartmentComponent implements OnInit {
     });
 
     const that = this;
-    // const topic = `${this.servicePointTopic}/${this.servicePointId}`;
-    const topic = `${this.servicePointTopic}/`;
+    const topicServicePoint = `${this.servicePointTopic}/${this.servicePointId}`;
+    const topicDepartment = `${this.departmentTopic}/${this.departmentId}`;
     const visitTopic = this.globalTopic;
+
 
     this.client.on('connect', () => {
       console.log('Connected!');
@@ -136,8 +140,25 @@ export class QueueCallerDepartmentComponent implements OnInit {
         that.isOffline = false;
       });
 
-      that.client.subscribe(topic, (error) => {
-        console.log('Subscribe : ' + topic);
+      if (this.servicePointId) {
+        that.client.subscribe(topicServicePoint, (error) => {
+          console.log('Subscribe : ' + topicServicePoint);
+
+          if (error) {
+            that.zone.run(() => {
+              that.isOffline = true;
+              try {
+                that.counter.restart();
+              } catch (error) {
+                console.log(error);
+              }
+            });
+          }
+        });
+      }
+
+      that.client.subscribe(topicDepartment, (error) => {
+        console.log('Subscribe : ' + topicDepartment);
 
         if (error) {
           that.zone.run(() => {
@@ -352,11 +373,11 @@ export class QueueCallerDepartmentComponent implements OnInit {
   setCallDetail(item: any) {
     this.queueId = item.queue_id;
     this.queueNumber = item.queue_number;
-    if (this.rooms.length === 1) {
-      this.roomId = this.rooms[0].room_id;
-      this.roomNumber = this.rooms[0].room_number;
-      this.doCallQueue();
-    }
+    this.roomId = item.rooms[0].room_id;
+    this.roomNumber = item.rooms[0].room_number;
+    this.servicePointId = item.service_point_id;
+    this.doCallQueue();
+    // }
   }
 
   setQueueForCall(queue: any) {
@@ -366,16 +387,12 @@ export class QueueCallerDepartmentComponent implements OnInit {
     this.queueId = queue.queue_id;
     this.rooms = queue.rooms;
     this.servicePointId = queue.service_point_id;
-    // console.log(queue);
-
-    // console.log(this.roomId, this.roomNumber, this.queueNumber, this.queueId);
-
-    // this.doCallQueue();
   }
 
   prepareQueue(room: any) {
     this.roomId = room.room_id;
     this.roomNumber = room.room_number;
+    console.log(this.roomId, this.roomNumber, this.queueNumber, this.queueId);
     this.doCallQueue();
   }
 
@@ -386,7 +403,10 @@ export class QueueCallerDepartmentComponent implements OnInit {
       this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
     } else {
       try {
-        const rs: any = await this.queueService.callQueue(this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId, isCompleted);
+        // const rs: any = await this.queueService.callQueue(this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId, isCompleted);
+        const rs: any = await this.queueService.callQueueDepartment(this.departmentId, this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId, isCompleted);
+        console.log(rs);
+
         if (rs.statusCode === 200) {
           this.alertService.success();
           this.getAllList();
