@@ -86,6 +86,12 @@
             <i class="mdi mdi-key menu-icon"></i>
           </a>
         </li>
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+          <a class="nav-link" href="javascript://" routerLink="/admin/printer">
+            <span class="menu-title">ตั้งค่าเครื่องพิมพ์</span>
+            <i class="mdi mdi-printer-wireless menu-icon"></i>
+          </a>
+        </li>
 
         <div class="border-bottom"></div>
 
