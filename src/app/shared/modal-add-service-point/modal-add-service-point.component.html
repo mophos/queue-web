@@ -12,8 +12,8 @@
           <div class="form-row">
             <div class="form-group col-md-12">
               <label for="servicePointName" class="required">ชื่อจุดให้บริการ</label>
-              <input type="text" name="servicePointName" id="servicePointName" class="form-control" name="servicePointName"
-                [(ngModel)]="servicePointName">
+              <input type="text" name="servicePointName" id="servicePointName" class="form-control"
+                name="servicePointName" [(ngModel)]="servicePointName">
             </div>
           </div>
           <div class="form-row">
@@ -41,9 +41,14 @@
           </div>
 
           <div class="form-row">
-            <div class="form-group form-check col-md-12">
+            <div class="form-group form-check col-md-6">
               <input type="checkbox" class="form-check-input" id="kios" name="kios" [(ngModel)]="kios">
               <label class="form-check-label" for="kios">สำหรับ KIOS</label>
+            </div>
+            <div class="form-group form-check col-md-6">
+              <input type="checkbox" class="form-check-input" id="useOldQueue" name="useOldQueue"
+                [(ngModel)]="useOldQueue">
+              <label class="form-check-label" for="useOldQueue">ใช้คิวเดิมออกคิว</label>
             </div>
           </div>
 
