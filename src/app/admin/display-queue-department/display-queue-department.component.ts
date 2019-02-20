@@ -78,7 +78,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
 
-    this.departmentTopic = decodedToken.DEPARTMENT_TOPIC;
+    this.departmentTopic = decodedToken.DEPARTMENT_TOPIC || 'queue/department';
 
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
