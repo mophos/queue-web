@@ -6,12 +6,11 @@ import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as _ from 'lodash';
 import * as Random from 'random-js';
-import * as screenfull from 'screenfull';
 
 import { Howl, Howler } from 'howler';
 
 import { CountdownComponent } from 'ngx-countdown';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
@@ -55,7 +54,6 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   currentRoomNumber: any;
   currentHn: any;
   currentRoomName: any;
-  currentTopic: any = '';
 
   isOffline = false;
 
@@ -63,28 +61,43 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   notifyUser = null;
   notifyPassword = null;
 
-  isSound = false;
-
+  isSound = true;
   isPlayingSound = false;
+
   playlists: any = [];
   notifyUrl: string;
+  token: string;
 
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,
     private zone: NgZone,
     private router: Router,
+    private route: ActivatedRoute
   ) {
-    const token = sessionStorage.getItem('token');
-    const decodedToken = this.jwtHelper.decodeToken(token);
-    this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
 
+    this.route.queryParams
+      .subscribe(params => {
+        this.token = params.token || null;
+        this.servicePointId = +params.servicePointId || null;
+        this.servicePointName = params.servicePointName || null;
+      });
+  }
+
+  ngOnInit() {
+    var token = this.token || sessionStorage.getItem('token');
+    var decodedToken = this.jwtHelper.decodeToken(token);
+
+    this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
     this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
+
+    if (this.servicePointId && this.servicePointName) {
+      this.initialSocket();
+    }
   }
 
-  ngOnInit(): void { }
 
   public unsafePublish(topic: string, message: string): void {
     try {
@@ -218,15 +231,13 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     const that = this;
 
     this.client.on('message', (topic, payload) => {
-      // console.log(topic);
-      // this.getWorking();
       that.getCurrentQueue();
       that.getWorkingHistory();
 
       try {
         const _payload = JSON.parse(payload.toString());
         if (that.isSound) {
-          if (that.servicePointId === +_payload.servicePointId) {
+          if (+that.servicePointId === +_payload.servicePointId) {
             // play sound
             const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString() };
             that.playlists.push(sound);
@@ -291,19 +302,21 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   onSelectedPoint(event: any) {
     this.servicePointName = event.service_point_name;
     this.servicePointId = event.service_point_id;
-    this.currentTopic = event.topic;
 
+    this.initialSocket();
+  }
+
+  initialSocket() {
     // connect mqtt
     this.connectWebSocket();
-    // get list
-    // this.getWorking();
+
     this.getCurrentQueue();
     this.getWorkingHistory();
   }
 
   async getCurrentQueue() {
     try {
-      const rs: any = await this.queueService.getWorking(this.servicePointId);
+      const rs: any = await this.queueService.getWorking(this.servicePointId, this.token);
       if (rs.statusCode === 200) {
         this.workingItems = rs.results;
         const arr = _.sortBy(rs.results, ['update_date']).reverse();
@@ -331,7 +344,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
   async getWorkingHistory() {
     try {
-      const rs: any = await this.queueService.getWorkingHistory(this.servicePointId);
+      const rs: any = await this.queueService.getWorkingHistory(this.servicePointId, this.token);
       if (rs.statusCode === 200) {
         this.workingItemsHistory = rs.results;
       } else {
