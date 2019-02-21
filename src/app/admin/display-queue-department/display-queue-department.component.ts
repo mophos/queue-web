@@ -12,7 +12,7 @@ import * as screenfull from 'screenfull';
 import { Howl, Howler } from 'howler';
 
 import { CountdownComponent } from 'ngx-countdown';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
@@ -55,7 +55,6 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
   currentRoomNumber: any;
   currentHn: any;
   currentRoomName: any;
-  currentTopic: any = '';
 
   isOffline = false;
 
@@ -63,29 +62,44 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
   notifyUser = null;
   notifyPassword = null;
 
-  isSound = false;
+  isSound = true;
 
   isPlayingSound = false;
   playlists: any = [];
   notifyUrl: string;
+  token: any;
 
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,
     private zone: NgZone,
     private router: Router,
+    private route: ActivatedRoute
   ) {
-    const token = sessionStorage.getItem('token');
-    const decodedToken = this.jwtHelper.decodeToken(token);
+
+    this.route.queryParams
+      .subscribe(params => {
+        this.token = params.token || null;
+        this.departmentId = +params.departmentId || null;
+        this.departmentName = params.departmentName || null;
+      });
+
+  }
+
+  ngOnInit() {
+    var token = this.token || sessionStorage.getItem('token');
+    var decodedToken = this.jwtHelper.decodeToken(token);
 
     this.departmentTopic = decodedToken.DEPARTMENT_TOPIC || 'queue/department';
 
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
     this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
-  }
 
-  ngOnInit(): void { }
+    if (this.token) {
+      this.initialSocket();
+    }
+  }
 
   public unsafePublish(topic: string, message: string): void {
     try {
@@ -291,8 +305,10 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
   onSelectDepartment(event: any) {
     this.departmentName = event.department_name;
     this.departmentId = event.department_id;
-    this.currentTopic = event.topic;
+    this.initialSocket();
+  }
 
+  initialSocket() {
     // connect mqtt
     this.connectWebSocket();
     this.getCurrentQueue();
@@ -300,7 +316,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
   async getCurrentQueue() {
     try {
-      const rs: any = await this.queueService.getWorkingDepartment(this.departmentId);
+      const rs: any = await this.queueService.getWorkingDepartment(this.departmentId, this.token);
       if (rs.statusCode === 200) {
         this.workingItems = rs.results;
         const arr = _.sortBy(rs.results, ['update_date']).reverse();
