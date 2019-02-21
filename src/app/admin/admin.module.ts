@@ -22,11 +22,8 @@ import { PriorityComponent } from './settings/priority/priority.component';
 import { QueueCallerDepartmentComponent } from './queue-caller-department/queue-caller-department.component';
 import { DisplayQueueDepartmentComponent } from './display-queue-department/display-queue-department.component';
 import { ModalSelectTransferComponent } from '../shared/modal-select-transfer/modal-select-transfer.component';
-<<<<<<< HEAD
 import { QueueCallerDepartmentGroupComponent } from './queue-caller-department-group/queue-caller-department-group.component';
-=======
 import { PrinterComponent } from './settings/printer/printer.component';
->>>>>>> 6655382c07d6ecc1c98f7ee291cd1cd35a4c46f9
 
 @NgModule({
   declarations: [
@@ -45,11 +42,8 @@ import { PrinterComponent } from './settings/printer/printer.component';
     QueueCallerDepartmentComponent,
     DisplayQueueDepartmentComponent,
     ModalSelectTransferComponent,
-<<<<<<< HEAD
-    QueueCallerDepartmentGroupComponent
-=======
+    QueueCallerDepartmentGroupComponent,
     PrinterComponent
->>>>>>> 6655382c07d6ecc1c98f7ee291cd1cd35a4c46f9
   ],
   imports: [
     CommonModule,

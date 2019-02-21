@@ -12,11 +12,8 @@ import { QueueCenterComponent } from './queue-center/queue-center.component';
 import { GenerateTokenComponent } from './settings/generate-token/generate-token.component';
 import { DepartmentsComponent } from './settings/departments/departments.component';
 import { PriorityComponent } from './settings/priority/priority.component';
-<<<<<<< HEAD
 import { QueueCallerDepartmentGroupComponent } from './queue-caller-department-group/queue-caller-department-group.component';
-=======
 import { PrinterComponent } from './settings/printer/printer.component';
->>>>>>> 6655382c07d6ecc1c98f7ee291cd1cd35a4c46f9
 
 const routes: Routes = [
   {
