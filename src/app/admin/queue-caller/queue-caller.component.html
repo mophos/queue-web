@@ -170,8 +170,13 @@
                         ซักประวัติ
                       </span>
                     </button>
-                    <button *ngIf="rooms.length > 1" class="btn btn-sm btn-success" (click)="setQueueForCall(item)"
-                      [ngbPopover]="popContent" popoverTitle="เลือกช่องรับบริการ">
+                    <button *ngIf="rooms.length > 5" class="btn btn-sm btn-success" (click)="openModalSelectRoom(item)">
+                      <span class="h4">
+                        เรียกคิว
+                      </span>
+                    </button>
+                    <button *ngIf="rooms.length > 1 && rooms.length <= 5" class="btn btn-sm btn-success"
+                      (click)="setQueueForCall(item)" [ngbPopover]="popContent" popoverTitle="เลือกช่องรับบริการ">
                       <span class="h4">
                         เรียกคิว
                       </span>
@@ -377,3 +382,5 @@
 </app-modal-select-servicepoints>
 
 <app-modal-select-transfer #mdlSelectTransfer (onSelected)="onSelectedTransfer($event)"></app-modal-select-transfer>
+
+<app-modal-select-room [rooms]="rooms" (onSelected)="onSelectRoom($event)" #mdlSelectRoom></app-modal-select-room>
