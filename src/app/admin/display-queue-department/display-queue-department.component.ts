@@ -87,17 +87,23 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    var token = this.token || sessionStorage.getItem('token');
-    var decodedToken = this.jwtHelper.decodeToken(token);
+    try {
+      var token = this.token || sessionStorage.getItem('token');
+      if (token) {
+        var decodedToken = this.jwtHelper.decodeToken(token);
 
-    this.departmentTopic = decodedToken.DEPARTMENT_TOPIC || 'queue/department';
+        this.departmentTopic = decodedToken.DEPARTMENT_TOPIC || 'queue/department';
 
-    this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
-    this.notifyUser = decodedToken.NOTIFY_USER;
-    this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
+        this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
+        this.notifyUser = decodedToken.NOTIFY_USER;
+        this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
 
-    if (this.token) {
-      this.initialSocket();
+        if (this.token) {
+          this.initialSocket();
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -176,7 +182,15 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
       }
 
       if (pCount <= audioFiles.length - 1) {
-        howlerBank[pCount].play();
+
+        if (!howlerBank[pCount].playing()) {
+          howlerBank[pCount].play();
+        } else {
+          howlerBank[pCount].stop();
+          howlerBank[pCount].unload();
+          howlerBank[pCount].play();
+        }
+
       } else {
         this.isPlayingSound = false;
         // remove queue in playlist
