@@ -63,19 +63,60 @@ export class QueueService {
     return this.httpClient.put(_url, {}, this.httpOptions).toPromise();
   }
 
-  async getWorkingDepartment(departmentId: any) {
+  async getWorkingDepartment(departmentId: any, token: any = null) {
     const _url = `${this.apiUrl}/queue/working/department/${departmentId}`;
-    return this.httpClient.get(_url, this.httpOptions).toPromise();
+
+    var _httpOptions = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
   }
 
-  async getWorking(servicePointId: any) {
+  async getWorking(servicePointId: any, token: any = null) {
     const _url = `${this.apiUrl}/queue/working/${servicePointId}`;
-    return this.httpClient.get(_url, this.httpOptions).toPromise();
+    var _httpOptions = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
   }
 
-  async getWorkingHistory(servicePointId: any) {
+  async getWorkingHistory(servicePointId: any, token: any = null) {
     const _url = `${this.apiUrl}/queue/working/history/${servicePointId}`;
-    return this.httpClient.get(_url, this.httpOptions).toPromise();
+
+    var _httpOptions: any = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
   }
 
   async getPending(servicePointId: any) {
