@@ -1,3 +1,4 @@
+import { ModalSelectRoomComponent } from './../../shared/modal-select-room/modal-select-room.component';
 import { Component, OnInit, OnDestroy, ViewChild, NgZone, Inject } from '@angular/core';
 import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
@@ -21,6 +22,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
 
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectServicepointsComponent;
   @ViewChild('mdlSelectTransfer') private mdlSelectTransfer: ModalSelectTransferComponent;
+  @ViewChild('mdlSelectRoom') private mdlSelectRoom: ModalSelectRoomComponent;
 
   message: string;
   servicePointId: any;
@@ -35,7 +37,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   roomId: any;
   queueId: any;
 
-  isAllServicePoint: boolean = false;
+  isAllServicePoint = false;
 
   total = 0;
   pageSize = 10;
@@ -182,12 +184,12 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
           console.log(error);
         }
       });
-    })
+    });
   }
 
   onPageChange(event: any) {
     const _currentPage = +event;
-    var _offset = 0;
+    let _offset = 0;
     if (_currentPage > 1) {
       _offset = (_currentPage - 1) * this.pageSize;
     }
@@ -202,7 +204,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   }
 
   onNotify($event) {
-    console.log('Finished')
+    console.log('Finished');
   }
 
   setChangeRoom(item: any) {
@@ -219,7 +221,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
       const roomNumber = room.room_number;
       const queueNumber = this.queueNumber;
       try {
-        const isConfirm = await this.alertService.confirm('ต้องการเปลี่ยนช่องบริการ ใช่หรือไม่')
+        const isConfirm = await this.alertService.confirm('ต้องการเปลี่ยนช่องบริการ ใช่หรือไม่');
         if (isConfirm) {
           const rs: any = await this.queueService.changeRoom(queueId, roomId, this.servicePointId, roomNumber, queueNumber);
           if (rs.statusCode === 200) {
@@ -356,8 +358,14 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   }
 
   setQueueForCall(item: any) {
+    console.log(item);
+
     this.queueId = item.queue_id;
     this.queueNumber = item.queue_number;
+  }
+
+  onSelectRoom(item) {
+    this.prepareQueue({ 'room_id': item.roomId, 'room_number': item.roomNumber });
   }
 
   setCallDetail(item: any) {
@@ -427,9 +435,9 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
             this.alertService.success();
             this.selectedQueue = {};
             this.isMarkPending = false;
-            var queueNumber = rs.queueNumber;
-            var newQueueId = rs.queueId;
-            var confirm = await this.alertService.confirm(`คิวใหม่ของคุณคือ ${queueNumber} ต้องการพิมพ์บัตรคิว หรือไม่?`);
+            const queueNumber = rs.queueNumber;
+            const newQueueId = rs.queueId;
+            const confirm = await this.alertService.confirm(`คิวใหม่ของคุณคือ ${queueNumber} ต้องการพิมพ์บัตรคิว หรือไม่?`);
             if (confirm) {
               this.printQueue(newQueueId);
             }
@@ -464,17 +472,17 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   }
 
   async printQueue(queueId: any) {
-    var usePrinter = localStorage.getItem('clientUserPrinter');
-    var printerId = localStorage.getItem('clientPrinterId');
+    const usePrinter = localStorage.getItem('clientUserPrinter');
+    const printerId = localStorage.getItem('clientPrinterId');
 
     if (usePrinter === 'Y') {
-      var topic = `/printer/${printerId}`;
+      const topic = `/printer/${printerId}`;
       try {
-        var rs: any = await this.queueService.printQueueGateway(queueId, topic);
+        const rs: any = await this.queueService.printQueueGateway(queueId, topic);
         if (rs.statusCode === 200) {
-          //success
+          // success
         } else {
-          this.alertService.error('ไม่สามารถพิมพ์บัตรคิวได้')
+          this.alertService.error('ไม่สามารถพิมพ์บัตรคิวได้');
         }
       } catch (error) {
         console.log(error);
@@ -486,5 +494,9 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     }
   }
 
+  openModalSelectRoom(item) {
+    this.setQueueForCall(item);
+    this.mdlSelectRoom.open();
+  }
 
 }
