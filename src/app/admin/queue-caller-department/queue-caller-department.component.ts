@@ -12,6 +12,7 @@ import { ServiceRoomService } from 'src/app/shared/service-room.service';
 
 import { CountdownComponent } from 'ngx-countdown';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { ModalSelectRoomComponent } from 'src/app/shared/modal-select-room/modal-select-room.component';
 
 @Component({
   selector: 'app-queue-caller-department',
