@@ -31,9 +31,10 @@ export class ModalSelectRoomComponent implements OnInit {
 
   ) { }
 
-  ngOnInit() {
+  ngOnInit() { }
 
-
+  setList(rooms) {
+    this.rooms = rooms;
   }
 
   open(isAll: boolean = false) {
