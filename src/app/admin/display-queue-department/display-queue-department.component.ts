@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, NgZone, Inject, OnDestroy, Directive, HostListener } from '@angular/core';
 import { ModalSelectServicepointsComponent } from 'src/app/shared/modal-select-servicepoints/modal-select-servicepoints.component';
+import { ModalSelectDepartmentComponent } from 'src/app/shared/modal-select-department/modal-select-department.component';
 import { QueueService } from 'src/app/shared/queue.service';
 import { AlertService } from 'src/app/shared/alert.service';
 import * as mqttClient from '../../../vendor/mqtt';
@@ -41,14 +42,14 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
-  @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectServicepointsComponent;
+  @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectDepartmentComponent;
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
   jwtHelper = new JwtHelperService();
-  servicePointTopic = null;
+  departmentTopic = null;
 
-  servicePointId: any;
-  servicePointName: any;
+  departmentId: any;
+  departmentName: any;
   workingItems: any = [];
   currentQueueNumber: any;
   currentRoomNumber: any;
@@ -76,7 +77,8 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
   ) {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
-    this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
+
+    this.departmentTopic = decodedToken.DEPARTMENT_TOPIC || 'queue/department';
 
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
@@ -108,8 +110,8 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
   prepareSound() {
     if (!this.isPlayingSound) {
       if (this.playlists.length) {
-        var queueNumber = this.playlists[0].queueNumber;
-        var roomNumber = this.playlists[0].roomNumber;
+        const queueNumber = this.playlists[0].queueNumber;
+        const roomNumber = this.playlists[0].roomNumber;
         this.playSound(queueNumber, roomNumber);
       }
     }
@@ -119,13 +121,13 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
     this.isPlayingSound = true;
 
-    var _queue = strQueue.replace(' ', '');
+    let _queue = strQueue.replace(' ', '');
     _queue = _queue.replace('-', '');
 
-    var _strQueue = _queue.split('');
-    var _strRoom = strRoomNumber.split('');
+    const _strQueue = _queue.split('');
+    const _strRoom = strRoomNumber.split('');
 
-    var audioFiles = [];
+    const audioFiles = [];
 
     audioFiles.push('./assets/audio/please.mp3')
     audioFiles.push('./assets/audio/silent.mp3')
@@ -142,16 +144,16 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
     audioFiles.push('./assets/audio/ka.mp3');
 
-    var howlerBank = [];
+    const howlerBank = [];
 
     // console.log(audioFiles);
 
-    var loop = false;
+    let loop = false;
 
-    var onPlay = [false], pCount = 0;
+    let onPlay = [false], pCount = 0;
     const that = this;
 
-    var onEnd = function (e) {
+    let onEnd = function (e) {
 
       if (loop === true) {
         pCount = (pCount + 1 !== howlerBank.length) ? pCount + 1 : 0;
@@ -170,7 +172,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           that.isPlayingSound = false;
           that.prepareSound();
-        }, 1000)
+        }, 1000);
       }
     };
 
@@ -212,7 +214,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
       console.log(error);
     }
 
-    const topic = `${this.servicePointTopic}/${this.servicePointId}`;
+    const topic = `${this.departmentTopic}/${this.departmentId}`;
 
     const that = this;
 
@@ -222,7 +224,9 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
       try {
         const _payload = JSON.parse(payload.toString());
         if (that.isSound) {
-          if (that.servicePointId === +_payload.servicePointId) {
+          console.log(that.departmentId, _payload.departmentId);
+
+          if (that.departmentId === +_payload.departmentId) {
             // play sound
             const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString() };
             that.playlists.push(sound);
@@ -277,16 +281,16 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
           console.log(error);
         }
       });
-    })
+    });
   }
 
-  selectServicePoint() {
+  selectDepartment() {
     this.mdlServicePoint.open();
   }
 
-  onSelectedPoint(event: any) {
-    this.servicePointName = event.service_point_name;
-    this.servicePointId = event.service_point_id;
+  onSelectDepartment(event: any) {
+    this.departmentName = event.department_name;
+    this.departmentId = event.department_id;
     this.currentTopic = event.topic;
 
     // connect mqtt
@@ -296,7 +300,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
   async getCurrentQueue() {
     try {
-      const rs: any = await this.queueService.getWorking(this.servicePointId);
+      const rs: any = await this.queueService.getWorkingDepartment(this.departmentId);
       if (rs.statusCode === 200) {
         this.workingItems = rs.results;
         const arr = _.sortBy(rs.results, ['update_date']).reverse();
