@@ -22,6 +22,7 @@ import { PriorityComponent } from './settings/priority/priority.component';
 import { QueueCallerDepartmentComponent } from './queue-caller-department/queue-caller-department.component';
 import { DisplayQueueDepartmentComponent } from './display-queue-department/display-queue-department.component';
 import { ModalSelectTransferComponent } from '../shared/modal-select-transfer/modal-select-transfer.component';
+import { PrinterComponent } from './settings/printer/printer.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ModalSelectTransferComponent } from '../shared/modal-select-transfer/mo
     PriorityComponent,
     QueueCallerDepartmentComponent,
     DisplayQueueDepartmentComponent,
-    ModalSelectTransferComponent
+    ModalSelectTransferComponent,
+    PrinterComponent
   ],
   imports: [
     CommonModule,

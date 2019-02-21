@@ -85,11 +85,11 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <!-- <tr>
                   <td>C 0001</td>
                   <td>5</td>
-                </tr>
-                <!-- <tr *ngIf="!workingItems.length">
+                </tr> -->
+                <tr *ngIf="!workingItems.length">
                   <td colspan="3">กรุณาเลือกจุดบริการ</td>
                 </tr>
                 <tr *ngFor="let item of workingItems"
@@ -101,7 +101,7 @@
                   <td>
                     <label style="font-size: 3.5rem;" class="font-weight-bold">{{item.room_number}}</label>
                   </td>
-                </tr> -->
+                </tr>
               </tbody>
             </table>
           </div>
@@ -128,8 +128,8 @@
                     class="h2 text-muted float-right mdi mdi-bell-off"></i>
                 </div>
                 <div class="float-right">
-                  <span class="h2 text-white font-weight-bold" style="cursor: pointer" (click)="selectServicePoint()">{{servicePointName
-                    || 'กรุณาเลือกจุดบริการ'}}</span>
+                  <span class="h2 text-white font-weight-bold" style="cursor: pointer" (click)="selectDepartment()">{{departmentName
+                    || 'กรุณาเลือกแผนก'}}</span>
                 </div>
               </div>
             </div>
@@ -144,5 +144,5 @@
 </div>
 
 
-<app-modal-select-servicepoints (onSelected)="onSelectedPoint($event)" #mdlServicePoint>
-</app-modal-select-servicepoints>
+<app-modal-select-department (onSelected)="onSelectDepartment($event)" #mdlServicePoint>
+</app-modal-select-department>

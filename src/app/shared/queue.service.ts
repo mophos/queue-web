@@ -63,6 +63,11 @@ export class QueueService {
     return this.httpClient.put(_url, {}, this.httpOptions).toPromise();
   }
 
+  async getWorkingDepartment(departmentId: any) {
+    const _url = `${this.apiUrl}/queue/working/department/${departmentId}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
   async getWorking(servicePointId: any, token: any = null) {
     const _url = `${this.apiUrl}/queue/working/${servicePointId}`;
     var _httpOptions = {};
@@ -127,6 +132,18 @@ export class QueueService {
   async callQueue(servicePointId: any, queueNumber: any, roomId: any, roomNumber: any, queueId: any, isCompleted: any = 'Y') {
     const _url = `${this.apiUrl}/queue/caller/${queueId}`;
     return this.httpClient.post(_url, {
+      servicePointId: servicePointId,
+      queueNumber: queueNumber,
+      roomNumber: roomNumber,
+      roomId: roomId,
+      isCompleted: isCompleted
+    }, this.httpOptions).toPromise();
+  }
+
+  async callQueueDepartment(departmentId: any, servicePointId: any, queueNumber: any, roomId: any, roomNumber: any, queueId: any, isCompleted: any = 'Y') {
+    const _url = `${this.apiUrl}/queue/caller/department/${queueId}`;
+    return this.httpClient.post(_url, {
+      departmentId: departmentId,
       servicePointId: servicePointId,
       queueNumber: queueNumber,
       roomNumber: roomNumber,
