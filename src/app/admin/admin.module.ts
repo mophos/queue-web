@@ -22,7 +22,7 @@ import { PriorityComponent } from './settings/priority/priority.component';
 import { QueueCallerDepartmentComponent } from './queue-caller-department/queue-caller-department.component';
 import { DisplayQueueDepartmentComponent } from './display-queue-department/display-queue-department.component';
 import { ModalSelectTransferComponent } from '../shared/modal-select-transfer/modal-select-transfer.component';
-import { QueueCallerDepartmentGroupComponent } from './queue-caller-department-group/queue-caller-department-group.component';
+import { QueueCalleGroupComponent } from './queue-caller-group/queue-caller-group.component';
 import { PrinterComponent } from './settings/printer/printer.component';
 
 @NgModule({
@@ -42,7 +42,7 @@ import { PrinterComponent } from './settings/printer/printer.component';
     QueueCallerDepartmentComponent,
     DisplayQueueDepartmentComponent,
     ModalSelectTransferComponent,
-    QueueCallerDepartmentGroupComponent,
+    QueueCalleGroupComponent,
     PrinterComponent
   ],
   imports: [

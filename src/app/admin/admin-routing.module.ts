@@ -12,7 +12,7 @@ import { QueueCenterComponent } from './queue-center/queue-center.component';
 import { GenerateTokenComponent } from './settings/generate-token/generate-token.component';
 import { DepartmentsComponent } from './settings/departments/departments.component';
 import { PriorityComponent } from './settings/priority/priority.component';
-import { QueueCallerDepartmentGroupComponent } from './queue-caller-department-group/queue-caller-department-group.component';
+import { QueueCalleGroupComponent } from './queue-caller-group/queue-caller-group.component';
 import { PrinterComponent } from './settings/printer/printer.component';
 
 const routes: Routes = [
@@ -28,7 +28,7 @@ const routes: Routes = [
       { path: 'visit', component: VisitComponent },
       { path: 'queue-caller', component: QueueCallerComponent },
       { path: 'queue-caller-department', component: QueueCallerDepartmentComponent },
-      { path: 'queue-caller-department-group', component: QueueCallerDepartmentGroupComponent },
+      { path: 'queue-caller-group', component: QueueCalleGroupComponent },
       { path: 'queue-center', component: QueueCenterComponent },
       { path: 'generate-token', component: GenerateTokenComponent },
       { path: 'printer', component: PrinterComponent },

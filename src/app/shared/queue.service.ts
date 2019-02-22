@@ -47,7 +47,10 @@ export class QueueService {
     const _url = `${this.apiUrl}/queue/waiting/${servicePointId}?limit=${limit}&offset=${offset}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
-
+  async getWaitingGroup(servicePointId: any, limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/waiting-group/${servicePointId}?limit=${limit}&offset=${offset}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
   async getQueueByDepartment(departmentId: any, limit: number = 20, offset: number = 0) {
     const _url = `${this.apiUrl}/queue/department/${departmentId}?limit=${limit}&offset=${offset}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
@@ -73,6 +76,10 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
+  async getWorkingHistoryGroup(servicePointId: any) {
+    const _url = `${this.apiUrl}/queue/working/history-group/${servicePointId}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
   async getWorkingHistory(servicePointId: any) {
     const _url = `${this.apiUrl}/queue/working/history/${servicePointId}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
@@ -100,6 +107,28 @@ export class QueueService {
   async markCancel(queueId: any) {
     const _url = `${this.apiUrl}/queue/cancel/${queueId}`;
     return this.httpClient.delete(_url, this.httpOptions).toPromise();
+  }
+
+  async callQueueGroups(servicePointId: any,  roomId: any, roomNumber: any, isCompleted: any = 'Y', queue: any) {
+    const _url = `${this.apiUrl}/queue/caller-groups`;
+    return this.httpClient.post(_url, {
+      servicePointId: servicePointId,
+      roomNumber: roomNumber,
+      roomId: roomId,
+      isCompleted: isCompleted,
+      queue: queue
+    }, this.httpOptions).toPromise();
+  }
+  async callQueueGroup(servicePointId: any, queueNumber: any, roomId: any, roomNumber: any, queueId: any, isCompleted: any = 'Y', queueRunning: any) {
+    const _url = `${this.apiUrl}/queue/caller-group/${queueId}`;
+    return this.httpClient.post(_url, {
+      servicePointId: servicePointId,
+      queueNumber: queueNumber,
+      roomNumber: roomNumber,
+      roomId: roomId,
+      isCompleted: isCompleted,
+      queueRunning: queueRunning
+    }, this.httpOptions).toPromise();
   }
 
   async callQueue(servicePointId: any, queueNumber: any, roomId: any, roomNumber: any, queueId: any, isCompleted: any = 'Y') {
