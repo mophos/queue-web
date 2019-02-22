@@ -59,7 +59,7 @@ export class ModalSelectRoomComponent implements OnInit {
 
   selectRoom() {
     if (this.roomId) {
-      const idx = _.findIndex(this.rooms, { 'room_id': this.roomId });
+      const idx = _.findIndex(this.rooms, { 'room_id': +this.roomId });
       this.modalReference.close();
       this.onSelected.emit({ roomId: this.roomId, roomNumber: this.rooms[idx].room_number });
     } else {
