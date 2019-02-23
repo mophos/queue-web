@@ -103,6 +103,24 @@ export class QueueService {
     return this.httpClient.get(_url, _httpOptions).toPromise();
   }
 
+  async getWorkingGroup(servicePointId: any, token: any = null) {
+    const _url = `${this.apiUrl}/queue/working-group/${servicePointId}`;
+    var _httpOptions = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
+  }
+
   async getWorkingHistoryGroup(servicePointId: any,token: any = null) {
     const _url = `${this.apiUrl}/queue/working/history-group/${servicePointId}`;
     var _httpOptions: any = {};
@@ -138,6 +156,8 @@ export class QueueService {
 
     return this.httpClient.get(_url, _httpOptions).toPromise();
   }
+
+  
 
   async getPending(servicePointId: any) {
     const _url = `${this.apiUrl}/queue/pending/${servicePointId}`;

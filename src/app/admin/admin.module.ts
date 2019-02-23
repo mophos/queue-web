@@ -24,6 +24,7 @@ import { DisplayQueueDepartmentComponent } from './display-queue-department/disp
 import { ModalSelectTransferComponent } from '../shared/modal-select-transfer/modal-select-transfer.component';
 import { QueueCalleGroupComponent } from './queue-caller-group/queue-caller-group.component';
 import { PrinterComponent } from './settings/printer/printer.component';
+import { DisplayQueueGroupComponent } from './display-queue-group/display-queue-group.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { PrinterComponent } from './settings/printer/printer.component';
     DisplayQueueDepartmentComponent,
     ModalSelectTransferComponent,
     QueueCalleGroupComponent,
-    PrinterComponent
+    PrinterComponent,
+    DisplayQueueGroupComponent
   ],
   imports: [
     CommonModule,
