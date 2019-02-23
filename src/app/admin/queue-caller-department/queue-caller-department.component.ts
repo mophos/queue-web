@@ -12,6 +12,7 @@ import { ServiceRoomService } from 'src/app/shared/service-room.service';
 
 import { CountdownComponent } from 'ngx-countdown';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { ModalSelectRoomComponent } from 'src/app/shared/modal-select-room/modal-select-room.component';
 
 @Component({
   selector: 'app-queue-caller-department',
@@ -22,6 +23,8 @@ export class QueueCallerDepartmentComponent implements OnInit {
 
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectDepartmentComponent;
   @ViewChild('mdlSelectTransfer') private mdlSelectTransfer: ModalSelectTransferComponent;
+  @ViewChild('mdlSelectRoom') private mdlSelectRoom: ModalSelectRoomComponent;
+
 
   message: string;
   servicePointId: any;
@@ -396,7 +399,9 @@ export class QueueCallerDepartmentComponent implements OnInit {
     this.doCallQueue();
   }
 
-
+  onSelectRoom(item) {
+    this.prepareQueue({ 'room_id': item.roomId, 'room_number': item.roomNumber });
+  }
 
   async doCallQueue(isCompleted: any = 'Y') {
     if (this.isOffline) {
@@ -444,6 +449,13 @@ export class QueueCallerDepartmentComponent implements OnInit {
     } else {
       window.open(`${this.apiUrl}/print/queue?queueId=${queueId}`, '_blank');
     }
+  }
+
+  async openModalSelectRoom(item) {
+
+    this.setQueueForCall(item);
+    this.mdlSelectRoom.setList(item.rooms);
+    this.mdlSelectRoom.open();
   }
 
 }

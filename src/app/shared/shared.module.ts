@@ -24,6 +24,7 @@ import { ModalSetPrinterComponent } from './modal-set-printer/modal-set-printer.
 import { ModalSelectPriorityComponent } from './modal-select-priority/modal-select-priority.component';
 import { ModalSelectDepartmentComponent } from './modal-select-department/modal-select-department.component';
 import { AlertWarningPrinterComponent } from './alert-warning-printer/alert-warning-printer.component';
+import { ModalSelectRoomComponent } from './modal-select-room/modal-select-room.component';
 
 @NgModule({
   imports: [
@@ -46,6 +47,7 @@ import { AlertWarningPrinterComponent } from './alert-warning-printer/alert-warn
     ModalSelectPriorityComponent,
     ModalSelectDepartmentComponent,
     AlertWarningPrinterComponent,
+    ModalSelectRoomComponent,
   ],
   exports: [
     ModalAddServicePointComponent,
@@ -61,7 +63,8 @@ import { AlertWarningPrinterComponent } from './alert-warning-printer/alert-warn
     ModalAddPriorityComponent,
     ModalSelectPriorityComponent,
     ModalSelectDepartmentComponent,
-    AlertWarningPrinterComponent
+    AlertWarningPrinterComponent,
+    ModalSelectRoomComponent
   ],
   providers: [
     ServicePointService,
