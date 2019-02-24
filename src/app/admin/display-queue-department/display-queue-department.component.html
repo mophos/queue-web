@@ -93,12 +93,12 @@
                   <td colspan="3">กรุณาเลือกจุดบริการ</td>
                 </tr>
                 <tr *ngFor="let item of workingItems"
-                  [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}">
-                  <td>
+                  [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber,'backgroud-queue-white':item.queue_number!==currentQueueNumber}">
+                  <td style="border-radius: 10px 0px 0px 10px">
                     <label style="font-size: 3.5rem; letter-spacing: 2px;"
                       class="font-weight-bold">{{item.queue_number}}</label>
                   </td>
-                  <td>
+                  <td style="border-radius: 0px 10px 10px 0px">
                     <label style="font-size: 3.5rem;" class="font-weight-bold">{{item.room_number}}</label>
                   </td>
                 </tr>
