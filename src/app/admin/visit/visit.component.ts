@@ -217,6 +217,7 @@ export class VisitComponent implements OnInit {
 
   changeServicePoints(event: any) {
     this.servicePointCode = event.target.value;
+    this.query = '';
     this.getVisit();
   }
 
