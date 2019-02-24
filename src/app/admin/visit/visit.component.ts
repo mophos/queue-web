@@ -107,6 +107,7 @@ export class VisitComponent implements OnInit {
     if (this.query) {
       if (event.keyCode === 13) {
         this.isSearch = true;
+        this.servicePointCode = '';
         this.getVisit();
       }
     }
