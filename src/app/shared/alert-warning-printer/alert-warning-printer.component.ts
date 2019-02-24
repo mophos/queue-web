@@ -9,7 +9,9 @@ export class AlertWarningPrinterComponent implements OnInit {
   warningPrinter = false;
   constructor() {
     this.warningPrinter = localStorage.getItem('clientPrinterId') === '' || !localStorage.getItem('clientPrinterId') ? true : false;
-    this.warningPrinter = sessionStorage.getItem('warning_printer') === 'false' ? false : true;
+    if (this.warningPrinter) {
+      this.warningPrinter = sessionStorage.getItem('warning_printer') === 'false' ? false : true;
+    }
   }
 
   ngOnInit() {
