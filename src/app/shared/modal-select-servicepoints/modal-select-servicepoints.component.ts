@@ -63,10 +63,9 @@ export class ModalSelectServicepointsComponent implements OnInit {
         this.alertService.error();
       }
     } else {
-      var _servicePoints = sessionStorage.getItem('servicePoints');
-      var jsonDecoded = JSON.parse(_servicePoints);
-
-      this.points = jsonDecoded
+      const _servicePoints = sessionStorage.getItem('servicePoints');
+      const jsonDecoded = JSON.parse(_servicePoints);
+      this.points = jsonDecoded;
     }
 
 

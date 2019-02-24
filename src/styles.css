@@ -228,3 +228,8 @@ label {
 .modal .modal-dialog .modal-content .modal-body {
     padding: 5px 26px;
   }
+
+  .backgroud-queue-white {
+    background: white;
+    margin-top: 10px;
+  }

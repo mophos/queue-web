@@ -149,8 +149,8 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
     const audioFiles = [];
 
-    audioFiles.push('./assets/audio/please.mp3')
-    audioFiles.push('./assets/audio/silent.mp3')
+    audioFiles.push('./assets/audio/please.mp3');
+    audioFiles.push('./assets/audio/silent.mp3');
 
     _strQueue.forEach(v => {
       audioFiles.push(`./assets/audio/${v}.mp3`);
@@ -333,6 +333,8 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
       const rs: any = await this.queueService.getWorkingDepartment(this.departmentId, this.token);
       if (rs.statusCode === 200) {
         this.workingItems = rs.results;
+        console.log(rs.results);
+
         const arr = _.sortBy(rs.results, ['update_date']).reverse();
 
         if (arr.length > 0) {
