@@ -68,6 +68,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
   notifyUrl: string;
   token: string;
 
+  hide = false;
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,

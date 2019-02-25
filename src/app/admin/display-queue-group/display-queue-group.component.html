@@ -1,6 +1,6 @@
 <div class="container-scroller">
   <!-- partial:../../partials/_navbar.html -->
-  <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+  <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0" [ngClass]="{'hide': hide}">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
       <a class="navbar-brand brand-logo" href="javascript://">
         <img style="width: 40px; height: 40px;" src="./assets/images/iconQ4U100.png" alt=""></a>
@@ -17,7 +17,7 @@
           </a>
         </li>
         <li class="nav-item d-none d-lg-block full-screen-link">
-          <a class="nav-link" appToggleFullscreen href="javascript://">
+          <a class="nav-link" appToggleFullscreen (click)="hide = true" href="javascript://">
             <i class="mdi mdi-fullscreen text-primary"></i>
           </a>
         </li>
@@ -32,78 +32,33 @@
   </nav>
   <!-- partial -->
   <div class="container-fluid page-body-wrapper">
-    <!-- partial:../../partials/_sidebar.html -->
-    <!-- <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <div class="mr-2 ml-2">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th><span class="h1">คิว</span></th>
-                <th><span class="h1">ช่อง</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngIf="!workingItems.length">
-                <td colspan="2">กรุณาเลือกจุดบริการ</td>
-              </tr>
-              <tr *ngFor="let item of workingItems">
-                <td style="text-align: center;">
-                  <label style="font-size: 3.5rem; letter-spacing: 5px;" class="font-weight-bold">{{item.queue_number}}</label>
-                </td>
-                <td style="text-align: center;">
-                  <label style="font-size: 3.5rem;" class="font-weight-bold">{{item.room_number}}</label>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </nav> -->
-    <!-- partial -->
     <div class="main-panel">
-      <div class="content-wrapper">
-
+      <div class="content-wrapper" style="padding: 1rem 2.25rem">
+        <div [ngClass]="{'hide': !hide}" style="text-align: right;font-size: 1rem">
+          <a href="javascript://" routerLink="/admin">
+            <i class="mdi mdi-home text-success"></i>
+          </a>
+          <a appToggleFullscreen (click)="hide = false" href="javascript://">
+            <i class="mdi mdi-fullscreen text-primary"></i>
+          </a>
+          <a (click)="logout()" href="javascript://">
+            <i class="mdi mdi-power text-danger"></i>
+          </a>
+        </div>
         <div class="card card-inverse-danger" *ngIf="isOffline">
           <div class="card-body">
             <p class="mb-4">
               เกิดข้อผิดพลาดในการเชื่อมต่อกับ Notify Server.
             </p>
             <button class="btn btn-danger" (click)="connectWebSocket()">เชื่อมต่อใหม่ (<strong>
-                <countdown [config]="{leftTime: 15, template: '$!s!'}" (finished)="onFinished()" (notify)="onNotify($event)"></countdown>
+                <countdown [config]="{leftTime: 15, template: '$!s!'}" (finished)="onFinished()"
+                  (notify)="onNotify($event)"></countdown>
               </strong>)</button>
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-6">
-            <!-- <div class="card border-primary">
-              <div class="card-header h2">ประวัติการเรียกเข้าห้องตรวจ</div>
-
-              <div class="card-body">
-                <table class="table table-sm table-striped">
-                  <thead>
-                    <tr>
-                      <th><span class="h1">ลำดับที่</span></th>
-                      <th><span class="h1">ช่องบริการ</span></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngIf="!workingItems.length">
-                      <td colspan="3">กรุณาเลือกจุดบริการ</td>
-                    </tr>
-                    <tr *ngFor="let item of workingItems" [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}">
-                      <td>
-                        <label style="font-size: 3.5rem; letter-spacing: 2px;" class="font-weight-bold">{{item.queue_number}}</label>
-                      </td>
-                      <td>
-                        <label style="font-size: 3.5rem;" class="font-weight-bold">{{item.room_number}}</label>
-                      </td>
-                      
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div> -->
-            <div style="margin-top: 20px;"></div>
             <div class="card">
               <div class="card-header h2">ประวัติการเรียก</div>
               <div class="card-body">
@@ -112,7 +67,6 @@
                     <tr>
                       <th><span class="h1">ลำดับที่</span></th>
                       <th><span class="h1">ช่องบริการ</span></th>
-                      <!-- <th><span class="h1">HN</span></th> -->
                     </tr>
                   </thead>
                   <tbody>
@@ -121,7 +75,8 @@
                     </tr>
                     <tr *ngFor="let item of workingItemsHistory">
                       <td>
-                        <label style="font-size: 3.5rem; letter-spacing: 2px;" class="font-weight-bold">{{item.queue_number}}</label>
+                        <label style="font-size: 3.5rem; letter-spacing: 2px;"
+                          class="font-weight-bold">{{item.queue_number}}</label>
                       </td>
                       <td>
                         <label style="font-size: 3.5rem;" class="font-weight-bold">{{item.room_number}}</label>
@@ -139,25 +94,33 @@
 
             <div class="card bg-primary card-img-holder text-white">
 
-              <div class="card-body">
-                <div style="font-size: 3rem;" class="font-weight-normal"> ลำดับที่</div>
-                <div *ngFor="let item of workingItems">
-                  <span class="font-weight-bold" style="letter-spacing: 11px; font-size: 8rem;">{{ item.queue_number
-                    || '-'}}</span>
-                    <hr style="margin:0;border-top-width: 4px;" color="white" noshade="noshade">
+              <div class="card-body" style="padding: 1rem 2.5rem">
+                <div style="font-size: 3rem;" class="font-weight-normal">
+                  <div class="row">
+                    <div class="col-md-6">ลำดับที่</div>
+                    <div class="col-md-6" style="text-align: right">ช่องบริการ</div>
+                  </div>
                 </div>
-
-                <!-- <h1 class="card-text">HN: {{currentHn || '-'}}</h1> -->
-                <div style="font-size: 3rem;" class="font-weight-normal">ช่องบริการ</div>
-                <span class="font-weight-bold" style="letter-spacing: 12px; font-size: 11rem;">{{currentRoomNumber
-                  || '-'}}</span>
-                <div style="font-size: 3rem;" class="card-text">{{currentRoomName || '-'}}</div>
+                <div *ngFor="let item of workingItems">
+                  <div class="row">
+                    <div class="col-md-9">
+                      <span class="font-weight-bold" style="letter-spacing: 10px; font-size: 8rem;">{{ item.queue_number
+                          || '-'}}</span>
+                    </div>
+                    <div class="col-md-3">
+                      <span class="font-weight-bold" style="letter-spacing: 5px; font-size: 8rem;">{{currentRoomNumber
+                            || '-'}}</span>
+                    </div>
+                  </div>
+                  <hr style="margin:0;border-top-width: 4px;" color="white" noshade="noshade">
+                </div>
               </div>
-
               <div class="card-footer">
                 <div class="float-left">
-                  <i style="cursor: pointer;" *ngIf="isSound" (click)="toggleSound()" class="h2 text-warning float-right mdi mdi-bell-ring"></i>
-                  <i style="cursor: pointer;" *ngIf="!isSound" (click)="toggleSound()" class="h2 text-muted float-right mdi mdi-bell-off"></i>
+                  <i style="cursor: pointer;" *ngIf="isSound" (click)="toggleSound()"
+                    class="h2 text-warning float-right mdi mdi-bell-ring"></i>
+                  <i style="cursor: pointer;" *ngIf="!isSound" (click)="toggleSound()"
+                    class="h2 text-muted float-right mdi mdi-bell-off"></i>
                 </div>
                 <div class="float-right">
                   <span class="h2 text-white font-weight-bold" style="cursor: pointer" (click)="selectServicePoint()">{{servicePointName
@@ -176,4 +139,5 @@
 </div>
 
 
-<app-modal-select-servicepoints (onSelected)="onSelectedPoint($event)" #mdlServicePoint></app-modal-select-servicepoints>
+<app-modal-select-servicepoints (onSelected)="onSelectedPoint($event)" #mdlServicePoint>
+</app-modal-select-servicepoints>
