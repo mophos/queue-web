@@ -44,7 +44,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
   jwtHelper = new JwtHelperService();
-  servicePointTopic = null;
+  groupTopic = null;
 
   servicePointId: any;
   servicePointName: any;
@@ -90,7 +90,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
       if (token) {
         var decodedToken = this.jwtHelper.decodeToken(token);
 
-        this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
+        this.groupTopic = decodedToken.GROUP_TOPIC;
         this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
         this.notifyUser = decodedToken.NOTIFY_USER;
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
@@ -240,7 +240,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
       console.log(error);
     }
 
-    const topic = `${this.servicePointTopic}/${this.servicePointId}`;
+    const topic = `${this.groupTopic}/${this.servicePointId}`;
 
     const that = this;
 

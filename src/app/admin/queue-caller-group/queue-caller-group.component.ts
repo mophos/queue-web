@@ -50,7 +50,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
 
   client: MqttClient;
   jwtHelper = new JwtHelperService();
-  servicePointTopic = null;
+  groupTopic = null;
   globalTopic = null;
   notifyUser = null;
   notifyPassword = null;
@@ -73,7 +73,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   ) {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
-    this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
+    this.groupTopic = decodedToken.GROUP_TOPIC;
     this.globalTopic = decodedToken.QUEUE_CENTER_TOPIC;
 
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
@@ -119,8 +119,8 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     });
 
     const that = this;
-    const topic = `${this.servicePointTopic}/${this.servicePointId}`;
-    const visitTopic = this.globalTopic;
+    const topic = `${this.groupTopic}/${this.servicePointId}`;
+    // const visitTopic = this.globalTopic;
 
     this.client.on('connect', () => {
       console.log('Connected!');
@@ -143,19 +143,19 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
         }
       });
 
-      that.client.subscribe(visitTopic, (error) => {
-        console.log('Subscribe : ' + visitTopic);
-        if (error) {
-          that.zone.run(() => {
-            that.isOffline = true;
-            try {
-              that.counter.restart();
-            } catch (error) {
-              console.log(error);
-            }
-          });
-        }
-      });
+      // that.client.subscribe(visitTopic, (error) => {
+      //   console.log('Subscribe : ' + visitTopic);
+      //   if (error) {
+      //     that.zone.run(() => {
+      //       that.isOffline = true;
+      //       try {
+      //         that.counter.restart();
+      //       } catch (error) {
+      //         console.log(error);
+      //       }
+      //     });
+      //   }
+      // });
     });
 
     this.client.on('close', () => {
