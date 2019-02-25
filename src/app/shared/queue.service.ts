@@ -32,8 +32,20 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
+  async changeRoomGroup(queueId: any, roomId: any, servicePointId: any, roomNumber: any, queueNumber: any, queueRunning: any) {
+    const _url = `${this.apiUrl}/queue/change-room-group`;
+    return this.httpClient.post(_url, {
+      roomId: roomId,
+      queueId: queueId,
+      servicePointId: servicePointId,
+      queueNumber: queueNumber,
+      roomNumber: roomNumber,
+      queueRunning: queueRunning
+    }, this.httpOptions).toPromise();
+  }
+
   async changeRoom(queueId: any, roomId: any, servicePointId: any, roomNumber: any, queueNumber: any) {
-    const _url = `${this.apiUrl}/queue/change-room`;
+    const _url = `${this.apiUrl}/queue/change`;
     return this.httpClient.post(_url, {
       roomId: roomId,
       queueId: queueId,
@@ -47,10 +59,24 @@ export class QueueService {
     const _url = `${this.apiUrl}/queue/waiting/${servicePointId}?limit=${limit}&offset=${offset}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
+
   async getWaitingGroup(servicePointId: any, limit: number = 20, offset: number = 0) {
     const _url = `${this.apiUrl}/queue/waiting-group/${servicePointId}?limit=${limit}&offset=${offset}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
+
+  async searchWaitingGroup(servicePointId: any, limit: number = 20, offset: number = 0, queryWaiting:string) {
+    const _url = `${this.apiUrl}/queue/waiting-group/search/${servicePointId}?limit=${limit}&offset=${offset}&query=${queryWaiting}`;
+    
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
+  async searchHistoryGroup(servicePointId: any, limit: number = 20, offset: number = 0, query:string) {
+    const _url = `${this.apiUrl}/queue/history-group/search/${servicePointId}?limit=${limit}&offset=${offset}&query=${query}`;
+    
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
   async getQueueByDepartment(departmentId: any, limit: number = 20, offset: number = 0) {
     const _url = `${this.apiUrl}/queue/department/${departmentId}?limit=${limit}&offset=${offset}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();

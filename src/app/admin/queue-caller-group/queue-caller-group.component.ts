@@ -27,7 +27,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   servicePointId: any;
   servicePointName: any;
   waitingItems: any = [];
-  // pendingItems: any = [];
+  workingItems: any = [];
   historyItems: any = [];
   rooms: any = [];
   queueNumber: any;
@@ -39,6 +39,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   isAllServicePoint: boolean = false;
 
   total = 0;
+  historyTotal = 0
   pageSize = 10;
   maxSizePage = 5;
   currentPage = 1;
@@ -60,9 +61,13 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
 
   selectedQueue: any = {};
   notifyUrl: string;
-
-  @ViewChild(CountdownComponent) counter: CountdownComponent;
   tmpWaitingItems: {}[];
+
+  queryWaiting: string = ''
+  queryHistory: string = ''
+  @ViewChild(CountdownComponent) counter: CountdownComponent;
+
+
 
   constructor(
     private queueService: QueueService,
@@ -74,7 +79,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
     this.groupTopic = decodedToken.GROUP_TOPIC;
-    this.globalTopic = decodedToken.QUEUE_CENTER_TOPIC;
+    // this.globalTopic = decodedToken.QUEUE_CENTER_TOPIC;
 
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
@@ -163,7 +168,11 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     });
 
     this.client.on('message', (topic, payload) => {
-      this.getAllList();
+      this.getWaiting();
+      // this.getWorking();
+      // this.getRooms();
+      // this.getPending();
+      // this.getHistory();
     });
 
     this.client.on('error', (error) => {
@@ -210,25 +219,40 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   setChangeRoom(item: any) {
     this.queueId = item.queue_id;
     this.queueNumber = item.queue_number;
-    // this.queueRunning = item.queue_running;
+    this.queueRunning = item.queue_running;
   }
 
   async doChangeRoom(room: any) {
     if (this.isOffline) {
       this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
     } else {
+      console.log(room);
+      
       const roomId = room.room_id;
       const queueId = this.queueId;
       const roomNumber = room.room_number;
       const queueNumber = this.queueNumber;
-      // const queueRunning = this.queueRunning;
+      const queueRunning = this.queueRunning;
 
       try {
         const isConfirm = await this.alertService.confirm('ต้องการเปลี่ยนช่องบริการ ใช่หรือไม่')
         if (isConfirm) {
-          const rs: any = await this.queueService.changeRoom(queueId, roomId, this.servicePointId, roomNumber, queueNumber);
+          const rs: any = await this.queueService.changeRoomGroup(queueId, roomId, this.servicePointId, roomNumber, queueNumber, queueRunning);
           if (rs.statusCode === 200) {
             this.alertService.success();
+            const idxw = _.findIndex(this.workingItems, { service_point_id: this.servicePointId, queue_id: this.queueId, queue_running: this.queueRunning });
+          if (idxw > -1) {
+            console.log(this.workingItems[idxw],roomId);
+            
+            this.workingItems[idxw].room_id = roomId
+            this.workingItems[idxw].room_number = roomNumber
+          }
+          const idxh = _.findIndex(this.historyItems, { service_point_id: this.servicePointId, queue_id: this.queueId, queue_running: this.queueRunning });
+          if (idxh > -1) {
+            console.log(this.historyItems[idxh]);
+            this.historyItems[idxh].room_id = roomId
+            this.historyItems[idxh].room_number = roomNumber
+          }
             // this.getWorking();
           } else {
             this.alertService.error(rs.message);
@@ -257,26 +281,63 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     }
   }
 
-  // async getWorking() {
-  //   try {
-  //     const rs: any = await this.queueService.getWorking(this.servicePointId);
-  //     if (rs.statusCode === 200) {
-  //       this.workingItems = rs.results;
-  //     } else {
-  //       console.log(rs.message);
-  //       this.alertService.error('เกิดข้อผิดพลาด');
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     this.alertService.error();
-  //   }
-  // }
+  async getWorking() {
+    try {
+      console.log('getWorking');
+
+      const rs: any = await this.queueService.getWorkingGroup(this.servicePointId);
+      if (rs.statusCode === 200) {
+        this.workingItems = rs.results;
+      } else {
+        console.log(rs.message);
+        this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
+    }
+  }
+
+  async searchQueryWaiting() {
+    try {
+      this.offset = 0;
+      const rs: any = await this.queueService.searchWaitingGroup(this.servicePointId, this.pageSize, this.offset, this.queryWaiting);
+      if (rs.statusCode === 200) {
+        this.waitingItems = rs.results;
+        this.total = rs.total;
+      } else {
+        console.log(rs.message);
+        this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
+    }
+  }
+
+  async searchQueryHistory() {
+    try {
+      this.offset = 0;
+      const rs: any = await this.queueService.searchHistoryGroup(this.servicePointId, this.pageSize, 0, this.queryHistory);
+      if (rs.statusCode === 200) {
+        this.historyItems = rs.results;
+        this.historyTotal = rs.total;
+      } else {
+        console.log(rs.message);
+        this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
+    }
+  }
 
   async getHistory() {
     try {
       const rs: any = await this.queueService.getWorkingHistoryGroup(this.servicePointId);
       if (rs.statusCode === 200) {
         this.historyItems = rs.results;
+        this.historyTotal = this.historyItems.length;
       } else {
         console.log(rs.message);
         this.alertService.error('เกิดข้อผิดพลาด');
@@ -354,7 +415,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
 
   getAllList() {
     this.getWaiting();
-    // this.getWorking();
+    this.getWorking();
     this.getRooms();
     // this.getPending();
     this.getHistory();
@@ -365,6 +426,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     this.queueNumber = item.queue_number;
     this.queueRunning = item.queue_running;
   }
+
   setQueueForCallGroup(value: number) {
     const tmp = _.map(_.take(this.waitingItems, value), (v: any) => {
       return {
@@ -389,14 +451,23 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     }
   }
 
+  callAgains(queue: any) {
+    this.roomNumber = queue.room_number;
+    this.roomId = queue.room_id;
+    this.queueNumber = queue.queue_number;
+    this.queueId = queue.queue_id;
+    this.queueRunning = queue.queue_running;
+    // this.doCallQueueAgain();
+    this.doCallQueue();
+  }
   callAgain(queue: any) {
     this.roomNumber = queue.room_number;
     this.roomId = queue.room_id;
     this.queueNumber = queue.queue_number;
     this.queueId = queue.queue_id;
     this.queueRunning = queue.queue_running;
-
-    this.doCallQueue();
+    this.doCallQueueAgain();
+    // this.doCallQueue();
   }
 
   prepareQueue(room: any) {
@@ -441,6 +512,44 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  async doCallQueueAgain(isCompleted: any = 'Y') {
+    console.log('doCallQueueAgain');
+
+    if (this.isOffline) {
+      this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
+    } else {
+      try {
+        const rs: any = await this.queueService.callQueueGroup(this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId, isCompleted, this.queueRunning);
+        // const rs: any = await this.queueService.callQueueGroup(this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId, isCompleted, this.queueRunning);
+        if (rs.statusCode === 200) {
+          this.alertService.success();
+          // this.getAllList();
+          // const idxw = _.findIndex(this.workingItems, { service_point_id: this.servicePointId, queue_id: this.queueId, queue_running: this.queueRunning });
+          // if (idxw > -1) {
+          //   this.workingItems[idxw].room_id = this.roomId
+          //   this.workingItems[idxw].room_number = this.roomNumber
+          // }
+          // const idxh = _.findIndex(this.historyItems, { service_point_id: this.servicePointId, queue_id: this.queueId, queue_running: this.queueRunning });
+          // if (idxh > -1) {
+          //   this.historyItems[idxh].room_id = this.roomId
+          //   this.historyItems[idxh].room_number = this.roomNumber
+          // }
+          this.roomId = null;
+          this.roomNumber = null;
+          this.queueNumber = null;
+          this.queueId = null;
+          this.queueRunning = null;
+        } else {
+          this.alertService.error(rs.message);
+        }
+      } catch (error) {
+        console.error(error);
+        this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    }
+  }
+
   async doCallQueue(isCompleted: any = 'Y') {
     if (this.isOffline) {
       this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');

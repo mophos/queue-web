@@ -50,9 +50,9 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
   servicePointName: any;
   workingItems: any = [];
   workingItemsHistory: any = [];
-  currentQueueNumber: any;
+  // currentQueueNumber: any;
   currentRoomNumber: any;
-  currentHn: any;
+  // currentHn: any;
   currentRoomName: any;
 
   isOffline = false;
@@ -136,14 +136,15 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     }
   }
 
-  playSound(strQueue: string, strRoomNumber: string) {
+  playSound(strQueue: any, strRoomNumber: string) {
 
     this.isPlayingSound = true;
 
-    var _queue = strQueue.replace(' ', '');
-    _queue = _queue.replace('-', '');
+    var _queue = _.cloneWith(_.map(strQueue, (v: any) => { return v.replace(' ', '') }));
+    // console.log(strQueue);
+    _queue = _.map(_queue, (v: any) => { return v.replace('-', '') })
 
-    var _strQueue = _queue.split('');
+    var _strQueue = _.map(_queue, (v: any) => { return v.split('') });
     var _strRoom = strRoomNumber.split('');
 
     var audioFiles = [];
@@ -151,8 +152,13 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     audioFiles.push('./assets/audio/please.mp3')
     audioFiles.push('./assets/audio/silent.mp3')
 
-    _strQueue.forEach(v => {
-      audioFiles.push(`./assets/audio/${v}.mp3`);
+    console.log(_strQueue);
+    
+    _strQueue.forEach((array: any) => {
+      array.forEach(v => {
+        audioFiles.push(`./assets/audio/${v}.mp3`);
+      });
+      audioFiles.push('./assets/audio/silent.mp3')
     });
 
     audioFiles.push('./assets/audio/channel.mp3');
@@ -338,13 +344,13 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
 
         if (arr.length > 0) {
           // this.
-          this.currentHn = arr[0].hn;
-          this.currentQueueNumber = arr[0].queue_number;
+          // this.currentHn = arr[0].hn;
+          // this.currentQueueNumber = arr[0].queue_number;
           this.currentRoomName = arr[0].room_name;
           this.currentRoomNumber = arr[0].room_number;
         } else {
-          this.currentHn = null;
-          this.currentQueueNumber = null;
+          // this.currentHn = null;
+          // this.currentQueueNumber = null;
           this.currentRoomName = null;
           this.currentRoomNumber = null;
         }
