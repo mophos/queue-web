@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, NgZone, Inject } from '@angula
 import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as Random from 'random-js';
+import * as _ from 'lodash';
 
 import { ModalSelectTransferComponent } from 'src/app/shared/modal-select-transfer/modal-select-transfer.component';
 import { ModalSelectServicepointsComponent } from 'src/app/shared/modal-select-servicepoints/modal-select-servicepoints.component';
@@ -87,6 +88,12 @@ export class QueueCallerDepartmentComponent implements OnInit {
     this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
     this.departmentId = sessionStorage.getItem('departmentId') ? sessionStorage.getItem('departmentId') : null;
     this.departmentName = sessionStorage.getItem('departmentName') ? sessionStorage.getItem('departmentName') : null;
+    const _servicePoints = sessionStorage.getItem('servicePoints');
+    const jsonDecodedServicePoint = JSON.parse(_servicePoints);
+    const _department = _.unionBy(jsonDecodedServicePoint, 'department_id');
+    if (_department.length === 1) {
+      this.onSelectedDepartment(_department[0]);
+    }
   }
 
   public unsafePublish(topic: string, message: string): void {
@@ -439,7 +446,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
         const rs: any = await this.queueService.printQueueGateway(queueId, topic);
         if (rs.statusCode === 200) {
         } else {
-          this.alertService.error('ไม่สามารถพิมพ์บัตรคิวได้')
+          this.alertService.error('ไม่สามารถพิมพ์บัตรคิวได้');
         }
       } catch (error) {
         console.log(error);
