@@ -53,6 +53,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   jwtHelper = new JwtHelperService();
   servicePointTopic = null;
   globalTopic = null;
+  departmentTopic = null;
   notifyUser = null;
   notifyPassword = null;
   isMarkPending = false;
@@ -61,6 +62,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
 
   selectedQueue: any = {};
   notifyUrl: string;
+  departmentId: any;
 
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
@@ -75,6 +77,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     const decodedToken = this.jwtHelper.decodeToken(token);
     this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
     this.globalTopic = decodedToken.QUEUE_CENTER_TOPIC;
+    this.departmentTopic = decodedToken.DEPARTMENT_TOPIC || 'queue/department';
 
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
@@ -120,6 +123,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
 
     const that = this;
     const topic = `${this.servicePointTopic}/${this.servicePointId}`;
+    const departmentTopic = `${this.departmentTopic}/${this.departmentId}`;
     const visitTopic = this.globalTopic;
 
     this.client.on('connect', () => {
@@ -156,7 +160,22 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
           });
         }
       });
+
+      that.client.subscribe(departmentTopic, (error) => {
+        console.log('Subscribe : ' + departmentTopic);
+        if (error) {
+          that.zone.run(() => {
+            that.isOffline = true;
+            try {
+              that.counter.restart();
+            } catch (error) {
+              console.log(error);
+            }
+          });
+        }
+      });
     });
+
 
     this.client.on('close', () => {
       console.log('Close');
@@ -326,13 +345,11 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   }
 
   onSelectedPoint(event: any) {
-    // console.log(event);
     if (event) {
       if (!this.isMarkPending) {
-
         this.servicePointName = event.service_point_name;
         this.servicePointId = event.service_point_id;
-
+        this.departmentId = event.department_id;
         this.connectWebSocket();
         this.getAllList();
       } else {

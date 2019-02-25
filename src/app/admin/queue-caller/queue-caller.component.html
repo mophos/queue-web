@@ -353,18 +353,18 @@
 
 <ng-template #popContent>
   <div class="text-center">
-    <button *ngFor="let room of rooms" type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw"
+    <button *ngFor="let room of rooms" type="button" class="mb-2 btn btn btn-success btn-rounded btn-fw"
       (click)="prepareQueue(room)">
-      <span class="h4">{{room.room_name}}</span>
+      <span class="h3">{{room.room_name}}</span>
     </button>
   </div>
 </ng-template>
 
 <ng-template #popContentInterview>
   <div class="text-center">
-    <button *ngFor="let room of rooms" type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw"
+    <button *ngFor="let room of rooms" type="button" class="mb-2 btn btn btn-success btn-rounded btn-fw"
       (click)="interviewQueue(room)">
-      <span class="h4">{{room.room_name}}</span>
+      <span class="h3">{{room.room_name}}</span>
     </button>
   </div>
 </ng-template>
@@ -372,8 +372,8 @@
 <ng-template #popContentChangeRoom>
   <div class="text-center">
     <button (click)="doChangeRoom(room)" *ngFor="let room of rooms" type="button"
-      class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw">
-      <span class="h4">{{room.room_name}}</span>
+      class="mb-2 btn btn btn-success btn-rounded btn-fw">
+      <span class="h3">{{room.room_name}}</span>
     </button>
   </div>
 </ng-template>
