@@ -25,7 +25,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
         display: flex;
         flex-direction: column;
     }
-    
+
     .bg-primary, .settings-panel .color-tiles .tiles.primary {
         background-color: #01579b !important;
     }
@@ -86,16 +86,18 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     try {
-      var token = this.token || sessionStorage.getItem('token');
+      const token = this.token || sessionStorage.getItem('token');
       if (token) {
-        var decodedToken = this.jwtHelper.decodeToken(token);
-
+        const decodedToken = this.jwtHelper.decodeToken(token);
         this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
         this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
         this.notifyUser = decodedToken.NOTIFY_USER;
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
-
-        if (this.servicePointId && this.servicePointName) {
+        const _servicePoints = sessionStorage.getItem('servicePoints');
+        const jsonDecodedServicePoint = JSON.parse(_servicePoints);
+        if (jsonDecodedServicePoint.length === 1) {
+          this.onSelectedPoint(jsonDecodedServicePoint[0]);
+        } else if (this.servicePointId && this.servicePointName) {
           this.initialSocket();
         }
       }
@@ -128,8 +130,8 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   prepareSound() {
     if (!this.isPlayingSound) {
       if (this.playlists.length) {
-        var queueNumber = this.playlists[0].queueNumber;
-        var roomNumber = this.playlists[0].roomNumber;
+        const queueNumber = this.playlists[0].queueNumber;
+        const roomNumber = this.playlists[0].roomNumber;
         this.playSound(queueNumber, roomNumber);
       }
     }
@@ -139,13 +141,13 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
     this.isPlayingSound = true;
 
-    var _queue = strQueue.replace(' ', '');
+    let _queue = strQueue.replace(' ', '');
     _queue = _queue.replace('-', '');
 
-    var _strQueue = _queue.split('');
-    var _strRoom = strRoomNumber.split('');
+    const _strQueue = _queue.split('');
+    const _strRoom = strRoomNumber.split('');
 
-    var audioFiles = [];
+    const audioFiles = [];
 
     audioFiles.push('./assets/audio/please.mp3')
     audioFiles.push('./assets/audio/silent.mp3')
@@ -162,18 +164,19 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
     audioFiles.push('./assets/audio/ka.mp3');
 
-    var howlerBank = [];
+    const howlerBank = [];
 
     // console.log(audioFiles);
 
-    var loop = false;
+    const loop = false;
 
-    var onPlay = [false], pCount = 0;
+    const onPlay = [false];
+    let pCount = 0;
     const that = this;
 
-    var onEnd = function (e) {
+    const onEnd = function (e) {
 
-      if (loop === true) {
+      if (loop) {
         pCount = (pCount + 1 !== howlerBank.length) ? pCount + 1 : 0;
       } else {
         pCount = pCount + 1;
@@ -198,7 +201,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           that.isPlayingSound = false;
           that.prepareSound();
-        }, 1000)
+        }, 1000);
       }
     };
 
@@ -306,7 +309,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
           console.log(error);
         }
       });
-    })
+    });
   }
 
   selectServicePoint() {

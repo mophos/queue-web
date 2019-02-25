@@ -82,6 +82,12 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
     this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
+
+    const _servicePoints = sessionStorage.getItem('servicePoints');
+    const jsonDecodedServicePoint = JSON.parse(_servicePoints);
+    if (jsonDecodedServicePoint.length === 1) {
+      this.onSelectedPoint(jsonDecodedServicePoint[0]);
+    }
   }
 
   public unsafePublish(topic: string, message: string): void {

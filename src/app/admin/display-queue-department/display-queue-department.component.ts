@@ -83,14 +83,20 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
         this.departmentId = +params.departmentId || null;
         this.departmentName = params.departmentName || null;
       });
+    const _servicePoints = sessionStorage.getItem('servicePoints');
+    const jsonDecodedServicePoint = JSON.parse(_servicePoints);
+    const _department = _.unionBy(jsonDecodedServicePoint, 'department_id');
+    if (_department.length === 1) {
+      this.onSelectDepartment(_department[0]);
+    }
 
   }
 
   ngOnInit() {
     try {
-      var token = this.token || sessionStorage.getItem('token');
+      const token = this.token || sessionStorage.getItem('token');
       if (token) {
-        var decodedToken = this.jwtHelper.decodeToken(token);
+        const decodedToken = this.jwtHelper.decodeToken(token);
 
         this.departmentTopic = decodedToken.DEPARTMENT_TOPIC || 'queue/department';
 
@@ -166,16 +172,16 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
     const howlerBank = [];
 
-    // console.log(audioFiles);
 
-    let loop = false;
+    const loop = false;
 
-    let onPlay = [false], pCount = 0;
+    const onPlay = [false];
+    let pCount = 0;
     const that = this;
 
-    let onEnd = function (e) {
+    const onEnd = function (e) {
 
-      if (loop === true) {
+      if (loop) {
         pCount = (pCount + 1 !== howlerBank.length) ? pCount + 1 : 0;
       } else {
         pCount = pCount + 1;
@@ -333,8 +339,6 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
       const rs: any = await this.queueService.getWorkingDepartment(this.departmentId, this.token);
       if (rs.statusCode === 200) {
         this.workingItems = rs.results;
-        console.log(rs.results);
-
         const arr = _.sortBy(rs.results, ['update_date']).reverse();
 
         if (arr.length > 0) {

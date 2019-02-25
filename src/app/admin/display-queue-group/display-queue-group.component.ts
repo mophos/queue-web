@@ -83,13 +83,19 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
         this.servicePointId = +params.servicePointId || null;
         this.servicePointName = params.servicePointName || null;
       });
+
+    const _servicePoints = sessionStorage.getItem('servicePoints');
+    const jsonDecodedServicePoint = JSON.parse(_servicePoints);
+    if (jsonDecodedServicePoint.length === 1) {
+      this.onSelectedPoint(jsonDecodedServicePoint[0]);
+    }
   }
 
   ngOnInit() {
     try {
-      var token = this.token || sessionStorage.getItem('token');
+      const token = this.token || sessionStorage.getItem('token');
       if (token) {
-        var decodedToken = this.jwtHelper.decodeToken(token);
+        const decodedToken = this.jwtHelper.decodeToken(token);
 
         this.groupTopic = decodedToken.GROUP_TOPIC;
         this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
@@ -129,8 +135,8 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
   prepareSound() {
     if (!this.isPlayingSound) {
       if (this.playlists.length) {
-        var queueNumber = this.playlists[0].queueNumber;
-        var roomNumber = this.playlists[0].roomNumber;
+        const queueNumber = this.playlists[0].queueNumber;
+        const roomNumber = this.playlists[0].roomNumber;
         this.playSound(queueNumber, roomNumber);
       }
     }
@@ -140,20 +146,20 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
 
     this.isPlayingSound = true;
 
-    var _queue = _.cloneWith(_.map(strQueue, (v: any) => { return v.replace(' ', '') }));
+    let _queue = _.cloneWith(_.map(strQueue, (v: any) => { return v.replace(' ', '') }));
     // console.log(strQueue);
     _queue = _.map(_queue, (v: any) => { return v.replace('-', '') })
 
-    var _strQueue = _.map(_queue, (v: any) => { return v.split('') });
-    var _strRoom = strRoomNumber.split('');
+    const _strQueue = _.map(_queue, (v: any) => { return v.split('') });
+    const _strRoom = strRoomNumber.split('');
 
-    var audioFiles = [];
+    const audioFiles = [];
 
     audioFiles.push('./assets/audio/please.mp3')
     audioFiles.push('./assets/audio/silent.mp3')
 
     console.log(_strQueue);
-    
+
     _strQueue.forEach((array: any) => {
       array.forEach(v => {
         audioFiles.push(`./assets/audio/${v}.mp3`);
@@ -169,18 +175,19 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
 
     audioFiles.push('./assets/audio/ka.mp3');
 
-    var howlerBank = [];
+    const howlerBank = [];
 
     // console.log(audioFiles);
 
-    var loop = false;
+    const loop = false;
 
-    var onPlay = [false], pCount = 0;
+    const onPlay = [false];
+    let pCount = 0;
     const that = this;
 
-    var onEnd = function (e) {
+    const onEnd = function (e) {
 
-      if (loop === true) {
+      if (loop) {
         pCount = (pCount + 1 !== howlerBank.length) ? pCount + 1 : 0;
       } else {
         pCount = pCount + 1;
@@ -205,7 +212,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           that.isPlayingSound = false;
           that.prepareSound();
-        }, 1000)
+        }, 1000);
       }
     };
 
@@ -313,7 +320,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
           console.log(error);
         }
       });
-    })
+    });
   }
 
   selectServicePoint() {
