@@ -115,56 +115,72 @@
               (keyup)="searchQueryWaiting()">
           </div>
           <div class="col-md-7" style="padding-left: 0%; text-align: right">
-            <button *ngIf="rooms.length > 1" class="btn btn-sm btn-success" (click)="setQueueForCallGroup(2)"
+            <button *ngIf=" rooms.length <= 5 && rooms.length > 1 && waitingItems.length" class="btn btn-sm btn-success" (click)="setQueueForCallGroup(2)"
               [ngbPopover]="popContentGroup" placement="bottom" popoverTitle="เลือกช่องรับบริการ">
               <span class="h4">
                 เรียก 2 คิว
               </span>
             </button>
-            <button *ngIf="rooms.length === 1" class="btn btn-sm btn-success" (click)="setCallDetailGroup(2)">
+            <button *ngIf="rooms.length === 1 && waitingItems.length" class="btn btn-sm btn-success" (click)="setCallDetailGroup(2)">
               <span class="h4">
                 เรียก 2 คิว
               </span>
             </button>
-            <button disabled="disabled" *ngIf="rooms.length === 0" class="btn btn-sm btn-success">
+            <button *ngIf="rooms.length > 5 && waitingItems.length" class="btn btn-sm btn-success" (click)="openModalSelectRoom(2)">
+                <span class="h4">
+                  เรียก 2 คิว
+                </span>
+              </button>
+            <button disabled="disabled" *ngIf="rooms.length === 0 || !waitingItems.length" class="btn btn-sm btn-success">
               <span class="h4">
                 เรียก 2 คิว
               </span>
             </button>
 
-            <button *ngIf="rooms.length > 1" class="btn btn-sm btn-warning" (click)="setQueueForCallGroup(3)"
+            <button *ngIf=" rooms.length <= 5 && rooms.length > 1  && waitingItems.length" class="btn btn-sm btn-warning" (click)="setQueueForCallGroup(3)"
               [ngbPopover]="popContentGroup" placement="bottom" popoverTitle="เลือกช่องรับบริการ">
               <span class="h4">
                 เรียก 3 คิว
               </span>
             </button>
-            <button *ngIf="rooms.length === 1" class="btn btn-sm btn-warning" (click)="setCallDetailGroup(3)">
+            <button *ngIf="rooms.length === 1  && waitingItems.length" class="btn btn-sm btn-warning" (click)="setCallDetailGroup(3)">
               <span class="h4">
                 เรียก 3 คิว
               </span>
             </button>
-            <button disabled="disabled" *ngIf="rooms.length === 0" class="btn btn-sm btn-warning">
+            <button *ngIf="rooms.length > 5 && waitingItems.length" class="btn btn-sm btn-warning" (click)="openModalSelectRoom(3)">
+                <span class="h4">
+                  เรียก 3 คิว
+                </span>
+              </button>
+            <button disabled="disabled" *ngIf="rooms.length === 0 || !waitingItems.length" class="btn btn-sm btn-warning">
               <span class="h4">
                 เรียก 3 คิว
               </span>
             </button>
 
-            <button *ngIf="rooms.length > 1" class="btn btn-sm btn-info" (click)="setQueueForCallGroup(5)" [ngbPopover]="popContentGroup"
-              placement="bottom" popoverTitle="เลือกช่องรับบริการ">
+            <button *ngIf="rooms.length <= 5 && rooms.length > 1  && waitingItems.length" class="btn btn-sm btn-info" (click)="setQueueForCallGroup(5)"
+              [ngbPopover]="popContentGroup" placement="bottom" popoverTitle="เลือกช่องรับบริการ">
               <span class="h4">
                 เรียก 5 คิว
               </span>
             </button>
-            <button *ngIf="rooms.length === 1" class="btn btn-sm btn-info" (click)="setCallDetailGroup(5)">
+            <button *ngIf="rooms.length === 1  && waitingItems.length" class="btn btn-sm btn-info" (click)="setCallDetailGroup(5)">
               <span class="h4">
                 เรียก 5 คิว
               </span>
             </button>
-            <button disabled="disabled" *ngIf="rooms.length === 0" class="btn btn-sm btn-info">
+            <button *ngIf="rooms.length > 5 && waitingItems.length" class="btn btn-sm btn-info" (click)="openModalSelectRoom(5)">
               <span class="h4">
                 เรียก 5 คิว
               </span>
             </button>
+            <button disabled="disabled" *ngIf="rooms.length === 0 || !waitingItems.length" class="btn btn-sm btn-info">
+              <span class="h4">
+                เรียก 5 คิว
+              </span>
+            </button>
+
 
           </div>
         </div>
@@ -362,9 +378,9 @@
               <td>
                 <!-- <button (click)="setChangeRoom(item)" class="btn btn-sm btn-success" [ngbPopover]="popContentChangeRoom"
                   popoverTitle="เปลี่ยนช่องบริการ"> -->
-                  <span class="h3 btn btn-sm btn-success">
-                    {{item.room_number}}
-                  </span>
+                <span class="h3 btn btn-sm btn-success">
+                  {{item.room_number}}
+                </span>
                 <!-- </button> -->
               </td>
               <td>
@@ -435,3 +451,4 @@
 </app-modal-select-servicepoints>
 
 <app-modal-select-transfer #mdlSelectTransfer (onSelected)="onSelectedTransfer($event)"></app-modal-select-transfer>
+<app-modal-select-room [rooms]="rooms" (onSelected)="onSelectRoom($event)" #mdlSelectRoom></app-modal-select-room>

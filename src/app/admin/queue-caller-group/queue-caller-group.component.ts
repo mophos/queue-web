@@ -12,6 +12,7 @@ import { ServiceRoomService } from 'src/app/shared/service-room.service';
 import { CountdownComponent } from 'ngx-countdown';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ModalSelectTransferComponent } from 'src/app/shared/modal-select-transfer/modal-select-transfer.component';
+import { ModalSelectRoomComponent } from 'src/app/shared/modal-select-room/modal-select-room.component';
 
 @Component({
   selector: 'app-queue-caller-group',
@@ -22,6 +23,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
 
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectServicepointsComponent;
   @ViewChild('mdlSelectTransfer') private mdlSelectTransfer: ModalSelectTransferComponent;
+  @ViewChild('mdlSelectRoom') private mdlSelectRoom: ModalSelectRoomComponent;
 
   message: string;
   servicePointId: any;
@@ -441,6 +443,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     // this.queueNumber = item.queue_number;
     // this.queueRunning = item.queue_running;
   }
+
   setCallDetail(item: any) {
     this.queueId = item.queue_id;
     this.queueNumber = item.queue_number;
@@ -449,6 +452,22 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
       this.roomId = this.rooms[0].room_id;
       this.roomNumber = this.rooms[0].room_number;
       this.doCallQueue();
+    }
+  }
+
+  setCallDetailGroup(value: number) {
+    const tmp = _.map(_.take(this.waitingItems, value), (v: any) => {
+      return {
+        queue_id: v.queue_id,
+        queue_number: v.queue_number,
+        queue_running: v.queue_running
+      }
+    })
+    this.tmpWaitingItems = _.cloneDeep(tmp)
+    if (this.rooms.length === 1) {
+      this.roomId = this.rooms[0].room_id;
+      this.roomNumber = this.rooms[0].room_number;
+      this.doCallQueueGroup();
     }
   }
 
@@ -646,6 +665,13 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
       window.open(`${this.apiUrl}/print/queue?queueId=${queueId}`, '_blank');
     }
   }
+  openModalSelectRoom(item) {
+    this.setQueueForCallGroup(item);
+    this.mdlSelectRoom.open();
+  }
 
+  onSelectRoom(item) {
+    this.prepareQueueGroup({ 'room_id': item.roomId, 'room_number': item.roomNumber });
+  }
 
 }
