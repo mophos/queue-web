@@ -20,6 +20,7 @@ export class ModalAddServicePointComponent implements OnInit {
     this.prefix = value.prefix;
     this.departmentId = value.department_id;
     this.kios = value.kios === 'Y' ? true : false;
+    this.useOldQueue = value.use_old_queue === 'Y' ? true : false;
   }
 
   @Output('onSave') onSave: EventEmitter<any> = new EventEmitter<any>();
@@ -36,6 +37,7 @@ export class ModalAddServicePointComponent implements OnInit {
   prefixes: any = [];
 
   kios: any;
+  useOldQueue: any;
 
   departments: any[];
 
@@ -85,13 +87,15 @@ export class ModalAddServicePointComponent implements OnInit {
     if (this.servicePointName && this.localCode && this.prefix && this.departmentId) {
       try {
         var kios = this.kios ? 'Y' : 'N';
+        var useOldQueue = this.useOldQueue ? 'Y' : 'N';
 
         const data: any = {
           servicePointName: this.servicePointName,
           localCode: this.localCode,
           prefix: this.prefix.toUpperCase(),
           departmentId: this.departmentId,
-          kios: kios
+          kios: kios,
+          useOldQueue: useOldQueue
         };
 
         var rs: any;

@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild, NgZone, Inject, OnDestroy, Directive, HostListener } from '@angular/core';
 import { ModalSelectServicepointsComponent } from 'src/app/shared/modal-select-servicepoints/modal-select-servicepoints.component';
+import { ModalSelectDepartmentComponent } from 'src/app/shared/modal-select-department/modal-select-department.component';
 import { QueueService } from 'src/app/shared/queue.service';
 import { AlertService } from 'src/app/shared/alert.service';
 import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as _ from 'lodash';
 import * as Random from 'random-js';
+import * as screenfull from 'screenfull';
 
 import { Howl, Howler } from 'howler';
 
@@ -14,8 +16,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
-  selector: 'app-display-queue',
-  templateUrl: './display-queue.component.html',
+  selector: 'app-display-queue-department',
+  templateUrl: './display-queue-department.component.html',
   styles: [
     `
     .main-panel {
@@ -25,7 +27,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
         display: flex;
         flex-direction: column;
     }
-
+    
     .bg-primary, .settings-panel .color-tiles .tiles.primary {
         background-color: #01579b !important;
     }
@@ -38,18 +40,17 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
   ]
 })
-export class DisplayQueueComponent implements OnInit, OnDestroy {
+export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
-  @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectServicepointsComponent;
+  @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectDepartmentComponent;
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
   jwtHelper = new JwtHelperService();
-  servicePointTopic = null;
+  departmentTopic = null;
 
-  servicePointId: any;
-  servicePointName: any;
+  departmentId: any;
+  departmentName: any;
   workingItems: any = [];
-  workingItemsHistory: any = [];
   currentQueueNumber: any;
   currentRoomNumber: any;
   currentHn: any;
@@ -62,11 +63,11 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   notifyPassword = null;
 
   isSound = true;
-  isPlayingSound = false;
 
+  isPlayingSound = false;
   playlists: any = [];
   notifyUrl: string;
-  token: string;
+  token: any;
 
   constructor(
     private queueService: QueueService,
@@ -79,9 +80,16 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     this.route.queryParams
       .subscribe(params => {
         this.token = params.token || null;
-        this.servicePointId = +params.servicePointId || null;
-        this.servicePointName = params.servicePointName || null;
+        this.departmentId = +params.departmentId || null;
+        this.departmentName = params.departmentName || null;
       });
+    const _servicePoints = sessionStorage.getItem('servicePoints');
+    const jsonDecodedServicePoint = JSON.parse(_servicePoints);
+    const _department = _.unionBy(jsonDecodedServicePoint, 'department_id');
+    if (_department.length === 1) {
+      this.onSelectDepartment(_department[0]);
+    }
+
   }
 
   ngOnInit() {
@@ -89,15 +97,14 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       const token = this.token || sessionStorage.getItem('token');
       if (token) {
         const decodedToken = this.jwtHelper.decodeToken(token);
-        this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
+
+        this.departmentTopic = decodedToken.DEPARTMENT_TOPIC || 'queue/department';
+
         this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
         this.notifyUser = decodedToken.NOTIFY_USER;
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
-        const _servicePoints = sessionStorage.getItem('servicePoints');
-        const jsonDecodedServicePoint = JSON.parse(_servicePoints);
-        if (jsonDecodedServicePoint.length === 1) {
-          this.onSelectedPoint(jsonDecodedServicePoint[0]);
-        } else if (this.servicePointId && this.servicePointName) {
+
+        if (this.token) {
           this.initialSocket();
         }
       }
@@ -105,7 +112,6 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       console.log(error);
     }
   }
-
 
   public unsafePublish(topic: string, message: string): void {
     try {
@@ -149,8 +155,8 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
     const audioFiles = [];
 
-    audioFiles.push('./assets/audio/please.mp3')
-    audioFiles.push('./assets/audio/silent.mp3')
+    audioFiles.push('./assets/audio/please.mp3');
+    audioFiles.push('./assets/audio/silent.mp3');
 
     _strQueue.forEach(v => {
       audioFiles.push(`./assets/audio/${v}.mp3`);
@@ -166,7 +172,6 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
     const howlerBank = [];
 
-    // console.log(audioFiles);
 
     const loop = false;
 
@@ -243,18 +248,19 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       console.log(error);
     }
 
-    const topic = `${this.servicePointTopic}/${this.servicePointId}`;
+    const topic = `${this.departmentTopic}/${this.departmentId}`;
 
     const that = this;
 
     this.client.on('message', (topic, payload) => {
       that.getCurrentQueue();
-      that.getWorkingHistory();
 
       try {
         const _payload = JSON.parse(payload.toString());
         if (that.isSound) {
-          if (+that.servicePointId === +_payload.servicePointId) {
+          console.log(that.departmentId, _payload.departmentId);
+
+          if (+that.departmentId === +_payload.departmentId) {
             // play sound
             const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString() };
             that.playlists.push(sound);
@@ -312,28 +318,25 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     });
   }
 
-  selectServicePoint() {
+  selectDepartment() {
     this.mdlServicePoint.open();
   }
 
-  onSelectedPoint(event: any) {
-    this.servicePointName = event.service_point_name;
-    this.servicePointId = event.service_point_id;
-
+  onSelectDepartment(event: any) {
+    this.departmentName = event.department_name;
+    this.departmentId = event.department_id;
     this.initialSocket();
   }
 
   initialSocket() {
     // connect mqtt
     this.connectWebSocket();
-
     this.getCurrentQueue();
-    this.getWorkingHistory();
   }
 
   async getCurrentQueue() {
     try {
-      const rs: any = await this.queueService.getWorking(this.servicePointId, this.token);
+      const rs: any = await this.queueService.getWorkingDepartment(this.departmentId, this.token);
       if (rs.statusCode === 200) {
         this.workingItems = rs.results;
         const arr = _.sortBy(rs.results, ['update_date']).reverse();
@@ -349,21 +352,6 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
           this.currentRoomName = null;
           this.currentRoomNumber = null;
         }
-      } else {
-        console.log(rs.message);
-        this.alertService.error('เกิดข้อผิดพลาด');
-      }
-    } catch (error) {
-      console.log(error);
-      this.alertService.error();
-    }
-  }
-
-  async getWorkingHistory() {
-    try {
-      const rs: any = await this.queueService.getWorkingHistory(this.servicePointId, this.token);
-      if (rs.statusCode === 200) {
-        this.workingItemsHistory = rs.results;
       } else {
         console.log(rs.message);
         this.alertService.error('เกิดข้อผิดพลาด');

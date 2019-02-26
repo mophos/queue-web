@@ -14,8 +14,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
-  selector: 'app-display-queue',
-  templateUrl: './display-queue.component.html',
+  selector: 'app-display-queue-group',
+  templateUrl: './display-queue-group.component.html',
   styles: [
     `
     .main-panel {
@@ -25,7 +25,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
         display: flex;
         flex-direction: column;
     }
-
+    
     .bg-primary, .settings-panel .color-tiles .tiles.primary {
         background-color: #01579b !important;
     }
@@ -38,21 +38,21 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
   ]
 })
-export class DisplayQueueComponent implements OnInit, OnDestroy {
+export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
 
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectServicepointsComponent;
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
   jwtHelper = new JwtHelperService();
-  servicePointTopic = null;
+  groupTopic = null;
 
   servicePointId: any;
   servicePointName: any;
   workingItems: any = [];
   workingItemsHistory: any = [];
-  currentQueueNumber: any;
+  // currentQueueNumber: any;
   currentRoomNumber: any;
-  currentHn: any;
+  // currentHn: any;
   currentRoomName: any;
 
   isOffline = false;
@@ -68,6 +68,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   notifyUrl: string;
   token: string;
 
+  hide = false;
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,
@@ -82,6 +83,12 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
         this.servicePointId = +params.servicePointId || null;
         this.servicePointName = params.servicePointName || null;
       });
+
+    const _servicePoints = sessionStorage.getItem('servicePoints');
+    const jsonDecodedServicePoint = JSON.parse(_servicePoints);
+    if (jsonDecodedServicePoint.length === 1) {
+      this.onSelectedPoint(jsonDecodedServicePoint[0]);
+    }
   }
 
   ngOnInit() {
@@ -89,15 +96,13 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       const token = this.token || sessionStorage.getItem('token');
       if (token) {
         const decodedToken = this.jwtHelper.decodeToken(token);
-        this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
+
+        this.groupTopic = decodedToken.GROUP_TOPIC;
         this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
         this.notifyUser = decodedToken.NOTIFY_USER;
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
-        const _servicePoints = sessionStorage.getItem('servicePoints');
-        const jsonDecodedServicePoint = JSON.parse(_servicePoints);
-        if (jsonDecodedServicePoint.length === 1) {
-          this.onSelectedPoint(jsonDecodedServicePoint[0]);
-        } else if (this.servicePointId && this.servicePointName) {
+
+        if (this.servicePointId && this.servicePointName) {
           this.initialSocket();
         }
       }
@@ -137,14 +142,15 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     }
   }
 
-  playSound(strQueue: string, strRoomNumber: string) {
+  playSound(strQueue: any, strRoomNumber: string) {
 
     this.isPlayingSound = true;
 
-    let _queue = strQueue.replace(' ', '');
-    _queue = _queue.replace('-', '');
+    let _queue = _.cloneWith(_.map(strQueue, (v: any) => { return v.replace(' ', '') }));
+    // console.log(strQueue);
+    _queue = _.map(_queue, (v: any) => { return v.replace('-', '') })
 
-    const _strQueue = _queue.split('');
+    const _strQueue = _.map(_queue, (v: any) => { return v.split('') });
     const _strRoom = strRoomNumber.split('');
 
     const audioFiles = [];
@@ -152,8 +158,13 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     audioFiles.push('./assets/audio/please.mp3')
     audioFiles.push('./assets/audio/silent.mp3')
 
-    _strQueue.forEach(v => {
-      audioFiles.push(`./assets/audio/${v}.mp3`);
+    console.log(_strQueue);
+
+    _strQueue.forEach((array: any) => {
+      array.forEach(v => {
+        audioFiles.push(`./assets/audio/${v}.mp3`);
+      });
+      audioFiles.push('./assets/audio/silent.mp3')
     });
 
     audioFiles.push('./assets/audio/channel.mp3');
@@ -243,7 +254,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       console.log(error);
     }
 
-    const topic = `${this.servicePointTopic}/${this.servicePointId}`;
+    const topic = `${this.groupTopic}/${this.servicePointId}`;
 
     const that = this;
 
@@ -333,19 +344,20 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
   async getCurrentQueue() {
     try {
-      const rs: any = await this.queueService.getWorking(this.servicePointId, this.token);
+      const rs: any = await this.queueService.getWorkingGroup(this.servicePointId, this.token);
       if (rs.statusCode === 200) {
         this.workingItems = rs.results;
         const arr = _.sortBy(rs.results, ['update_date']).reverse();
 
         if (arr.length > 0) {
-          this.currentHn = arr[0].hn;
-          this.currentQueueNumber = arr[0].queue_number;
+          // this.
+          // this.currentHn = arr[0].hn;
+          // this.currentQueueNumber = arr[0].queue_number;
           this.currentRoomName = arr[0].room_name;
           this.currentRoomNumber = arr[0].room_number;
         } else {
-          this.currentHn = null;
-          this.currentQueueNumber = null;
+          // this.currentHn = null;
+          // this.currentQueueNumber = null;
           this.currentRoomName = null;
           this.currentRoomNumber = null;
         }
@@ -361,7 +373,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
   async getWorkingHistory() {
     try {
-      const rs: any = await this.queueService.getWorkingHistory(this.servicePointId, this.token);
+      const rs: any = await this.queueService.getWorkingHistoryGroup(this.servicePointId, this.token);
       if (rs.statusCode === 200) {
         this.workingItemsHistory = rs.results;
       } else {

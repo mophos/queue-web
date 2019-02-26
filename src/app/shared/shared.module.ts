@@ -22,6 +22,9 @@ import { ModalAddDepartmentComponent } from './modal-add-department/modal-add-de
 import { ModalAddPriorityComponent } from './modal-add-priority/modal-add-priority.component';
 import { ModalSetPrinterComponent } from './modal-set-printer/modal-set-printer.component';
 import { ModalSelectPriorityComponent } from './modal-select-priority/modal-select-priority.component';
+import { ModalSelectDepartmentComponent } from './modal-select-department/modal-select-department.component';
+import { AlertWarningPrinterComponent } from './alert-warning-printer/alert-warning-printer.component';
+import { ModalSelectRoomComponent } from './modal-select-room/modal-select-room.component';
 
 @NgModule({
   imports: [
@@ -42,6 +45,9 @@ import { ModalSelectPriorityComponent } from './modal-select-priority/modal-sele
     ModalAddPriorityComponent,
     ModalSetPrinterComponent,
     ModalSelectPriorityComponent,
+    ModalSelectDepartmentComponent,
+    AlertWarningPrinterComponent,
+    ModalSelectRoomComponent,
   ],
   exports: [
     ModalAddServicePointComponent,
@@ -55,7 +61,10 @@ import { ModalSelectPriorityComponent } from './modal-select-priority/modal-sele
     ThaiDatePipe,
     ToggleFullscreenDirective,
     ModalAddPriorityComponent,
-    ModalSelectPriorityComponent
+    ModalSelectPriorityComponent,
+    ModalSelectDepartmentComponent,
+    AlertWarningPrinterComponent,
+    ModalSelectRoomComponent
   ],
   providers: [
     ServicePointService,

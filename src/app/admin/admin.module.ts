@@ -19,6 +19,12 @@ import { QueueCenterPatientComponent } from './queue-center-patient/queue-center
 import { GenerateTokenComponent } from './settings/generate-token/generate-token.component';
 import { DepartmentsComponent } from './settings/departments/departments.component';
 import { PriorityComponent } from './settings/priority/priority.component';
+import { QueueCallerDepartmentComponent } from './queue-caller-department/queue-caller-department.component';
+import { DisplayQueueDepartmentComponent } from './display-queue-department/display-queue-department.component';
+import { ModalSelectTransferComponent } from '../shared/modal-select-transfer/modal-select-transfer.component';
+import { QueueCalleGroupComponent } from './queue-caller-group/queue-caller-group.component';
+import { PrinterComponent } from './settings/printer/printer.component';
+import { DisplayQueueGroupComponent } from './display-queue-group/display-queue-group.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +39,14 @@ import { PriorityComponent } from './settings/priority/priority.component';
     QueueCenterPatientComponent,
     GenerateTokenComponent,
     DepartmentsComponent,
-    PriorityComponent],
+    PriorityComponent,
+    QueueCallerDepartmentComponent,
+    DisplayQueueDepartmentComponent,
+    ModalSelectTransferComponent,
+    QueueCalleGroupComponent,
+    PrinterComponent,
+    DisplayQueueGroupComponent
+  ],
   imports: [
     CommonModule,
     NgbModule,
