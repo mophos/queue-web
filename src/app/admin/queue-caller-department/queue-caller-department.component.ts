@@ -151,7 +151,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
       });
 
       if (this.servicePointId) {
-        that.client.subscribe(topicServicePoint, (error) => {
+        that.client.subscribe(topicServicePoint, { qos: 0 }, (error) => {
           console.log('Subscribe : ' + topicServicePoint);
 
           if (error) {
@@ -167,8 +167,8 @@ export class QueueCallerDepartmentComponent implements OnInit {
         });
       }
 
-      that.client.subscribe(topicDepartment, (error) => {
-        console.log('Subscribe : ' + topicDepartment);
+      that.client.subscribe([topicDepartment, visitTopic], { qos: 0 }, (error) => {
+        console.log('Subscribe : ' + topicDepartment + ', ' + visitTopic);
 
         if (error) {
           that.zone.run(() => {
@@ -182,19 +182,6 @@ export class QueueCallerDepartmentComponent implements OnInit {
         }
       });
 
-      that.client.subscribe(visitTopic, (error) => {
-        console.log('Subscribe : ' + visitTopic);
-        if (error) {
-          that.zone.run(() => {
-            that.isOffline = true;
-            try {
-              that.counter.restart();
-            } catch (error) {
-              console.log(error);
-            }
-          });
-        }
-      });
     });
 
     this.client.on('close', () => {

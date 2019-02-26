@@ -138,37 +138,9 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
         that.isOffline = false;
       });
 
-      that.client.subscribe(topic, (error) => {
-        console.log('Subscribe : ' + topic);
+      that.client.subscribe([topic, visitTopic, departmentTopic], { qos: 0 }, (error) => {
+        console.log(`Subscribe ${topic}, ${visitTopic}, ${departmentTopic}`);
 
-        if (error) {
-          that.zone.run(() => {
-            that.isOffline = true;
-            try {
-              that.counter.restart();
-            } catch (error) {
-              console.log(error);
-            }
-          });
-        }
-      });
-
-      that.client.subscribe(visitTopic, (error) => {
-        console.log('Subscribe : ' + visitTopic);
-        if (error) {
-          that.zone.run(() => {
-            that.isOffline = true;
-            try {
-              that.counter.restart();
-            } catch (error) {
-              console.log(error);
-            }
-          });
-        }
-      });
-
-      that.client.subscribe(departmentTopic, (error) => {
-        console.log('Subscribe : ' + departmentTopic);
         if (error) {
           that.zone.run(() => {
             that.isOffline = true;
