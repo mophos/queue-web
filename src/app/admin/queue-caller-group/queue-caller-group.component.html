@@ -46,63 +46,7 @@
           </div>
         </div>
       </div>
-      <!-- <div class="card-title" style="margin-top:10px;margin-bottom:0;">
-        <div class="row" style="vertical-align: middle;padding-left:10px;">
-          <div class="col-md-7" style="text-align: center">
-            <button *ngIf="rooms.length > 1" class="btn btn-sm btn-success" (click)="setQueueForCallGroup(2)"
-              [ngbPopover]="popContentGroup" placement="bottom" popoverTitle="เลือกช่องรับบริการ">
-              <span class="h4">
-                เรียก 2 คิว
-              </span>
-            </button>
-            <button *ngIf="rooms.length === 1" class="btn btn-sm btn-success" (click)="setCallDetailGroup(2)">
-              <span class="h4">
-                เรียก 2 คิว
-              </span>
-            </button>
-            <button disabled="disabled" *ngIf="rooms.length === 0" class="btn btn-sm btn-success">
-              <span class="h4">
-                เรียก 2 คิว
-              </span>
-            </button>
-
-            <button *ngIf="rooms.length > 1" class="btn btn-sm btn-warning" (click)="setQueueForCallGroup(3)"
-              [ngbPopover]="popContentGroup" placement="bottom" popoverTitle="เลือกช่องรับบริการ">
-              <span class="h4">
-                เรียก 3 คิว
-              </span>
-            </button>
-            <button *ngIf="rooms.length === 1" class="btn btn-sm btn-warning" (click)="setCallDetailGroup(3)">
-              <span class="h4">
-                เรียก 3 คิว
-              </span>
-            </button>
-            <button disabled="disabled" *ngIf="rooms.length === 0" class="btn btn-sm btn-warning">
-              <span class="h4">
-                เรียก 3 คิว
-              </span>
-            </button>
-
-            <button *ngIf="rooms.length > 1" class="btn btn-sm btn-info" (click)="setQueueForCallGroup(5)" [ngbPopover]="popContentGroup"
-              placement="bottom" popoverTitle="เลือกช่องรับบริการ">
-              <span class="h4">
-                เรียก 5 คิว
-              </span>
-            </button>
-            <button *ngIf="rooms.length === 1" class="btn btn-sm btn-info" (click)="setCallDetailGroup(5)">
-              <span class="h4">
-                เรียก 5 คิว
-              </span>
-            </button>
-            <button disabled="disabled" *ngIf="rooms.length === 0" class="btn btn-sm btn-info">
-              <span class="h4">
-                เรียก 5 คิว
-              </span>
-            </button>
-
-          </div>
-        </div>
-      </div> -->
+      
       <div class="card-body" style="padding-left:5px;padding-right:5px;padding-top: 10px;">
 
         <div class="row">
@@ -207,37 +151,22 @@
               <td>
                 <span class="h3 font-weight-bold text-danger" style="letter-spacing: 2px;">{{item.queue_number}}</span>
               </td>
-              <!-- <td>
-                      <label class="badge badge-primary">
-                        <span class="h3-x font-weight-bold" style="letter-spacing: 2px;">{{item.queue_id}}</span>
-                      </label>
-                    </td>
-                    <td>
-                      <span *ngIf="item.is_interview === 'Y'" class="mdi mdi-check text-success"></span>
-                      <span *ngIf="item.is_interview === 'N' || !item.is_interview"
-                        class="mdi mdi-close text-danger"></span>
-                    </td> -->
+
               <td>
                 <div class="btn-group">
-                  <!-- <button *ngIf="rooms.length > 1" class="btn btn-sm btn-primary" (click)="setQueueForCall(item)"
-                          [ngbPopover]="popContentInterview" popoverTitle="เลือกจุดซักประวัติ">
-                          <span class="h4">
-                            ซักประวัติ
-                          </span>
-                        </button> -->
-                  <!-- <button *ngIf="rooms.length === 1" class="btn btn-sm btn-primary" (click)="setCallDetail(item)"
-                          [ngbPopover]="popContentInterview" popoverTitle="เลือกจุดซักประวัติ">
-                          <span class="h4">
-                            ซักประวัติ
-                          </span>
-                        </button> -->
-                  <button *ngIf="rooms.length > 1" class="btn btn-sm btn-success" (click)="setQueueForCall(item)"
+                 
+                  <button *ngIf="rooms.length <= 5 && rooms.length > 1" class="btn btn-sm btn-success" (click)="setQueueForCall(item)"
                     [ngbPopover]="popContent" popoverTitle="เลือกช่องรับบริการ">
                     <span class="h4">
                       เรียกคิว
                     </span>
                   </button>
                   <button *ngIf="rooms.length === 1" class="btn btn-sm btn-success" (click)="setCallDetail(item)">
+                    <span class="h4">
+                      เรียกคิว
+                    </span>
+                  </button>
+                  <button *ngIf="rooms.length > 5" class="btn btn-sm btn-success" (click)="openModalSelectRoomOne(item)">
                     <span class="h4">
                       เรียกคิว
                     </span>
@@ -324,7 +253,7 @@
               <td>
                 <div class="btn-group">
                   <button class="btn btn-sm btn-success" (click)="callAgain(item)">เรียกซ้ำ</button>
-                  <button class="btn btn-sm btn-danger" (click)="showSelectPointForMarkPending(item)">พัก/ส่งต่อ</button>
+                  <!-- <button class="btn btn-sm btn-danger" (click)="showSelectPointForMarkPending(item)">พัก/ส่งต่อ</button> -->
                 </div>
               </td>
             </tr>
@@ -349,7 +278,7 @@
           </div>
         </div>
       </div>
-      <div class="card-body" style="">
+      <div class="card-body">
         <div class="row">
           <div class="col-md-2" style="vertical-align: middle;text-align: right">
             <span>ค้นหา :</span>
@@ -398,7 +327,7 @@
               <td>
                 <div class="btn-group">
                   <button class="btn btn-sm btn-success" (click)="callAgains(item)">เรียกซ้ำ</button>
-                  <button class="btn btn-sm btn-danger" (click)="showSelectPointForMarkPending(item)">พัก/ส่งต่อ</button>
+                  <!-- <button class="btn btn-sm btn-danger" (click)="showSelectPointForMarkPending(item)">พัก/ส่งต่อ</button> -->
                 </div>
               </td>
             </tr>

@@ -670,6 +670,16 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     this.mdlSelectRoom.open();
   }
 
+  openModalSelectRoomOne(item) {
+    // this.setQueueForCall(item);
+    this.tmpWaitingItems = [{
+      queue_id: item.queue_id,
+      queue_number: item.queue_number,
+      queue_running: item.queue_running
+    }]
+    this.mdlSelectRoom.open();
+  }
+
   onSelectRoom(item) {
     this.prepareQueueGroup({ 'room_id': item.roomId, 'room_number': item.roomNumber });
   }
