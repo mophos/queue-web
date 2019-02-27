@@ -21,6 +21,7 @@ export class ModalAddServicePointComponent implements OnInit {
     this.departmentId = value.department_id;
     this.kios = value.kios === 'Y' ? true : false;
     this.useOldQueue = value.use_old_queue === 'Y' ? true : false;
+    this.groupCompare = value.group_compare === 'Y' ? true : false;
   }
 
   @Output('onSave') onSave: EventEmitter<any> = new EventEmitter<any>();
@@ -40,6 +41,7 @@ export class ModalAddServicePointComponent implements OnInit {
   useOldQueue: any;
 
   departments: any[];
+  groupCompare: any;
 
   constructor(
     private modalService: NgbModal,
@@ -88,14 +90,15 @@ export class ModalAddServicePointComponent implements OnInit {
       try {
         var kios = this.kios ? 'Y' : 'N';
         var useOldQueue = this.useOldQueue ? 'Y' : 'N';
-
+        var groupCompare = this.groupCompare ? 'Y' : 'N';
         const data: any = {
           servicePointName: this.servicePointName,
           localCode: this.localCode,
           prefix: this.prefix.toUpperCase(),
           departmentId: this.departmentId,
           kios: kios,
-          useOldQueue: useOldQueue
+          useOldQueue: useOldQueue,
+          groupCompare: groupCompare
         };
 
         var rs: any;
