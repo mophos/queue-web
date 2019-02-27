@@ -103,7 +103,11 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
             this.initialSocket();
           }
         } else {
-          this.onSelectedPoint({ 'service_point_id': this.servicePointId, 'service_point_name': this.servicePointName });
+          if (this.servicePointId) {
+            this.onSelectedPoint({ 'service_point_id': this.servicePointId, 'service_point_name': this.servicePointName });
+          } else {
+            this.initialSocket();
+          }
         }
       }
     } catch (error) {
