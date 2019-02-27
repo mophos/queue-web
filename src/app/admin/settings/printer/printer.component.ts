@@ -25,4 +25,5 @@ export class PrinterComponent implements OnInit {
     localStorage.setItem('clientUserPrinter', this.usePrinter ? 'Y' : 'N');
     this.alertService.success();
   }
+
 }

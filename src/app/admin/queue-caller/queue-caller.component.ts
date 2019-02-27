@@ -37,6 +37,8 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   roomId: any;
   queueId: any;
 
+  isInterview = false;
+
   isAllServicePoint = false;
 
   total = 0;
@@ -384,8 +386,11 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   prepareQueue(room: any) {
     this.roomId = room.room_id;
     this.roomNumber = room.room_number;
-
-    this.doCallQueue();
+    if (this.isInterview) {
+      this.doCallQueue('N');
+    } else {
+      this.doCallQueue();
+    }
   }
 
   async interviewQueue(room: any) {
@@ -490,6 +495,13 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   }
 
   openModalSelectRoom(item) {
+    this.isInterview = false;
+    this.setQueueForCall(item);
+    this.mdlSelectRoom.open();
+  }
+
+  openModalSelectRoomInterview(item) {
+    this.isInterview = true;
     this.setQueueForCall(item);
     this.mdlSelectRoom.open();
   }
