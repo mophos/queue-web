@@ -19,10 +19,10 @@ export class PrinterComponent implements OnInit {
     this.usePrinter = localStorage.getItem('clientUserPrinter') === 'N' ? false : true;
   }
 
-
   save() {
     localStorage.setItem('clientPrinterId', this.printerId);
     localStorage.setItem('clientUserPrinter', this.usePrinter ? 'Y' : 'N');
     this.alertService.success();
   }
+
 }
