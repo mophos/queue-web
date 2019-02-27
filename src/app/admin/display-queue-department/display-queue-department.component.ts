@@ -83,12 +83,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
         this.departmentId = +params.departmentId || null;
         this.departmentName = params.departmentName || null;
       });
-    const _servicePoints = sessionStorage.getItem('servicePoints');
-    const jsonDecodedServicePoint = JSON.parse(_servicePoints);
-    const _department = _.unionBy(jsonDecodedServicePoint, 'department_id');
-    if (_department.length === 1) {
-      this.onSelectDepartment(_department[0]);
-    }
+
 
   }
 
@@ -105,7 +100,20 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
 
         if (this.token) {
-          this.initialSocket();
+          if (sessionStorage.getItem('servicePoints')) {
+            const _servicePoints = sessionStorage.getItem('servicePoints');
+            const jsonDecodedServicePoint = JSON.parse(_servicePoints);
+            const _department = _.unionBy(jsonDecodedServicePoint, 'department_id');
+            if (_department.length === 1) {
+              this.onSelectDepartment(_department[0]);
+            }
+          } else {
+            if (this.departmentId) {
+              this.onSelectDepartment({ 'department_id': this.departmentId, 'department_name': this.departmentName });
+            } else {
+              this.initialSocket();
+            }
+          }
         }
       }
     } catch (error) {

@@ -82,6 +82,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
         this.servicePointId = +params.servicePointId || null;
         this.servicePointName = params.servicePointName || null;
       });
+
   }
 
   ngOnInit() {
@@ -93,12 +94,20 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
         this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
         this.notifyUser = decodedToken.NOTIFY_USER;
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
-        const _servicePoints = sessionStorage.getItem('servicePoints');
-        const jsonDecodedServicePoint = JSON.parse(_servicePoints);
-        if (jsonDecodedServicePoint.length === 1) {
-          this.onSelectedPoint(jsonDecodedServicePoint[0]);
-        } else if (this.servicePointId && this.servicePointName) {
-          this.initialSocket();
+        if (sessionStorage.getItem('servicePoints')) {
+          const _servicePoints = sessionStorage.getItem('servicePoints');
+          const jsonDecodedServicePoint = JSON.parse(_servicePoints);
+          if (jsonDecodedServicePoint.length === 1) {
+            this.onSelectedPoint(jsonDecodedServicePoint[0]);
+          } else if (this.servicePointId && this.servicePointName) {
+            this.initialSocket();
+          }
+        } else {
+          if (this.servicePointId) {
+            this.onSelectedPoint({ 'service_point_id': this.servicePointId, 'service_point_name': this.servicePointName });
+          } else {
+            this.initialSocket();
+          }
         }
       }
     } catch (error) {

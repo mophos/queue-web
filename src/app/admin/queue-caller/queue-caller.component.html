@@ -158,8 +158,15 @@
                 </td>
                 <td>
                   <div class="btn-group">
-                    <button *ngIf="rooms.length > 1" class="btn btn-sm btn-primary" (click)="setQueueForCall(item)"
-                      [ngbPopover]="popContentInterview" popoverTitle="เลือกจุดซักประวัติ">
+                    <button *ngIf="rooms.length > 5" class="btn btn-sm btn-primary"
+                      (click)="openModalSelectRoomInterview(item)">
+                      <span class="h4">
+                        ซักประวัติ
+                      </span>
+                    </button>
+                    <button *ngIf="rooms.length > 1 && rooms.length <= 5" class="btn btn-sm btn-primary"
+                      (click)="setQueueForCall(item)" [ngbPopover]="popContentInterview"
+                      popoverTitle="เลือกจุดซักประวัติ">
                       <span class="h4">
                         ซักประวัติ
                       </span>
@@ -270,11 +277,25 @@
                   <span class="h3">{{item.pending_to_service_point_name}}</span>
                 </td>
                 <td>
-                  <button class="btn btn-sm btn-gradient-success" (click)="setQueueForCall(item)"
-                    [ngbPopover]="popContent" popoverTitle="เลือกช่องรับบริการ">
+                  <button *ngIf="rooms.length > 5" class="btn btn-sm btn-success" (click)="openModalSelectRoom(item)">
                     <span class="h4">
                       เรียกคิว
-                      <i class="mdi mdi-send"></i>
+                    </span>
+                  </button>
+                  <button *ngIf="rooms.length > 1 && rooms.length <= 5" class="btn btn-sm btn-success"
+                    (click)="setQueueForCall(item)" [ngbPopover]="popContent" popoverTitle="เลือกช่องรับบริการ">
+                    <span class="h4">
+                      เรียกคิว
+                    </span>
+                  </button>
+                  <button *ngIf="rooms.length === 1" class="btn btn-sm btn-success" (click)="setCallDetail(item)">
+                    <span class="h4">
+                      เรียกคิว
+                    </span>
+                  </button>
+                  <button disabled="disabled" *ngIf="rooms.length === 0" class="btn btn-sm btn-success">
+                    <span class="h4">
+                      เรียกคิว
                     </span>
                   </button>
                 </td>
