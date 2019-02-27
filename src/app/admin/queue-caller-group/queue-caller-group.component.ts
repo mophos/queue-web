@@ -55,6 +55,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   jwtHelper = new JwtHelperService();
   groupTopic = null;
   globalTopic = null;
+  servicePointTopic = null;
   notifyUser = null;
   notifyPassword = null;
   isMarkPending = false;
@@ -81,6 +82,8 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
     this.groupTopic = decodedToken.GROUP_TOPIC;
+    this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
+    this.globalTopic = decodedToken.QUEUE_CENTER_TOPIC;
 
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
@@ -132,13 +135,31 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
 
     const that = this;
     const topic = `${this.groupTopic}/${this.servicePointId}`;
-    // const visitTopic = this.globalTopic;
+    const topicServicePoint = `${this.servicePointTopic}/${this.servicePointId}`;
+    const visitTopic = this.globalTopic;
 
     this.client.on('connect', () => {
       console.log('Connected!');
       that.zone.run(() => {
         that.isOffline = false;
       });
+
+      if (this.servicePointId) {
+        that.client.subscribe(topicServicePoint, { qos: 0 }, (error) => {
+          console.log('Subscribe : ' + topicServicePoint);
+
+          if (error) {
+            that.zone.run(() => {
+              that.isOffline = true;
+              try {
+                that.counter.restart();
+              } catch (error) {
+                console.log(error);
+              }
+            });
+          }
+        });
+      }
 
       that.client.subscribe(topic, (error) => {
         console.log('Subscribe : ' + topic);
@@ -155,19 +176,20 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
         }
       });
 
-      // that.client.subscribe(visitTopic, (error) => {
-      //   console.log('Subscribe : ' + visitTopic);
-      //   if (error) {
-      //     that.zone.run(() => {
-      //       that.isOffline = true;
-      //       try {
-      //         that.counter.restart();
-      //       } catch (error) {
-      //         console.log(error);
-      //       }
-      //     });
-      //   }
-      // });
+      that.client.subscribe(visitTopic, (error) => {
+        console.log('Subscribe : ' + visitTopic);
+        if (error) {
+          that.zone.run(() => {
+            that.isOffline = true;
+            try {
+              that.counter.restart();
+            } catch (error) {
+              console.log(error);
+            }
+          });
+        }
+      });
+
     });
 
     this.client.on('close', () => {
