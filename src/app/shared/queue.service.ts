@@ -65,15 +65,15 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
-  async searchWaitingGroup(servicePointId: any, limit: number = 20, offset: number = 0, queryWaiting:string) {
+  async searchWaitingGroup(servicePointId: any, limit: number = 20, offset: number = 0, queryWaiting: string) {
     const _url = `${this.apiUrl}/queue/waiting-group/search/${servicePointId}?limit=${limit}&offset=${offset}&query=${queryWaiting}`;
-    
+
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
-  async searchHistoryGroup(servicePointId: any, limit: number = 20, offset: number = 0, query:string) {
+  async searchHistoryGroup(servicePointId: any, limit: number = 20, offset: number = 0, query: string) {
     const _url = `${this.apiUrl}/queue/history-group/search/${servicePointId}?limit=${limit}&offset=${offset}&query=${query}`;
-    
+
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
@@ -147,7 +147,7 @@ export class QueueService {
     return this.httpClient.get(_url, _httpOptions).toPromise();
   }
 
-  async getWorkingHistoryGroup(servicePointId: any,token: any = null) {
+  async getWorkingHistoryGroup(servicePointId: any, token: any = null) {
     const _url = `${this.apiUrl}/queue/working/history-group/${servicePointId}`;
     var _httpOptions: any = {};
 
@@ -183,7 +183,7 @@ export class QueueService {
     return this.httpClient.get(_url, _httpOptions).toPromise();
   }
 
-  
+
 
   async getPending(servicePointId: any) {
     const _url = `${this.apiUrl}/queue/pending/${servicePointId}`;
@@ -209,10 +209,10 @@ export class QueueService {
     return this.httpClient.delete(_url, this.httpOptions).toPromise();
   }
 
-  async callQueueGroups(servicePointId: any,  roomId: any, roomNumber: any, isCompleted: any = 'Y', queue: any) {
+  async callQueueGroups(servicePointId: any, roomId: any, roomNumber: any, isCompleted: any = 'Y', queue: any) {
     const _url = `${this.apiUrl}/queue/caller-groups`;
     console.log(_url);
-    
+
     return this.httpClient.post(_url, {
       servicePointId: servicePointId,
       roomNumber: roomNumber,
@@ -274,9 +274,23 @@ export class QueueService {
     }, this.httpOptions).toPromise();
   }
 
-  async getCurrentQueueList() {
+  async getCurrentQueueList(token: any = null) {
     const _url = `${this.apiUrl}/queue/current-list`;
-    return this.httpClient.get(_url, this.httpOptions).toPromise();
+
+    var _httpOptions: any = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
   }
 
 }
