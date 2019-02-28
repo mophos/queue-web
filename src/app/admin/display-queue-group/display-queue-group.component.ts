@@ -132,17 +132,18 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     this.isSound = !this.isSound;
   }
 
-  prepareSound() {
+  async prepareSound() {
     if (!this.isPlayingSound) {
       if (this.playlists.length) {
         const queueNumber = this.playlists[0].queueNumber;
         const roomNumber = this.playlists[0].roomNumber;
-        this.playSound(queueNumber, roomNumber);
+        let arrQueueNumber = Array.isArray(queueNumber) ? queueNumber : [queueNumber]
+        await this.playSound(arrQueueNumber, roomNumber);
       }
     }
   }
 
-  playSound(strQueue: any, strRoomNumber: string) {
+  async playSound(strQueue: any, strRoomNumber: string) {
 
     this.isPlayingSound = true;
 
@@ -157,8 +158,6 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
 
     audioFiles.push('./assets/audio/please.mp3')
     audioFiles.push('./assets/audio/silent.mp3')
-
-    console.log(_strQueue);
 
     _strQueue.forEach((array: any) => {
       array.forEach(v => {
@@ -226,7 +225,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     });
 
     try {
-      howlerBank[0].play();
+      await howlerBank[0].play();
     } catch (error) {
       console.log(error);
     }
@@ -267,7 +266,8 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
         if (that.isSound) {
           if (+that.servicePointId === +_payload.servicePointId) {
             // play sound
-            const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString() };
+            const queueNumber = Array.isArray(_payload.queueNumber) ? _payload.queueNumber : [_payload.queueNumber]
+            const sound = { queueNumber: queueNumber, roomNumber: _payload.roomNumber.toString() };
             that.playlists.push(sound);
             that.prepareSound();
           }
