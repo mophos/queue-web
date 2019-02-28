@@ -49,11 +49,8 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
   servicePointId: any;
   servicePointName: any;
   workingItems: any = [];
+  _workingItems: any = [];
   workingItemsHistory: any = [];
-  // currentQueueNumber: any;
-  currentRoomNumber: any;
-  // currentHn: any;
-  currentRoomName: any;
 
   isOffline = false;
 
@@ -148,7 +145,6 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     this.isPlayingSound = true;
 
     let _queue = _.cloneWith(_.map(strQueue, (v: any) => { return v.replace(' ', '') }));
-    // console.log(strQueue);
     _queue = _.map(_queue, (v: any) => { return v.replace('-', '') })
 
     const _strQueue = _.map(_queue, (v: any) => { return v.split('') });
@@ -225,6 +221,9 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     });
 
     try {
+
+      await this._workingItems.shift()
+      this.workingItems = await _.cloneDeep(this._workingItems[0])
       await howlerBank[0].play();
     } catch (error) {
       console.log(error);
@@ -260,7 +259,6 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     this.client.on('message', (topic, payload) => {
       that.getCurrentQueue();
       that.getWorkingHistory();
-
       try {
         const _payload = JSON.parse(payload.toString());
         if (that.isSound) {
@@ -334,11 +332,12 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     this.initialSocket();
   }
 
-  initialSocket() {
+  async initialSocket() {
     // connect mqtt
     this.connectWebSocket();
-
-    this.getCurrentQueue();
+    this._workingItems = []
+    await this.getCurrentQueue();
+    this._workingItems.length === 1 ? this.workingItems = await _.cloneDeep(this._workingItems[0]) : '';
     this.getWorkingHistory();
   }
 
@@ -346,21 +345,10 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     try {
       const rs: any = await this.queueService.getWorkingGroup(this.servicePointId, this.token);
       if (rs.statusCode === 200) {
-        this.workingItems = rs.results;
+        await this._workingItems.push(_.cloneDeep(rs.results));
+        if (this._workingItems != this.workingItems) this.workingItems = await _.cloneDeep(this._workingItems[0])
         const arr = _.sortBy(rs.results, ['update_date']).reverse();
-
-        if (arr.length > 0) {
-          // this.
-          // this.currentHn = arr[0].hn;
-          // this.currentQueueNumber = arr[0].queue_number;
-          this.currentRoomName = arr[0].room_name;
-          this.currentRoomNumber = arr[0].room_number;
-        } else {
-          // this.currentHn = null;
-          // this.currentQueueNumber = null;
-          this.currentRoomName = null;
-          this.currentRoomNumber = null;
-        }
+        if (arr.length <= 0) this._workingItems = []
       } else {
         console.log(rs.message);
         this.alertService.error('เกิดข้อผิดพลาด');
