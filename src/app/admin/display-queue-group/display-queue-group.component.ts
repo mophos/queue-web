@@ -282,7 +282,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
         that.isOffline = false;
       });
 
-      that.client.subscribe(topic, (error) => {
+      that.client.subscribe(topic, { qos: 0}, (error) => {
         if (error) {
           that.zone.run(() => {
             that.isOffline = true;
