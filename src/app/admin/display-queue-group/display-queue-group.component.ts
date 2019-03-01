@@ -47,11 +47,8 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
   servicePointId: any;
   servicePointName: any;
   workingItems: any = [];
+  _workingItems: any = [];
   workingItemsHistory: any = [];
-  // currentQueueNumber: any;
-  currentRoomNumber: any;
-  // currentHn: any;
-  currentRoomName: any;
 
   isOffline = false;
 
@@ -130,22 +127,22 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     this.isSound = !this.isSound;
   }
 
-  prepareSound() {
+  async prepareSound() {
     if (!this.isPlayingSound) {
       if (this.playlists.length) {
         const queueNumber = this.playlists[0].queueNumber;
         const roomNumber = this.playlists[0].roomNumber;
-        this.playSound(queueNumber, roomNumber);
+        let arrQueueNumber = Array.isArray(queueNumber) ? queueNumber : [queueNumber]
+        await this.playSound(arrQueueNumber, roomNumber);
       }
     }
   }
 
-  playSound(strQueue: any, strRoomNumber: string) {
+  async playSound(strQueue: any, strRoomNumber: string) {
 
     this.isPlayingSound = true;
 
     let _queue = _.cloneWith(_.map(strQueue, (v: any) => { return v.replace(' ', '') }));
-    // console.log(strQueue);
     _queue = _.map(_queue, (v: any) => { return v.replace('-', '') })
 
     const _strQueue = _.map(_queue, (v: any) => { return v.split('') });
@@ -155,8 +152,6 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
 
     audioFiles.push('./assets/audio/please.mp3')
     audioFiles.push('./assets/audio/silent.mp3')
-
-    console.log(_strQueue);
 
     _strQueue.forEach((array: any) => {
       array.forEach(v => {
@@ -224,6 +219,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     });
 
     try {
+
       await this._workingItems.shift()
       this.workingItems = await _.cloneDeep(this._workingItems[0])
       await howlerBank[0].play();
@@ -261,13 +257,13 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     this.client.on('message', (topic, payload) => {
       that.getCurrentQueue();
       that.getWorkingHistory();
-
       try {
         const _payload = JSON.parse(payload.toString());
         if (that.isSound) {
           if (+that.servicePointId === +_payload.servicePointId) {
             // play sound
-            const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString() };
+            const queueNumber = Array.isArray(_payload.queueNumber) ? _payload.queueNumber : [_payload.queueNumber]
+            const sound = { queueNumber: queueNumber, roomNumber: _payload.roomNumber.toString() };
             that.playlists.push(sound);
             that.prepareSound();
           }
@@ -283,6 +279,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
       that.zone.run(() => {
         that.isOffline = false;
       });
+
       that.client.subscribe(topic, { qos: 0 }, (error) => {
         if (error) {
           that.zone.run(() => {
@@ -333,11 +330,12 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     this.initialSocket();
   }
 
-  initialSocket() {
+  async initialSocket() {
     // connect mqtt
     this.connectWebSocket();
-
-    this.getCurrentQueue();
+    this._workingItems = []
+    await this.getCurrentQueue();
+    this._workingItems.length === 1 ? this.workingItems = await _.cloneDeep(this._workingItems[0]) : '';
     this.getWorkingHistory();
   }
 
@@ -353,19 +351,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
         }
         
         const arr = _.sortBy(rs.results, ['update_date']).reverse();
-
-        if (arr.length > 0) {
-          // this.
-          // this.currentHn = arr[0].hn;
-          // this.currentQueueNumber = arr[0].queue_number;
-          this.currentRoomName = arr[0].room_name;
-          this.currentRoomNumber = arr[0].room_number;
-        } else {
-          // this.currentHn = null;
-          // this.currentQueueNumber = null;
-          this.currentRoomName = null;
-          this.currentRoomNumber = null;
-        }
+        if (arr.length <= 0) this._workingItems = []
       } else {
         console.log(rs.message);
         this.alertService.error('เกิดข้อผิดพลาด');
