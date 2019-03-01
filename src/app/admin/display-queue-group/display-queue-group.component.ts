@@ -221,7 +221,6 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     });
 
     try {
-
       await this._workingItems.shift()
       this.workingItems = await _.cloneDeep(this._workingItems[0])
       await howlerBank[0].play();
