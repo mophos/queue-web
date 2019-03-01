@@ -282,7 +282,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
         that.isOffline = false;
       });
 
-      that.client.subscribe(topic, { qos: 0}, (error) => {
+      that.client.subscribe(topic, { qos: 0 }, (error) => {
         if (error) {
           that.zone.run(() => {
             that.isOffline = true;
@@ -345,8 +345,13 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     try {
       const rs: any = await this.queueService.getWorkingGroup(this.servicePointId, this.token);
       if (rs.statusCode === 200) {
-        await this._workingItems.push(_.cloneDeep(rs.results));
-        if (this._workingItems != this.workingItems) this.workingItems = await _.cloneDeep(this._workingItems[0])
+        if(this.isSound){
+          await this._workingItems.push(_.cloneDeep(rs.results));
+          if (this._workingItems != this.workingItems) this.workingItems = await _.cloneDeep(this._workingItems[0])
+        } else {
+          this.workingItems = _.cloneDeep(rs.results)
+        }
+        
         const arr = _.sortBy(rs.results, ['update_date']).reverse();
         if (arr.length <= 0) this._workingItems = []
       } else {
