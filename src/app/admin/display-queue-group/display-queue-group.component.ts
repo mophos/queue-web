@@ -6,9 +6,7 @@ import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as _ from 'lodash';
 import * as Random from 'random-js';
-
 import { Howl, Howler } from 'howler';
-
 import { CountdownComponent } from 'ngx-countdown';
 import { Router, ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
