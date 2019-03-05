@@ -173,6 +173,7 @@ export class QueueCenterPatientComponent implements OnInit {
     const token = this.token || sessionStorage.getItem('token');
 
     try {
+
       if (token) {
         const decodedToken = this.jwtHelper.decodeToken(token);
         this.queueCenterTopic = decodedToken.QUEUE_CENTER_TOPIC;

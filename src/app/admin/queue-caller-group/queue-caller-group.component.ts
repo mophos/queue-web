@@ -668,11 +668,12 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   async printQueue(queueId: any) {
     const usePrinter = localStorage.getItem('clientUserPrinter');
     const printerId = localStorage.getItem('clientPrinterId');
+    var printSmallQueue = localStorage.getItem('printSmallQueue') || 'N';
 
     if (usePrinter === 'Y') {
       const topic = `/printer/${printerId}`;
       try {
-        const rs: any = await this.queueService.printQueueGateway(queueId, topic);
+        const rs: any = await this.queueService.printQueueGateway(queueId, topic, printSmallQueue);
         if (rs.statusCode === 200) {
           //success
         } else {
