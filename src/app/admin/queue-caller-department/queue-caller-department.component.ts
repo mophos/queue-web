@@ -426,11 +426,12 @@ export class QueueCallerDepartmentComponent implements OnInit {
   async printQueue(queueId: any) {
     const usePrinter = localStorage.getItem('clientUserPrinter');
     const printerId = localStorage.getItem('clientPrinterId');
+    const printSmallQueue = localStorage.getItem('printSmallQueue') || 'N';
 
     if (usePrinter === 'Y') {
       const topic = `/printer/${printerId}`;
       try {
-        const rs: any = await this.queueService.printQueueGateway(queueId, topic);
+        const rs: any = await this.queueService.printQueueGateway(queueId, topic, printSmallQueue);
         if (rs.statusCode === 200) {
         } else {
           this.alertService.error('ไม่สามารถพิมพ์บัตรคิวได้');

@@ -116,12 +116,13 @@ export class VisitComponent implements OnInit {
   async printQueue(queueId: any) {
     var usePrinter = localStorage.getItem('clientUserPrinter');
     var printerId = localStorage.getItem('clientPrinterId');
+    var printSmallQueue = localStorage.getItem('printSmallQueue') || 'N';
 
     if (usePrinter === 'Y') {
       var topic = `/printer/${printerId}`;
       console.log(topic);
       try {
-        var rs: any = await this.queueService.printQueueGateway(queueId, topic);
+        var rs: any = await this.queueService.printQueueGateway(queueId, topic, printSmallQueue);
         if (rs.statusCode === 200) {
           //success
         } else {
