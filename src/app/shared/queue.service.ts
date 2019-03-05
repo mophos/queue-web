@@ -19,11 +19,12 @@ export class QueueService {
     };
   }
 
-  async printQueueGateway(queueId: any, topic: any) {
+  async printQueueGateway(queueId: any, topic: any, printSmallQueue: any) {
     const _url = `${this.apiUrl}/print/queue/prepare/print`;
     return this.httpClient.post(_url, {
       queueId: queueId,
-      topic: topic
+      topic: topic,
+      printSmallQueue: printSmallQueue
     }, this.httpOptions).toPromise();
   }
 
