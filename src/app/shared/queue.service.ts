@@ -45,7 +45,7 @@ export class QueueService {
   }
 
   async changeRoom(queueId: any, roomId: any, servicePointId: any, roomNumber: any, queueNumber: any) {
-    const _url = `${this.apiUrl}/queue/change`;
+    const _url = `${this.apiUrl}/queue/change-room`;
     return this.httpClient.post(_url, {
       roomId: roomId,
       queueId: queueId,
