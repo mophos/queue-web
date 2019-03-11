@@ -424,6 +424,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
 
         this.connectWebSocket();
         this.getAllList();
+        this.getRooms();
       } else {
         this.pendingToServicePointId = event.service_point_id;
         this.doMarkPending(this.selectedQueue);
@@ -441,8 +442,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   getAllList() {
     this.getWaiting();
     this.getWorking();
-    this.getRooms();
-    // this.getPending();
     this.getHistory();
   }
 
@@ -452,84 +451,74 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     this.queueRunning = item.queue_running;
   }
 
-  setQueueForCallGroup(value: number) {
-    const tmp = _.map(_.take(this.waitingItems, value), (v: any) => {
-      return {
-        queue_id: v.queue_id,
-        queue_number: v.queue_number,
-        queue_running: v.queue_running
-      }
-    })
-    this.tmpWaitingItems = _.cloneDeep(tmp);
-    // this.queueId = item.queue_id;
-    // this.queueNumber = item.queue_number;
-    // this.queueRunning = item.queue_running;
-  }
-
-  setCallDetail(item: any) {
+  onCallCurrentQueue(item: any) {
     this.queueId = item.queue_id;
     this.queueNumber = item.queue_number;
     this.queueRunning = item.queue_running;
-    if (this.rooms.length === 1) {
-      this.roomId = this.rooms[0].room_id;
-      this.roomNumber = this.rooms[0].room_number;
-      this.doCallQueue();
-    }
-  }
 
-  setCallDetailGroup(value: number) {
-    const tmp = _.map(_.take(this.waitingItems, value), (v: any) => {
-      return {
-        queue_id: v.queue_id,
-        queue_number: v.queue_number,
-        queue_running: v.queue_running
-      }
-    })
-    this.tmpWaitingItems = _.cloneDeep(tmp)
-    if (this.rooms.length === 1) {
-      this.roomId = this.rooms[0].room_id;
-      this.roomNumber = this.rooms[0].room_number;
-      this.doCallQueueGroup();
+    if (this.roomNumber && this.roomId) {
+      this.doCallQueue(this.roomId, this.roomNumber);
+    } else {
+      this.alertService.error('กรุณาเลือกช่องรับบริการ');
     }
   }
 
   callAgains(queue: any) {
-    this.roomNumber = queue.room_number;
-    this.roomId = queue.room_id;
     this.queueNumber = queue.queue_number;
     this.queueId = queue.queue_id;
     this.queueRunning = queue.queue_running;
-    // this.doCallQueueAgain();
-    this.doCallQueue();
+    this.doCallQueue(queue.room_id, queue.room_number);
   }
+
   callAgain(queue: any) {
-    this.roomNumber = queue.room_number;
-    this.roomId = queue.room_id;
     this.queueNumber = queue.queue_number;
     this.queueId = queue.queue_id;
     this.queueRunning = queue.queue_running;
-    this.doCallQueueAgain();
-    // this.doCallQueue();
+    this.doCallQueueAgain(queue.room_id, queue.room_number);
   }
 
-  prepareQueue(room: any) {
-    this.roomId = room.room_id;
-    this.roomNumber = room.room_number;
-    console.log(this.roomId, this.roomNumber, this.queueNumber, this.queueId);
-    this.doCallQueue();
-  }
+  // prepareQueue(room: any) {
+  //   this.doCallQueue(room.room_id, room.room_number);
+  // }
 
-  prepareQueueGroup(room: any) {
-    this.roomId = room.room_id;
-    this.roomNumber = room.room_number;
-    this.doCallQueueGroup();
-  }
-  // async interviewQueue(room: any) {
+  // prepareQueueGroup(room: any) {
   //   this.roomId = room.room_id;
   //   this.roomNumber = room.room_number;
-  //   // update interview
-  //   this.doCallQueue('N');
+  //   this.doCallQueueGroup(room.room_id, room.room_number);
   // }
+
+  onChangeRooms(event: any) {
+    var _roomId = event.target.value;
+    var idx = _.findIndex(this.rooms, { room_id: +_roomId });
+    if (idx > -1) {
+      this.roomId = this.rooms[idx].room_id;
+      this.roomNumber = this.rooms[idx].room_number;
+    } else {
+      this.alertService.error('กรุณาเลือกช่องรับบริการ');
+      this.roomId = null;
+      this.roomNumber = null;
+    }
+  }
+
+  async onCallQueueGroup(count: any) {
+    if (this.roomId && this.roomNumber) {
+      const tmp = _.map(_.take(this.waitingItems, count), (v: any) => {
+        return {
+          queue_id: v.queue_id,
+          queue_number: v.queue_number,
+          queue_running: v.queue_running
+        }
+      });
+
+      this.tmpWaitingItems = _.cloneDeep(tmp);
+
+      this.doCallQueueGroup();
+
+    } else {
+      this.alertService.error('กรุณาเลือกห้องตรวจ');
+    }
+  }
+
   async doCallQueueGroup(isCompleted: any = 'Y') {
     if (this.isOffline) {
       this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
@@ -540,10 +529,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
         if (rs.statusCode === 200) {
           this.alertService.success();
           this.getAllList();
-          this.roomId = null;
-          this.roomNumber = null;
-          // this.queueNumber = null;
-          // this.queueId = null;
+
           this.tmpWaitingItems = null;
         } else {
           this.alertService.error(rs.message);
@@ -555,14 +541,13 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     }
   }
 
-  async doCallQueueAgain(isCompleted: any = 'Y') {
-    console.log('doCallQueueAgain');
+  async doCallQueueAgain(_roomId: any, _roomNumber: any, isCompleted: any = 'Y') {
 
     if (this.isOffline) {
       this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
     } else {
       try {
-        const rs: any = await this.queueService.callQueueGroup(this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId, isCompleted, this.queueRunning);
+        const rs: any = await this.queueService.callQueueGroup(this.servicePointId, this.queueNumber, _roomId, _roomNumber, this.queueId, isCompleted, this.queueRunning);
         // const rs: any = await this.queueService.callQueueGroup(this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId, isCompleted, this.queueRunning);
         if (rs.statusCode === 200) {
           this.alertService.success();
@@ -577,8 +562,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
           //   this.historyItems[idxh].room_id = this.roomId
           //   this.historyItems[idxh].room_number = this.roomNumber
           // }
-          this.roomId = null;
-          this.roomNumber = null;
           this.queueNumber = null;
           this.queueId = null;
           this.queueRunning = null;
@@ -592,18 +575,16 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     }
   }
 
-  async doCallQueue(isCompleted: any = 'Y') {
+  async doCallQueue(_roomId: any, _roomNumber: any, isCompleted: any = 'Y') {
     if (this.isOffline) {
       this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
     } else {
       try {
-        const rs: any = await this.queueService.callQueueGroup(this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId, isCompleted, this.queueRunning);
+        const rs: any = await this.queueService.callQueueGroup(this.servicePointId, this.queueNumber, _roomId, _roomNumber, this.queueId, isCompleted, this.queueRunning);
         // const rs: any = await this.queueService.callQueueGroup(this.servicePointId, this.queueNumber, this.roomId, this.roomNumber, this.queueId, isCompleted, this.queueRunning);
         if (rs.statusCode === 200) {
           this.alertService.success();
           this.getAllList();
-          this.roomId = null;
-          this.roomNumber = null;
           this.queueNumber = null;
           this.queueId = null;
           this.queueRunning = null;
@@ -688,10 +669,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
       window.open(`${this.apiUrl}/print/queue?queueId=${queueId}`, '_blank');
     }
   }
-  openModalSelectRoom(item) {
-    this.setQueueForCallGroup(item);
-    this.mdlSelectRoom.open();
-  }
 
   openModalSelectRoomOne(item) {
     // this.setQueueForCall(item);
@@ -701,10 +678,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
       queue_running: item.queue_running
     }]
     this.mdlSelectRoom.open();
-  }
-
-  onSelectRoom(item) {
-    this.prepareQueueGroup({ 'room_id': item.roomId, 'room_number': item.roomNumber });
   }
 
 }

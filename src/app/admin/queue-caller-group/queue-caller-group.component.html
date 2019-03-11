@@ -36,17 +36,24 @@
     <div class="card">
       <div class="card-header">
         <div class="row">
-          <div class="col-md-12" style="margin:0px;">
+          <div class="col-md-6" style="margin:0px;">
             <span class="h3">
-              รายการคิวรอเรียกเข้ารับบริการ
+              รายการคิวรอเรียก
               <label class="badge badge-danger">
                 <span class="h4 font-weight-bold">{{total || 0}}</span>
               </label>
             </span>
           </div>
+          <div class="col-md-6">
+            <select style="color: white;" [ngStyle]="{'background-color': roomId ? '#689f38' : '#d84315'}"
+              name="slRooms" id="slRooms" class="form-control" (change)="onChangeRooms($event)">
+              <option value="">เลือกช่องรับบริการ ({{rooms.length || 0 | number}})</option>
+              <option *ngFor="let r of rooms" [value]="r.room_id">{{r.room_number}} - {{r.room_name}}</option>
+            </select>
+          </div>
         </div>
       </div>
-      
+
       <div class="card-body" style="padding-left:5px;padding-right:5px;padding-top: 10px;">
 
         <div class="row">
@@ -55,77 +62,33 @@
             <span>ค้นหา</span>
           </div>
           <div class="col-md-4" style="padding-right: 0%; padding-left: 5px;">
-            <input [disabled]="!servicePointId" type="text" class="form-control" [(ngModel)]="queryWaiting" name="queryWaiting"
-              (keyup)="searchQueryWaiting()">
+            <input [disabled]="!servicePointId" type="text" class="form-control" [(ngModel)]="queryWaiting"
+              name="queryWaiting" (keyup)="searchQueryWaiting()">
           </div>
           <div class="col-md-7" style="padding-left: 0%; text-align: right">
-            <button *ngIf=" rooms.length <= 5 && rooms.length > 1 && waitingItems.length" class="btn btn-sm btn-success" (click)="setQueueForCallGroup(2)"
-              [ngbPopover]="popContentGroup" placement="bottom" popoverTitle="เลือกช่องรับบริการ">
-              <span class="h4">
-                เรียก 2 คิว
-              </span>
-            </button>
-            <button *ngIf="rooms.length === 1 && waitingItems.length" class="btn btn-sm btn-success" (click)="setCallDetailGroup(2)">
-              <span class="h4">
-                เรียก 2 คิว
-              </span>
-            </button>
-            <button *ngIf="rooms.length > 5 && waitingItems.length" class="btn btn-sm btn-success" (click)="openModalSelectRoom(2)">
+            <div class="btn-group">
+              <button [disabled]="!waitingItems.length || !roomId" class="btn btn-sm btn-primary"
+                (click)="onCallQueueGroup(2)">
                 <span class="h4">
                   เรียก 2 คิว
                 </span>
               </button>
-            <button disabled="disabled" *ngIf="rooms.length === 0 || !waitingItems.length" class="btn btn-sm btn-success">
-              <span class="h4">
-                เรียก 2 คิว
-              </span>
-            </button>
 
-            <button *ngIf=" rooms.length <= 5 && rooms.length > 1  && waitingItems.length" class="btn btn-sm btn-warning" (click)="setQueueForCallGroup(3)"
-              [ngbPopover]="popContentGroup" placement="bottom" popoverTitle="เลือกช่องรับบริการ">
-              <span class="h4">
-                เรียก 3 คิว
-              </span>
-            </button>
-            <button *ngIf="rooms.length === 1  && waitingItems.length" class="btn btn-sm btn-warning" (click)="setCallDetailGroup(3)">
-              <span class="h4">
-                เรียก 3 คิว
-              </span>
-            </button>
-            <button *ngIf="rooms.length > 5 && waitingItems.length" class="btn btn-sm btn-warning" (click)="openModalSelectRoom(3)">
+              <button [disabled]="!waitingItems.length || !roomId" class="btn btn-sm btn-primary"
+                (click)="onCallQueueGroup(3)">
                 <span class="h4">
                   เรียก 3 คิว
                 </span>
               </button>
-            <button disabled="disabled" *ngIf="rooms.length === 0 || !waitingItems.length" class="btn btn-sm btn-warning">
-              <span class="h4">
-                เรียก 3 คิว
-              </span>
-            </button>
 
-            <button *ngIf="rooms.length <= 5 && rooms.length > 1  && waitingItems.length" class="btn btn-sm btn-info" (click)="setQueueForCallGroup(5)"
-              [ngbPopover]="popContentGroup" placement="bottom" popoverTitle="เลือกช่องรับบริการ">
-              <span class="h4">
-                เรียก 5 คิว
-              </span>
-            </button>
-            <button *ngIf="rooms.length === 1  && waitingItems.length" class="btn btn-sm btn-info" (click)="setCallDetailGroup(5)">
-              <span class="h4">
-                เรียก 5 คิว
-              </span>
-            </button>
-            <button *ngIf="rooms.length > 5 && waitingItems.length" class="btn btn-sm btn-info" (click)="openModalSelectRoom(5)">
-              <span class="h4">
-                เรียก 5 คิว
-              </span>
-            </button>
-            <button disabled="disabled" *ngIf="rooms.length === 0 || !waitingItems.length" class="btn btn-sm btn-info">
-              <span class="h4">
-                เรียก 5 คิว
-              </span>
-            </button>
+              <button [disabled]="!waitingItems.length || !roomId" class="btn btn-sm btn-primary"
+                (click)="onCallQueueGroup(5)">
+                <span class="h4">
+                  เรียก 5 คิว
+                </span>
+              </button>
 
-
+            </div>
           </div>
         </div>
         <table class="table">
@@ -154,33 +117,13 @@
 
               <td>
                 <div class="btn-group">
-                 
-                  <button *ngIf="rooms.length <= 5 && rooms.length > 1" class="btn btn-sm btn-success" (click)="setQueueForCall(item)"
-                    [ngbPopover]="popContent" popoverTitle="เลือกช่องรับบริการ">
+
+                  <button [disabled]="!roomId" class="btn btn-sm btn-success" (click)="onCallCurrentQueue(item)">
                     <span class="h4">
                       เรียกคิว
                     </span>
                   </button>
-                  <button *ngIf="rooms.length === 1" class="btn btn-sm btn-success" (click)="setCallDetail(item)">
-                    <span class="h4">
-                      เรียกคิว
-                    </span>
-                  </button>
-                  <button *ngIf="rooms.length > 5" class="btn btn-sm btn-success" (click)="openModalSelectRoomOne(item)">
-                    <span class="h4">
-                      เรียกคิว
-                    </span>
-                  </button>
-                  <button disabled="disabled" *ngIf="rooms.length === 0" class="btn btn-sm btn-success">
-                    <span class="h4">
-                      เรียกคิว
-                    </span>
-                  </button>
-                  <!-- <button class="btn btn-sm btn-danger" (click)="cancelQueue(item)">
-                          <span class="h4">
-                            ยกเลิก
-                          </span>
-                        </button> -->
+
                 </div>
 
               </td>
@@ -191,9 +134,9 @@
 
 
         <div *ngIf="waitingItems.length" style="padding-top: 25px;">
-          <ngb-pagination class="d-flex justify-content-center" [rotate]="true" [collectionSize]="total" [maxSize]="maxSizePage"
-            [boundaryLinks]="true" [pageSize]="pageSize" (pageChange)="onPageChange($event)" [(page)]="currentPage"
-            aria-label="pagination"></ngb-pagination>
+          <ngb-pagination class="d-flex justify-content-center" [rotate]="true" [collectionSize]="total"
+            [maxSize]="maxSizePage" [boundaryLinks]="true" [pageSize]="pageSize" (pageChange)="onPageChange($event)"
+            [(page)]="currentPage" aria-label="pagination"></ngb-pagination>
         </div>
 
       </div>
@@ -231,8 +174,7 @@
             </tr>
             <tr *ngFor="let item of workingItems">
               <td>
-                <button (click)="setChangeRoom(item)" class="btn btn-sm btn-success" [ngbPopover]="popContentChangeRoom"
-                  popoverTitle="เปลี่ยนช่องบริการ">
+                <button (click)="setChangeRoom(item)" class="btn btn-sm btn-success">
                   <span class="h4">
                     {{item.room_number}}
                   </span>
@@ -248,7 +190,8 @@
                 <span class="h4">{{item.priority_name}}</span>
               </td>
               <td>
-                <span class="h3 font-weight-bold text-danger" style="letter-spacing: 2px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
+                <span class="h3 font-weight-bold text-danger"
+                  style="letter-spacing: 2px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
               </td>
               <td>
                 <div class="btn-group">
@@ -284,8 +227,8 @@
             <span>ค้นหา :</span>
           </div>
           <div class="col-md-5" style="padding-left:0;">
-            <input [disabled]="!servicePointId" type="text" class="form-control" [(ngModel)]="queryHistory" name="queryHistory"
-              (keyup)="searchQueryHistory()">
+            <input [disabled]="!servicePointId" type="text" class="form-control" [(ngModel)]="queryHistory"
+              name="queryHistory" (keyup)="searchQueryHistory()">
           </div>
         </div>
         <table class="table">
@@ -322,7 +265,8 @@
                 <span class="h4">{{item.priority_name}}</span>
               </td>
               <td>
-                <span class="h3 font-weight-bold text-danger" style="letter-spacing: 2px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
+                <span class="h3 font-weight-bold text-danger"
+                  style="letter-spacing: 2px;">{{item.service_point_prefix}}{{item.priority_prefix}}{{item.queue_number}}</span>
               </td>
               <td>
                 <div class="btn-group">
@@ -339,42 +283,6 @@
 
   </div>
 </div>
-
-
-
-
-<ng-template #popContent>
-  <div class="text-center">
-    <button *ngFor="let room of rooms" type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw"
-      (click)="prepareQueue(room)">
-      <span class="h4">{{room.room_name}}</span>
-    </button>
-  </div>
-</ng-template>
-<ng-template #popContentGroup>
-  <div class="text-center">
-    <button *ngFor="let room of rooms" type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw"
-      (click)="prepareQueueGroup(room)">
-      <span class="h4">{{room.room_name}}</span>
-    </button>
-  </div>
-</ng-template>
-<!-- <ng-template #popContentInterview>
-  <div class="text-center">
-    <button *ngFor="let room of rooms" type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw"
-      (click)="interviewQueue(room)">
-      <span class="h4">{{room.room_name}}</span>
-    </button>
-  </div>
-</ng-template> -->
-
-<ng-template #popContentChangeRoom>
-  <div class="text-center">
-    <button (click)="doChangeRoom(room)" *ngFor="let room of rooms" type="button" class="mb-2 btn btn btn-inverse-success btn-rounded btn-fw">
-      <span class="h4">{{room.room_name}}</span>
-    </button>
-  </div>
-</ng-template>
 
 <app-modal-select-servicepoints (onSelected)="onSelectedPoint($event)" #mdlServicePoint>
 </app-modal-select-servicepoints>
