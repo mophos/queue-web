@@ -23,7 +23,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
 
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalSelectServicepointsComponent;
   @ViewChild('mdlSelectTransfer') private mdlSelectTransfer: ModalSelectTransferComponent;
-  @ViewChild('mdlSelectRoom') private mdlSelectRoom: ModalSelectRoomComponent;
+  // @ViewChild('mdlSelectRoom') private mdlSelectRoom: ModalSelectRoomComponent;
 
   message: string;
   servicePointId: any;
@@ -670,14 +670,14 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     }
   }
 
-  openModalSelectRoomOne(item) {
-    // this.setQueueForCall(item);
-    this.tmpWaitingItems = [{
-      queue_id: item.queue_id,
-      queue_number: item.queue_number,
-      queue_running: item.queue_running
-    }]
-    this.mdlSelectRoom.open();
-  }
+  // openModalSelectRoomOne(item) {
+  //   // this.setQueueForCall(item);
+  //   this.tmpWaitingItems = [{
+  //     queue_id: item.queue_id,
+  //     queue_number: item.queue_number,
+  //     queue_running: item.queue_running
+  //   }]
+  //   this.mdlSelectRoom.open();
+  // }
 
 }
