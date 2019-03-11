@@ -10,12 +10,17 @@ export class LayoutComponent implements OnInit {
   isCollapsed = true;
   fullname: string;
   userType: string;
+  openSidebar: boolean = false;
 
   constructor(private router: Router) { }
 
   ngOnInit() {
     this.fullname = sessionStorage.getItem('fullname');
     this.userType = sessionStorage.getItem('userType');
+  }
+
+  toggleSidebar() {
+    this.openSidebar = !this.openSidebar;
   }
 
   logout() {
