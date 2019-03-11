@@ -151,13 +151,13 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     const audioFiles = [];
 
     audioFiles.push('./assets/audio/please.mp3')
-    audioFiles.push('./assets/audio/silent.mp3')
+    // audioFiles.push('./assets/audio/silent.mp3')
 
     _strQueue.forEach((array: any) => {
       array.forEach(v => {
         audioFiles.push(`./assets/audio/${v}.mp3`);
       });
-      audioFiles.push('./assets/audio/silent.mp3')
+      // audioFiles.push('./assets/audio/silent.mp3')
     });
 
     audioFiles.push('./assets/audio/channel.mp3');
@@ -343,7 +343,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     try {
       const rs: any = await this.queueService.getWorkingGroup(this.servicePointId, this.token);
       if (rs.statusCode === 200) {
-        if(this.isSound){
+        if (this.isSound) {
           await this._workingItems.push(_.cloneDeep(rs.results));
           if (this._workingItems != this.workingItems) this.workingItems = await _.cloneDeep(this._workingItems[0])
         } else {

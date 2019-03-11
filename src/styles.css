@@ -258,5 +258,11 @@ label {
   .navbar-toggler {
     display: none;
   }
+}
 
+select.form-control {
+    border: 1px solid #ebedf2;
+    font-size: 1.1rem;
+    color: black;
+    font-weight: bold;
 }
