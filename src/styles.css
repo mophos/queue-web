@@ -237,3 +237,26 @@ label {
   .hide{
     display: none;
   }
+
+@media (max-width: 991px) {
+  .navbar.default-layout-navbar .navbar-brand-wrapper {
+    width: 200px;
+  }
+}
+
+.sidebar-show {
+    position: fixed;
+    max-height: calc(100vh - 70px);
+    top: 70px;
+    bottom: 0;
+    overflow: auto;
+    left: 0;
+    transition: all 0.25s ease-out;
+}
+
+@media (min-width: 992px) {
+  .navbar-toggler {
+    display: none;
+  }
+
+}
