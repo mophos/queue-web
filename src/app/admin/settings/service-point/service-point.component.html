@@ -30,7 +30,9 @@
               <th>แผนก</th>
               <th>PREFIX</th>
               <th>KIOS</th>
-              <th>ใช้คิวเดิมออกคิว</th>
+              <th>ใช้คิวเดิม</th>
+              <th>ตัดคิวกลุ่ม</th>
+              <th>ออกคิวตามประเภท</th>
               <th style="width: 150px;">#</th>
             </tr>
           </thead>
@@ -47,6 +49,14 @@
               <td>
                 <i class="mdi mdi-check text-success" *ngIf="item.use_old_queue === 'Y'"></i>
                 <i class="mdi mdi-close text-danger" *ngIf="item.use_old_queue === 'N'"></i>
+              </td>
+              <td>
+                <i class="mdi mdi-check text-success" *ngIf="item.group_compare === 'Y'"></i>
+                <i class="mdi mdi-close text-danger" *ngIf="item.group_compare === 'N'"></i>
+              </td>
+              <td>
+                <i class="mdi mdi-check text-success" *ngIf="item.priority_queue_running === 'Y'"></i>
+                <i class="mdi mdi-close text-danger" *ngIf="item.priority_queue_running === 'N'"></i>
               </td>
               <td>
                 <div class="btn-group">
