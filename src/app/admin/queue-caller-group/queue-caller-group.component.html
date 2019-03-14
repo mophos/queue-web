@@ -56,41 +56,33 @@
 
       <div class="card-body" style="padding-left:5px;padding-right:5px;padding-top: 10px;">
 
-        <div class="row">
+        <div class="btn-group d-flex" style="margin-bottom:5px;">
+          <button [disabled]="!waitingItems.length || !roomId" class="w-100 btn btn-sm btn-primary"
+            (click)="onCallQueueGroup(2)">
+            <span class="h4">
+              เรียก 2 คิว
+            </span>
+          </button>
 
-          <div class="col-md-1" style="vertical-align: middle;text-align: right;padding-right: 0%;">
-            <span>ค้นหา</span>
-          </div>
-          <div class="col-md-4" style="padding-right: 0%; padding-left: 5px;">
-            <input [disabled]="!servicePointId" type="text" class="form-control" [(ngModel)]="queryWaiting"
-              name="queryWaiting" (keyup)="searchQueryWaiting()">
-          </div>
-          <div class="col-md-7" style="padding-left: 0%; text-align: right">
-            <div class="btn-group">
-              <button [disabled]="!waitingItems.length || !roomId" class="btn btn-sm btn-primary"
-                (click)="onCallQueueGroup(2)">
-                <span class="h4">
-                  เรียก 2 คิว
-                </span>
-              </button>
+          <button [disabled]="!waitingItems.length || !roomId" class="w-100 btn btn-sm btn-primary"
+            (click)="onCallQueueGroup(3)">
+            <span class="h4">
+              เรียก 3 คิว
+            </span>
+          </button>
 
-              <button [disabled]="!waitingItems.length || !roomId" class="btn btn-sm btn-primary"
-                (click)="onCallQueueGroup(3)">
-                <span class="h4">
-                  เรียก 3 คิว
-                </span>
-              </button>
+          <button [disabled]="!waitingItems.length || !roomId" class="w-100 btn btn-sm btn-primary"
+            (click)="onCallQueueGroup(5)">
+            <span class="h4">
+              เรียก 5 คิว
+            </span>
+          </button>
 
-              <button [disabled]="!waitingItems.length || !roomId" class="btn btn-sm btn-primary"
-                (click)="onCallQueueGroup(5)">
-                <span class="h4">
-                  เรียก 5 คิว
-                </span>
-              </button>
-
-            </div>
-          </div>
         </div>
+        
+        <input [disabled]="!servicePointId" type="text" placeholder="ค้นหาด้วยชื่อ-นามสกุลหรือ HN" class="form-control" [(ngModel)]="queryWaiting"
+        name="queryWaiting" (keyup)="searchQueryWaiting()">
+    
         <table class="table">
           <thead>
             <tr>
@@ -107,6 +99,7 @@
             <tr *ngFor="let item of waitingItems">
               <td>
                 <span class="h3-x">{{item.title}}{{item.first_name}} {{item.last_name}}</span>
+                <p>HN: {{item.hn}}</p>
               </td>
               <td>
                 <span class="h3-x">{{item.priority_name}}</span>
@@ -145,7 +138,7 @@
   </div>
   <div class="col-md-6" style="padding-left:5px;padding-right:10px;padding-top:1px;">
     <div class="card">
-      <div class="card-header">
+      <div class="card-header" style="min-height:68px;">
         <div class="row">
           <div class="col-md-12" style="margin:0px;">
             <span class="h3" style="padding-left:10px;">คิวที่กำลังเรียก
@@ -157,7 +150,7 @@
         </div>
       </div>
 
-      <div class="card-body" style="padding-left:5px;padding-right:5px;">
+      <div class="card-body" style="padding-left:5px;padding-right:5px;padding-top:5px;">
         <table class="table">
           <thead>
             <tr>
