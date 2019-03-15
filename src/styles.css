@@ -228,3 +228,41 @@ label {
 .modal .modal-dialog .modal-content .modal-body {
     padding: 5px 26px;
   }
+
+  .backgroud-queue-white {
+    background: white;
+    margin-top: 10px;
+  }
+  
+  .hide{
+    display: none;
+  }
+
+@media (max-width: 991px) {
+  .navbar.default-layout-navbar .navbar-brand-wrapper {
+    width: 200px;
+  }
+}
+
+.sidebar-show {
+    position: fixed;
+    max-height: calc(100vh - 70px);
+    top: 70px;
+    bottom: 0;
+    overflow: auto;
+    left: 0;
+    transition: all 0.25s ease-out;
+}
+
+@media (min-width: 992px) {
+  .navbar-toggler {
+    display: none;
+  }
+}
+
+select.form-control {
+    border: 1px solid #ebedf2;
+    font-size: 1.1rem;
+    color: black;
+    font-weight: bold;
+}

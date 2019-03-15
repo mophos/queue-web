@@ -2,6 +2,11 @@
   <!-- partial:../../partials/_navbar.html -->
   <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+      <button class="navbar-toggler" (click)="toggleSidebar()" type="button" data-toggle="collapse"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <i class="mdi mdi-menu" *ngIf="!openSidebar"></i>
+        <i class="mdi mdi-dots-vertical" *ngIf="openSidebar"></i>
+      </button>
       <a class="navbar-brand brand-logo" href="javascript://">
         <img style="width: 40px; height: 40px;" src="./assets/images/iconQ4U100.png" alt=""></a>
       <span class="font-weight-bold" style="font-size: 1.5rem;">
@@ -17,12 +22,13 @@
           </a>
         </li>
       </ul>
+
     </div>
   </nav>
   <!-- partial -->
   <div class="container-fluid page-body-wrapper">
     <!-- partial:../../partials/_sidebar.html -->
-    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <nav class="sidebar sidebar-offcanvas" [ngClass]="{'sidebar-show': openSidebar}" id="sidebar">
       <ul class="nav">
         <li class="nav-item nav-profile">
           <a href="javascript://" class="nav-link">
@@ -45,72 +51,105 @@
           </a>
         </li>
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/admin/queue-center">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/queue-center">
             <span class="menu-title">แสดงคิวทั้งหมด</span>
             <i class="mdi mdi-animation-play menu-icon"></i>
           </a>
         </li>
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/admin/visit">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/visit">
             <span class="menu-title">ทะเบียนผู้รับบริการ</span>
             <i class="mdi mdi-human-male-female menu-icon"></i>
           </a>
         </li>
         <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" routerLink="/admin/departments">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/departments">
             <span class="menu-title">แผนก</span>
             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
           </a>
         </li>
         <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" routerLink="/admin/service-point">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/service-point">
             <span class="menu-title">จุดให้บริการ</span>
             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
           </a>
         </li>
         <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" routerLink="/admin/priority">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/priority">
             <span class="menu-title">ประเภทผู้ป่วย</span>
             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
           </a>
         </li>
         <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" routerLink="/admin/users">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/users">
             <span class="menu-title">ผู้ใช้งานระบบ</span>
             <i class="mdi mdi-account-group menu-icon"></i>
           </a>
         </li>
         <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" routerLink="/admin/generate-token">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/generate-token">
             <span class="menu-title">Generate token</span>
             <i class="mdi mdi-key menu-icon"></i>
           </a>
         </li>
-
-        <div class="border-bottom"></div>
-
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/display-queue">
-            <span class="menu-title">แสดงคิว (ช่องบริการ)</span>
-            <i class="mdi mdi-airplay menu-icon"></i>
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/printer">
+            <span class="menu-title">ตั้งค่าเครื่องพิมพ์</span>
+            <i class="mdi mdi-printer-wireless menu-icon"></i>
           </a>
         </li>
 
+        <div class="border-bottom"></div>
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/queue-center-patient">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/queue-center-patient">
             <span class="menu-title">แสดงคิว (ทั้งหมด)</span>
             <i class="mdi mdi-airplay menu-icon"></i>
           </a>
         </li>
 
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" routerLink="/admin/queue-caller">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/display-queue">
+            <span class="menu-title">แสดงคิว (ช่องบริการ)</span>
+            <i class="mdi mdi-airplay menu-icon"></i>
+          </a>
+        </li>
+
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/display-queue-department">
+            <span class="menu-title">แสดงคิว (แผนก)</span>
+            <i class="mdi mdi-airplay menu-icon"></i>
+          </a>
+        </li>
+
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/display-queue-group">
+            <span class="menu-title">แสดงคิว (กลุ่ม)</span>
+            <i class="mdi mdi-airplay menu-icon"></i>
+          </a>
+        </li>
+
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/queue-caller">
             <span class="menu-title">เรียกคิวห้องตรวจ</span>
+            <i class="mdi mdi-cast menu-icon"></i>
+          </a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false"
+            routerLink="/admin/queue-caller-department">
+            <span class="menu-title">เรียกคิว (แผนก)</span>
+            <i class="mdi mdi-cast menu-icon"></i>
+          </a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/queue-caller-group">
+            <span class="menu-title">เรียกคิว (กลุ่ม)</span>
             <i class="mdi mdi-cast menu-icon"></i>
           </a>
         </li>
       </ul>
     </nav>
+
     <!-- partial -->
     <div class="main-panel">
       <div class="content-wrapper">
@@ -122,9 +161,11 @@
       <!-- partial:../../partials/_footer.html -->
       <footer class="footer">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">
-          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.moph.go.th/"
-              target="_blank">Ministry Of Public Health (MOPH)</a>. All rights reserved.</span>
-          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Made with <i class="mdi mdi-heart text-danger"></i></span>
+          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a
+              href="https://www.moph.go.th/" target="_blank">Ministry Of Public Health (MOPH)</a>. All rights
+            reserved.</span>
+          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Made with <i
+              class="mdi mdi-heart text-danger"></i></span>
         </div>
       </footer>
       <!-- partial -->

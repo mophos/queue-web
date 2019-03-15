@@ -1,6 +1,6 @@
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h3 class="modal-title" id="modal-basic-title">เลือกจุดให้บริการ</h3>
+    <h3 class="modal-title" id="modal-basic-title">เลือกแผนกให้บริการ</h3>
     <button type="button" class="close" aria-label="Close" (click)="dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -12,13 +12,13 @@
         <table class="table">
           <thead>
             <tr>
-              <th>จุดให้บริการ</th>
+              <th>แผนกให้บริการ</th>
               <th style="width: 50px;">#</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let point of points">
-              <td>{{point.local_code}} - {{point.service_point_name}}</td>
+              <td>{{point.department_id}} - {{point.department_name}}</td>
               <td>
                 <button class="btn btn-sm btn-icon-append btn-gradient-success" (click)="setSelected(point)">
                   <i class="mdi mdi-refresh"></i> เปลี่ยน

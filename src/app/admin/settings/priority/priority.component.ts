@@ -37,7 +37,7 @@ export class PriorityComponent implements OnInit {
   }
 
   async remove(item: any) {
-    let confirm = await this.alertService.confirm(`ต้องการลบ ${item.department_name} ใช่หรือไม่?`);
+    let confirm = await this.alertService.confirm(`ต้องการลบ ${item.priority_name} ใช่หรือไม่?`);
     if (confirm) {
       try {
         let rs: any = await this.priorityService.remove(item.priority_id);

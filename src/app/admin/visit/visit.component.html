@@ -1,21 +1,17 @@
+<app-alert-warning-printer></app-alert-warning-printer>
 <div class="row">
   <div class="col-md-12">
     <div class="card">
       <div class="card-body">
-        <!-- <h4 class="card-title">
-          รายชื่อผู้ป่วยที่รอรับบริการ
-        </h4> -->
         <p class="card-description">
           แสดงเฉพาะรายชื่อจุดให้บริการที่มีการ <code>เปิดให้บริการ</code> เท่านั้น
-          <button (click)="openPrinter()" class="float-right btn btn-sm btn-success"> <i class="mdi mdi-printer"></i>
-            ตั้งค่าเครื่องพิมพ์</button>
-
         </p>
         <div class="row">
           <div class="col-md-9">
             <div class="input-group" style="width: 250px;">
-              <input type="text" (click)="$event.target.select()" class="form-control" name="query" (keyup)="doSearch($event)"
-                [(ngModel)]="query" placeholder="ระบุคำค้นหา.." aria-label="ระบุคำค้นหา" aria-describedby="button-addon2">
+              <input type="text" (click)="$event.target.select()" class="form-control" name="query"
+                (keyup)="doSearch($event)" [(ngModel)]="query" placeholder="ระบุคำค้นหา.." aria-label="ระบุคำค้นหา"
+                aria-describedby="button-addon2">
               <div class="input-group-append">
                 <button class="btn btn-primary btn-sm" (click)="getVisit()" type="button" id="button-addon2">
                   <i class="mdi mdi-account-search"></i>
@@ -26,8 +22,8 @@
           </div>
           <div class="col-md-3">
             <div class="form-group">
-              <select aria-placeholder="เลือกจุดให้บริการ" (change)="changeServicePoints($event)" class="form-control form-control-sm"
-                name="servicePointId">
+              <select aria-placeholder="เลือกจุดให้บริการ" (change)="changeServicePoints($event)"
+                class="form-control form-control-sm" name="servicePointId">
                 <!-- <option value="">เลือกจุดให้บริการ</option> -->
                 <option *ngFor="let s of servicePoints" [value]="s.local_code">{{s.local_code}} -
                   {{s.service_point_name}}</option>
@@ -68,9 +64,9 @@
         </table>
 
         <div *ngIf="visit.length" style="padding-top: 25px;">
-          <ngb-pagination class="d-flex justify-content-center" [rotate]="true" [collectionSize]="total" [maxSize]="maxSizePage"
-            [boundaryLinks]="true" [pageSize]="pageSize" (pageChange)="onPageChange($event)" [(page)]="currentPage"
-            aria-label="pagination"></ngb-pagination>
+          <ngb-pagination class="d-flex justify-content-center" [rotate]="true" [collectionSize]="total"
+            [maxSize]="maxSizePage" [boundaryLinks]="true" [pageSize]="pageSize" (pageChange)="onPageChange($event)"
+            [(page)]="currentPage" aria-label="pagination"></ngb-pagination>
         </div>
 
       </div>
@@ -78,5 +74,5 @@
   </div>
 </div>
 
-<app-modal-select-priority #mdlSelectPriority (onSelected)="onSelectedPriority($event)" [patientName]="patientName"></app-modal-select-priority>
-<app-modal-set-printer #mdlSetPrinter (onSave)="onSelectedPrinter($event)"></app-modal-set-printer>
+<app-modal-select-priority #mdlSelectPriority (onSelected)="onSelectedPriority($event)" [patientName]="patientName">
+</app-modal-select-priority>

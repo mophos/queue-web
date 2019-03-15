@@ -8,7 +8,7 @@ import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as Random from 'random-js';
 import { CountdownComponent } from 'ngx-countdown';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
@@ -57,21 +57,22 @@ export class QueueCenterPatientComponent implements OnInit {
   notifyPassword = null;
   notifyUrl: string;
 
+  token: any;
+
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,
     private zone: NgZone,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
-    const token = sessionStorage.getItem('token');
-    const decodedToken = this.jwtHelper.decodeToken(token);
-    this.queueCenterTopic = decodedToken.QUEUE_CENTER_TOPIC;
 
-    this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
-    this.notifyUser = decodedToken.NOTIFY_USER;
-    this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
+    this.route.queryParams
+      .subscribe(params => {
+        this.token = params.token || null;
+      });
 
     setInterval(() => {
       this.currentTime = new Date();
@@ -168,8 +169,28 @@ export class QueueCenterPatientComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getList();
-    this.connectWebSocket();
+
+    const token = this.token || sessionStorage.getItem('token');
+
+    try {
+
+      if (token) {
+        const decodedToken = this.jwtHelper.decodeToken(token);
+        this.queueCenterTopic = decodedToken.QUEUE_CENTER_TOPIC;
+
+        this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
+        this.notifyUser = decodedToken.NOTIFY_USER;
+        this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
+
+        this.getList();
+        this.connectWebSocket();
+      } else {
+        this.router.navigate(['/login']);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
   async getList() {
@@ -177,7 +198,7 @@ export class QueueCenterPatientComponent implements OnInit {
       var lastItemQueue = null;
       var updatedDate = 0;
 
-      const rs: any = await this.queueService.getCurrentQueueList();
+      const rs: any = await this.queueService.getCurrentQueueList(this.token);
       if (rs.statusCode === 200) {
         this.items = rs.results;
         // find last items

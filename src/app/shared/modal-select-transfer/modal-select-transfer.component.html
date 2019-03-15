@@ -1,0 +1,32 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-basic-title">เลือกจุดให้บริการ</h3>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="slServicePoints">เลือกจุดให้บริการ</label>
+          <select class="form-control" name="slServicePoints" [(ngModel)]="servicePointId">
+            <option *ngFor="let item of points" [value]="item.service_point_id">{{item.local_code}} -
+              {{item.service_point_name}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="slPriorities">เลือกประเภทผู้ป่วย</label>
+          <select class="form-control" name="slPriorities" [(ngModel)]="priorityId">
+            <option *ngFor="let item of priorities" [value]="item.priority_id">{{item.priority_name}}
+              (prefix: {{item.priority_prefix}})</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="doTransfer()">ส่งต่อ</button>
+    <button type="button" class="btn btn-outline-danger" (click)="dismiss()">ยกเลิก</button>
+  </div>
+</ng-template>

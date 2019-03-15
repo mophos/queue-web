@@ -19,17 +19,30 @@ export class QueueService {
     };
   }
 
-  async printQueueGateway(queueId: any, topic: any) {
+  async printQueueGateway(queueId: any, topic: any, printSmallQueue: any) {
     const _url = `${this.apiUrl}/print/queue/prepare/print`;
     return this.httpClient.post(_url, {
       queueId: queueId,
-      topic: topic
+      topic: topic,
+      printSmallQueue: printSmallQueue
     }, this.httpOptions).toPromise();
   }
 
   async visitList(servicePointCode: any, query: any, limit: number = 20, offset: number = 0) {
     const _url = `${this.apiUrl}/queue/his-visit?servicePointCode=${servicePointCode}&query=${query}&limit=${limit}&offset=${offset}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
+  async changeRoomGroup(queueId: any, roomId: any, servicePointId: any, roomNumber: any, queueNumber: any, queueRunning: any) {
+    const _url = `${this.apiUrl}/queue/change-room-group`;
+    return this.httpClient.post(_url, {
+      roomId: roomId,
+      queueId: queueId,
+      servicePointId: servicePointId,
+      queueNumber: queueNumber,
+      roomNumber: roomNumber,
+      queueRunning: queueRunning
+    }, this.httpOptions).toPromise();
   }
 
   async changeRoom(queueId: any, roomId: any, servicePointId: any, roomNumber: any, queueNumber: any) {
@@ -48,38 +61,194 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
+  async getWaitingGroup(servicePointId: any, limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/waiting-group/${servicePointId}?limit=${limit}&offset=${offset}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
+  async searchWaitingGroup(servicePointId: any, limit: number = 20, offset: number = 0, queryWaiting: string) {
+    const _url = `${this.apiUrl}/queue/waiting-group/search/${servicePointId}?limit=${limit}&offset=${offset}&query=${queryWaiting}`;
+
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
+  async searchHistoryGroup(servicePointId: any, limit: number = 20, offset: number = 0, query: string) {
+    const _url = `${this.apiUrl}/queue/history-group/search/${servicePointId}?limit=${limit}&offset=${offset}&query=${query}`;
+
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
+  async getQueueByDepartment(departmentId: any, limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/department/${departmentId}?limit=${limit}&offset=${offset}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
+  async searchQueueByDepartment(departmentId: any, limit: number = 20, offset: number = 0, query: string = '') {
+    const _url = `${this.apiUrl}/queue/department/search/${departmentId}?limit=${limit}&offset=${offset}&query=${query}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
   async markInterview(queueId: any) {
     const _url = `${this.apiUrl}/queue/interview/marked/${queueId}`;
     return this.httpClient.put(_url, {}, this.httpOptions).toPromise();
   }
 
-  async getWorking(servicePointId: any) {
-    const _url = `${this.apiUrl}/queue/working/${servicePointId}`;
-    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  async getWorkingDepartment(departmentId: any, token: any = null) {
+    const _url = `${this.apiUrl}/queue/working/department/${departmentId}`;
+
+    var _httpOptions = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
   }
 
-  async getWorkingHistory(servicePointId: any) {
-    const _url = `${this.apiUrl}/queue/working/history/${servicePointId}`;
-    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  async getWorking(servicePointId: any, token: any = null) {
+    const _url = `${this.apiUrl}/queue/working/${servicePointId}`;
+    var _httpOptions = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
   }
+
+  async getWorkingGroup(servicePointId: any, token: any = null) {
+    const _url = `${this.apiUrl}/queue/working-group/${servicePointId}`;
+    var _httpOptions = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
+  }
+
+  async getWorkingHistoryGroup(servicePointId: any, token: any = null) {
+    const _url = `${this.apiUrl}/queue/working/history-group/${servicePointId}`;
+    var _httpOptions: any = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+    return this.httpClient.get(_url, _httpOptions).toPromise();
+  }
+
+  async getWorkingHistory(servicePointId: any, token: any = null) {
+    const _url = `${this.apiUrl}/queue/working/history/${servicePointId}`;
+
+    var _httpOptions: any = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
+  }
+
+
 
   async getPending(servicePointId: any) {
     const _url = `${this.apiUrl}/queue/pending/${servicePointId}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
-  async markPending(queueId: any, servicePointId: any) {
+  async getPendingByDepartment(departmentId: any) {
+    const _url = `${this.apiUrl}/queue/pending/department/${departmentId}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
+  async markPending(queueId: any, servicePointId: any, priorityId: any) {
     const _url = `${this.apiUrl}/queue/pending`;
     return this.httpClient.post(_url, {
       queueId: queueId,
-      servicePointId: servicePointId
+      servicePointId: servicePointId,
+      priorityId: priorityId
+    }, this.httpOptions).toPromise();
+  }
+
+  async markCancel(queueId: any) {
+    const _url = `${this.apiUrl}/queue/cancel/${queueId}`;
+    return this.httpClient.delete(_url, this.httpOptions).toPromise();
+  }
+
+  async callQueueGroups(servicePointId: any, roomId: any, roomNumber: any, isCompleted: any = 'Y', queue: any) {
+    const _url = `${this.apiUrl}/queue/caller-groups`;
+    console.log(_url);
+
+    return this.httpClient.post(_url, {
+      servicePointId: servicePointId,
+      roomNumber: roomNumber,
+      roomId: roomId,
+      isCompleted: isCompleted,
+      queue: queue
+    }, this.httpOptions).toPromise();
+  }
+  async callQueueGroup(servicePointId: any, queueNumber: any, roomId: any, roomNumber: any, queueId: any, isCompleted: any = 'Y', queueRunning: any) {
+    const _url = `${this.apiUrl}/queue/caller-group/${queueId}`;
+    return this.httpClient.post(_url, {
+      servicePointId: servicePointId,
+      queueNumber: queueNumber,
+      roomNumber: roomNumber,
+      roomId: roomId,
+      isCompleted: isCompleted,
+      queueRunning: queueRunning
     }, this.httpOptions).toPromise();
   }
 
   async callQueue(servicePointId: any, queueNumber: any, roomId: any, roomNumber: any, queueId: any, isCompleted: any = 'Y') {
-    console.log('xxxxxx : ' + queueId);
     const _url = `${this.apiUrl}/queue/caller/${queueId}`;
     return this.httpClient.post(_url, {
+      servicePointId: servicePointId,
+      queueNumber: queueNumber,
+      roomNumber: roomNumber,
+      roomId: roomId,
+      isCompleted: isCompleted
+    }, this.httpOptions).toPromise();
+  }
+
+  async callQueueDepartment(departmentId: any, servicePointId: any, queueNumber: any, roomId: any, roomNumber: any, queueId: any, isCompleted: any = 'Y') {
+    const _url = `${this.apiUrl}/queue/caller/department/${queueId}`;
+    return this.httpClient.post(_url, {
+      departmentId: departmentId,
       servicePointId: servicePointId,
       queueNumber: queueNumber,
       roomNumber: roomNumber,
@@ -106,9 +275,23 @@ export class QueueService {
     }, this.httpOptions).toPromise();
   }
 
-  async getCurrentQueueList() {
+  async getCurrentQueueList(token: any = null) {
     const _url = `${this.apiUrl}/queue/current-list`;
-    return this.httpClient.get(_url, this.httpOptions).toPromise();
+
+    var _httpOptions: any = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
   }
 
 }

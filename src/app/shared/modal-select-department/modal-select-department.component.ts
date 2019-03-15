@@ -1,14 +1,14 @@
+import { DepartmentService } from './../department.service';
 import { Component, OnInit, Output, EventEmitter, ViewChild, Input } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AlertService } from '../alert.service';
-import { ServicePointService } from '../service-point.service';
 
 @Component({
-  selector: 'app-modal-select-servicepoints',
-  templateUrl: './modal-select-servicepoints.component.html',
+  selector: 'app-modal-select-department',
+  templateUrl: './modal-select-department.component.html',
   styles: []
 })
-export class ModalSelectServicepointsComponent implements OnInit {
+export class ModalSelectDepartmentComponent implements OnInit {
 
   @Output('onSelected') onSelected: EventEmitter<any> = new EventEmitter<any>();
 
@@ -22,7 +22,7 @@ export class ModalSelectServicepointsComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private alertService: AlertService,
-    private servicePointService: ServicePointService
+    private departmentService: DepartmentService
   ) { }
 
   ngOnInit() { }
@@ -49,24 +49,29 @@ export class ModalSelectServicepointsComponent implements OnInit {
   }
 
   async getList() {
-    if (this.isAll) {
-      try {
-        const rs: any = await this.servicePointService.list();
-        if (rs.statusCode === 200) {
-          this.points = rs.results;
-        } else {
-          console.log(rs.message);
-          this.alertService.error('เกิดข้อผิดพลาด');
-        }
-      } catch (error) {
-        console.log(error);
-        this.alertService.error();
+    // if (this.isAll) {
+    try {
+      const rs: any = await this.departmentService.list();
+      console.log(rs);
+
+      if (rs.statusCode === 200) {
+        this.points = rs.results;
+      } else {
+        console.log(rs.message);
+        this.alertService.error('เกิดข้อผิดพลาด');
       }
-    } else {
-      const _servicePoints = sessionStorage.getItem('servicePoints');
-      const jsonDecoded = JSON.parse(_servicePoints);
-      this.points = jsonDecoded;
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
     }
+    // } else {
+    //   // console.log(sessionStorage.getItem('department'));
+
+    //   var _servicePoints = sessionStorage.getItem('servicePoints');
+    //   var jsonDecoded = JSON.parse(_servicePoints);
+
+    //   this.points = jsonDecoded
+    // }
 
 
   }

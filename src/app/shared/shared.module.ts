@@ -25,6 +25,9 @@ import { ModalSelectPriorityComponent } from './modal-select-priority/modal-sele
 import { ModalAddServiceTimesComponent } from './queue-online/modal-add-service-times/modal-add-service-times.component';
 import { QueueOnlineServiceTimeService } from './queue-online/service-time.service';
 import { ServiceTimePipe } from './service-time.pipe';
+import { ModalSelectDepartmentComponent } from './modal-select-department/modal-select-department.component';
+import { AlertWarningPrinterComponent } from './alert-warning-printer/alert-warning-printer.component';
+import { ModalSelectRoomComponent } from './modal-select-room/modal-select-room.component';
 
 @NgModule({
   imports: [
@@ -47,6 +50,9 @@ import { ServiceTimePipe } from './service-time.pipe';
     ModalSetPrinterComponent,
     ModalSelectPriorityComponent,
     ModalAddServiceTimesComponent,
+    ModalSelectDepartmentComponent,
+    AlertWarningPrinterComponent,
+    ModalSelectRoomComponent,
   ],
   exports: [
     ModalAddServicePointComponent,
@@ -62,7 +68,10 @@ import { ServiceTimePipe } from './service-time.pipe';
     ToggleFullscreenDirective,
     ModalAddPriorityComponent,
     ModalSelectPriorityComponent,
-    ModalAddServiceTimesComponent
+    ModalAddServiceTimesComponent,
+    ModalSelectDepartmentComponent,
+    AlertWarningPrinterComponent,
+    ModalSelectRoomComponent
   ],
   providers: [
     ServicePointService,
