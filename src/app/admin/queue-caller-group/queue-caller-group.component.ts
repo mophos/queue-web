@@ -13,6 +13,7 @@ import { CountdownComponent } from 'ngx-countdown';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ModalSelectTransferComponent } from 'src/app/shared/modal-select-transfer/modal-select-transfer.component';
 import { ModalSelectRoomComponent } from 'src/app/shared/modal-select-room/modal-select-room.component';
+import { PriorityService } from '../../shared/priority.service';
 
 @Component({
   selector: 'app-queue-caller-group',
@@ -37,6 +38,9 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   roomId: any;
   queueId: any;
   queueRunning: any;
+  priorities = [];
+
+  priorityId: any;
 
   isAllServicePoint: boolean = false;
 
@@ -70,11 +74,10 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   queryHistory = '';
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
-
-
   constructor(
     private queueService: QueueService,
     private roomService: ServiceRoomService,
+    private priorityService: PriorityService,
     private alertService: AlertService,
     private zone: NgZone,
     @Inject('API_URL') private apiUrl: string,
@@ -112,7 +115,21 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.getPriorities();
+  }
+
+  async getPriorities() {
+    try {
+      var rs: any = await this.priorityService.list();
+      if (rs.statusCode === 200) {
+        this.priorities = rs.results;
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
+    }
+  }
 
   connectWebSocket() {
     const rnd = new Random();
@@ -275,9 +292,14 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     }
   }
 
+  onChangePriority(event: any) {
+    this.priorityId = event.target.value;
+    this.getWaiting();
+  }
+
   async getWaiting() {
     try {
-      const rs: any = await this.queueService.getWaitingGroup(this.servicePointId, this.pageSize, this.offset);
+      const rs: any = await this.queueService.getWaitingGroup(this.servicePointId, this.priorityId, this.pageSize, this.offset);
       if (rs.statusCode === 200) {
         this.waitingItems = rs.results;
         this.total = rs.total;
@@ -311,7 +333,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   async searchQueryWaiting() {
     try {
       this.offset = 0;
-      const rs: any = await this.queueService.searchWaitingGroup(this.servicePointId, this.pageSize, this.offset, this.queryWaiting);
+      const rs: any = await this.queueService.searchWaitingGroup(this.servicePointId, this.priorityId, this.pageSize, this.offset, this.queryWaiting);
       if (rs.statusCode === 200) {
         this.waitingItems = rs.results;
         this.total = rs.total;
