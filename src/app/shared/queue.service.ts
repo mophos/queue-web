@@ -61,13 +61,13 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
-  async getWaitingGroup(servicePointId: any, limit: number = 20, offset: number = 0) {
-    const _url = `${this.apiUrl}/queue/waiting-group/${servicePointId}?limit=${limit}&offset=${offset}`;
+  async getWaitingGroup(servicePointId: any, priorityId: any, limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/waiting-group/${servicePointId}?priorityId=${priorityId}&limit=${limit}&offset=${offset}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
-  async searchWaitingGroup(servicePointId: any, limit: number = 20, offset: number = 0, queryWaiting: string) {
-    const _url = `${this.apiUrl}/queue/waiting-group/search/${servicePointId}?limit=${limit}&offset=${offset}&query=${queryWaiting}`;
+  async searchWaitingGroup(servicePointId: any, priorityId: any, limit: number = 20, offset: number = 0, queryWaiting: string) {
+    const _url = `${this.apiUrl}/queue/waiting-group/search/${servicePointId}?priorityId=${priorityId}&limit=${limit}&offset=${offset}&query=${queryWaiting}`;
 
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
