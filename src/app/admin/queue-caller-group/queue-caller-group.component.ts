@@ -161,23 +161,8 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
         });
       }
 
-      that.client.subscribe(topic, (error) => {
-        console.log('Subscribe : ' + topic);
-
-        if (error) {
-          that.zone.run(() => {
-            that.isOffline = true;
-            try {
-              that.counter.restart();
-            } catch (error) {
-              console.log(error);
-            }
-          });
-        }
-      });
-
-      that.client.subscribe(visitTopic, (error) => {
-        console.log('Subscribe : ' + visitTopic);
+      that.client.subscribe([topic, visitTopic], (error) => {
+        console.log('Subscribe : ' + visitTopic + ', ' + topic);
         if (error) {
           that.zone.run(() => {
             that.isOffline = true;
@@ -502,7 +487,8 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
 
   async onCallQueueGroup(count: any) {
     if (this.roomId && this.roomNumber) {
-      const tmp = _.map(_.take(this.waitingItems, count), (v: any) => {
+      this.tmpWaitingItems = [];
+      this.tmpWaitingItems = _.map(_.take(this.waitingItems, count), (v: any) => {
         return {
           queue_id: v.queue_id,
           queue_number: v.queue_number,
@@ -510,9 +496,13 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.tmpWaitingItems = _.cloneDeep(tmp);
+      console.log(this.tmpWaitingItems);
 
-      this.doCallQueueGroup();
+      if (this.tmpWaitingItems.length) {
+        this.doCallQueueGroup();
+      } else {
+        this.alertService.error('ไม่พบรายการคิวที่ต้องการเรียก');
+      }
 
     } else {
       this.alertService.error('กรุณาเลือกห้องตรวจ');
@@ -529,8 +519,7 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
         if (rs.statusCode === 200) {
           this.alertService.success();
           this.getAllList();
-
-          this.tmpWaitingItems = null;
+          this.tmpWaitingItems = [];
         } else {
           this.alertService.error(rs.message);
         }

@@ -7,7 +7,7 @@
         <i class="mdi mdi-menu" *ngIf="!openSidebar"></i>
         <i class="mdi mdi-dots-vertical" *ngIf="openSidebar"></i>
       </button>
-      <a class="navbar-brand brand-logo" href="javascript://">
+      <a class="navbar-brand brand-logo" href="javascript://" (click)="toggleHideSidebar()">
         <img style="width: 40px; height: 40px;" src="./assets/images/iconQ4U100.png" alt=""></a>
       <span class="font-weight-bold" style="font-size: 1.5rem;">
         ระบบคิวออนไลน์
@@ -28,7 +28,7 @@
   <!-- partial -->
   <div class="container-fluid page-body-wrapper">
     <!-- partial:../../partials/_sidebar.html -->
-    <nav class="sidebar sidebar-offcanvas" [ngClass]="{'sidebar-show': openSidebar}" id="sidebar">
+    <nav *ngIf="!hideSidebar" class="sidebar sidebar-offcanvas" [ngClass]="{'sidebar-show': openSidebar}" id="sidebar">
       <ul class="nav">
         <li class="nav-item nav-profile">
           <a href="javascript://" class="nav-link">
@@ -129,7 +129,8 @@
           </a>
         </li>
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/queue-caller-department">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false"
+            routerLink="/admin/queue-caller-department">
             <span class="menu-title">เรียกคิว (แผนก)</span>
             <i class="mdi mdi-cast menu-icon"></i>
           </a>
@@ -144,7 +145,7 @@
     </nav>
 
     <!-- partial -->
-    <div class="main-panel">
+    <div [ngClass]="{'main-panel': !hideSidebar || openSidebar,'main-panel2': hideSidebar}">
       <div class="content-wrapper">
 
         <router-outlet></router-outlet>
