@@ -4,13 +4,23 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  styles: []
+  styles: [
+    `
+    .main-panel2 {
+        transition: width 0.25s ease, margin 0.25s ease;
+        min-height: calc(100vh - 70px);
+        display: flex;
+        flex-direction: column;
+    }
+    `
+  ]
 })
 export class LayoutComponent implements OnInit {
   isCollapsed = true;
   fullname: string;
   userType: string;
   openSidebar: boolean = false;
+  hideSidebar: boolean = false;
 
   constructor(private router: Router) { }
 
@@ -21,6 +31,10 @@ export class LayoutComponent implements OnInit {
 
   toggleSidebar() {
     this.openSidebar = !this.openSidebar;
+  }
+
+  toggleHideSidebar() {
+    this.hideSidebar = !this.hideSidebar;
   }
 
   logout() {
