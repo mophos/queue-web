@@ -68,13 +68,14 @@
               เกิดข้อผิดพลาดในการเชื่อมต่อกับ Notify Server.
             </p>
             <button class="btn btn-danger" (click)="connectWebSocket()">เชื่อมต่อใหม่ (<strong>
-                <countdown [config]="{leftTime: 15, template: '$!s!'}" (finished)="onFinished()" (notify)="onNotify($event)"></countdown>
+                <countdown [config]="{leftTime: 15, template: '$!s!'}" (finished)="onFinished()"
+                  (notify)="onNotify($event)"></countdown>
               </strong>)</button>
           </div>
         </div>
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="card border-primary">
               <div class="card-header h2">ประวัติการเรียกเข้าห้องตรวจ</div>
 
@@ -83,7 +84,7 @@
                   <thead>
                     <tr>
                       <th><span class="h1">ลำดับที่</span></th>
-                      <th><span class="h1">ช่องบริการ</span></th>
+                      <th style="text-align: right;"><span class="h1">ช่องบริการ</span></th>
                       <!-- <th><span class="h1">HN</span></th> -->
                     </tr>
                   </thead>
@@ -91,12 +92,14 @@
                     <tr *ngIf="!workingItems.length">
                       <td colspan="3">กรุณาเลือกจุดบริการ</td>
                     </tr>
-                    <tr *ngFor="let item of workingItems" [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}">
+                    <tr *ngFor="let item of workingItems"
+                      [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}">
                       <td>
-                        <label style="font-size: 3.5rem; letter-spacing: 2px;" class="font-weight-bold">{{item.queue_number}}</label>
+                        <label style="font-size: 5rem; letter-spacing: 2px;"
+                          class="font-weight-bold">{{item.queue_number}}</label>
                       </td>
-                      <td>
-                        <label style="font-size: 3.5rem;" class="font-weight-bold">{{item.room_number}}</label>
+                      <td style="text-align: right;">
+                        <label style="font-size: 5rem;" class="font-weight-bold">{{item.room_number}}</label>
                       </td>
                       <!-- <td>
                         <label style="font-size: 2.5rem;" class="font-weight-bold">{{item.hn}}</label>
@@ -114,7 +117,7 @@
                   <thead>
                     <tr>
                       <th><span class="h1">ลำดับที่</span></th>
-                      <th><span class="h1">ช่องบริการ</span></th>
+                      <th style="text-align: right;"><span class="h1">ช่องบริการ</span></th>
                       <!-- <th><span class="h1">HN</span></th> -->
                     </tr>
                   </thead>
@@ -124,10 +127,11 @@
                     </tr>
                     <tr *ngFor="let item of workingItemsHistory">
                       <td>
-                        <label style="font-size: 3.5rem; letter-spacing: 2px;" class="font-weight-bold">{{item.queue_number}}</label>
+                        <label style="font-size: 5rem; letter-spacing: 2px;"
+                          class="font-weight-bold">{{item.queue_number}}</label>
                       </td>
-                      <td>
-                        <label style="font-size: 3.5rem;" class="font-weight-bold">{{item.room_number}}</label>
+                      <td style="text-align: right;">
+                        <label style="font-size: 5rem;" class="font-weight-bold">{{item.room_number}}</label>
                       </td>
                       <!-- <td>
                         <label style="font-size: 2.5rem;" class="font-weight-bold">{{item.hn}}</label>
@@ -138,25 +142,27 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-8">
 
             <div class="card bg-primary card-img-holder text-white">
 
               <div class="card-body">
                 <div style="font-size: 3rem;" class="font-weight-normal">ลำดับที่</div>
-                <span class="font-weight-bold" style="letter-spacing: 12px; font-size: 11rem;">{{currentQueueNumber
+                <span class="font-weight-bold" style="letter-spacing: 12px; font-size: 13rem;">{{currentQueueNumber
                   || '-'}}</span>
                 <!-- <h1 class="card-text">HN: {{currentHn || '-'}}</h1> -->
                 <div style="font-size: 3rem;" class="font-weight-normal">ช่องบริการ</div>
-                <span class="font-weight-bold" style="letter-spacing: 12px; font-size: 11rem;">{{currentRoomNumber
+                <span class="font-weight-bold" style="letter-spacing: 12px; font-size: 13rem;">{{currentRoomNumber
                   || '-'}}</span>
                 <div style="font-size: 3rem;" class="card-text">{{currentRoomName || '-'}}</div>
               </div>
 
               <div class="card-footer">
                 <div class="float-left">
-                  <i style="cursor: pointer;" *ngIf="isSound" (click)="toggleSound()" class="h2 text-warning float-right mdi mdi-bell-ring"></i>
-                  <i style="cursor: pointer;" *ngIf="!isSound" (click)="toggleSound()" class="h2 text-muted float-right mdi mdi-bell-off"></i>
+                  <i style="cursor: pointer;" *ngIf="isSound" (click)="toggleSound()"
+                    class="h2 text-warning float-right mdi mdi-bell-ring"></i>
+                  <i style="cursor: pointer;" *ngIf="!isSound" (click)="toggleSound()"
+                    class="h2 text-muted float-right mdi mdi-bell-off"></i>
                 </div>
                 <div class="float-right">
                   <span class="h2 text-white font-weight-bold" style="cursor: pointer" (click)="selectServicePoint()">{{servicePointName
@@ -175,4 +181,5 @@
 </div>
 
 
-<app-modal-select-servicepoints (onSelected)="onSelectedPoint($event)" #mdlServicePoint></app-modal-select-servicepoints>
+<app-modal-select-servicepoints (onSelected)="onSelectedPoint($event)" #mdlServicePoint>
+</app-modal-select-servicepoints>
