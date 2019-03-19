@@ -253,7 +253,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     if (this.isOffline) {
       this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
     } else {
-      console.log(room);
 
       const roomId = room.room_id;
       const queueId = this.queueId;
@@ -315,8 +314,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
 
   async getWorking() {
     try {
-      console.log('getWorking');
-
       const rs: any = await this.queueService.getWorkingGroup(this.servicePointId);
       if (rs.statusCode === 200) {
         this.workingItems = rs.results;
@@ -380,21 +377,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     }
   }
 
-  // async getPending() {
-  //   try {
-  //     const rs: any = await this.queueService.getPending(this.servicePointId);
-  //     if (rs.statusCode === 200) {
-  //       this.pendingItems = rs.results;
-  //     } else {
-  //       console.log(rs.message);
-  //       this.alertService.error('เกิดข้อผิดพลาด');
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     this.alertService.error();
-  //   }
-  // }
-
   async getRooms() {
     try {
       const rs: any = await this.roomService.list(this.servicePointId);
@@ -424,18 +406,13 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   onSelectedPoint(event: any) {
     // console.log(event);
     if (event) {
-      if (!this.isMarkPending) {
+      this.servicePointName = event.service_point_name;
+      this.servicePointId = event.service_point_id;
+      this.priorityId = '';
 
-        this.servicePointName = event.service_point_name;
-        this.servicePointId = event.service_point_id;
-
-        this.connectWebSocket();
-        this.getAllList();
-        this.getRooms();
-      } else {
-        this.pendingToServicePointId = event.service_point_id;
-        this.doMarkPending(this.selectedQueue);
-      }
+      this.connectWebSocket();
+      this.getAllList();
+      this.getRooms();
     }
   }
 
@@ -484,16 +461,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     this.doCallQueueAgain(queue.room_id, queue.room_number);
   }
 
-  // prepareQueue(room: any) {
-  //   this.doCallQueue(room.room_id, room.room_number);
-  // }
-
-  // prepareQueueGroup(room: any) {
-  //   this.roomId = room.room_id;
-  //   this.roomNumber = room.room_number;
-  //   this.doCallQueueGroup(room.room_id, room.room_number);
-  // }
-
   onChangeRooms(event: any) {
     var _roomId = event.target.value;
     var idx = _.findIndex(this.rooms, { room_id: +_roomId });
@@ -517,8 +484,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
           queue_running: v.queue_running
         }
       });
-
-      console.log(this.tmpWaitingItems);
 
       if (this.tmpWaitingItems.length) {
         this.doCallQueueGroup();
