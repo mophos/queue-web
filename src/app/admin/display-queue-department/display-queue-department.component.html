@@ -75,37 +75,35 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
-            <table class="table table-sm">
-              <thead>
-                <tr>
-                  <th><span class="h1">ลำดับที่</span></th>
-                  <th><span class="h1">ช่องบริการ</span></th>
-                  <!-- <th><span class="h1">HN</span></th> -->
-                </tr>
-              </thead>
-              <tbody>
-                <!-- <tr>
-                  <td>C 0001</td>
-                  <td>5</td>
-                </tr> -->
-                <tr *ngIf="!workingItems.length">
-                  <td colspan="3">กรุณาเลือกจุดบริการ</td>
-                </tr>
-                <tr *ngFor="let item of workingItems"
-                  [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber,'backgroud-queue-white':item.queue_number!==currentQueueNumber}">
-                  <td style="border-radius: 10px 0px 0px 10px">
-                    <label style="font-size: 3.5rem; letter-spacing: 2px;"
-                      class="font-weight-bold">{{item.queue_number}}</label>
-                  </td>
-                  <td style="border-radius: 0px 10px 10px 0px">
-                    <label style="font-size: 3.5rem;" class="font-weight-bold">{{item.room_number}}</label>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="col-md-5">
+            <div class="card bg-primary text-white">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th><span class="h1">ลำดับที่</span></th>
+                    <th style="text-align: right;"><span class="h1">ช่องบริการ</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="!workingItems.length">
+                    <td colspan="3" style="font-size: 3rem;">กรุณาเลือกจุดบริการ</td>
+                  </tr>
+                  <tr *ngFor="let item of workingItems"
+                    [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber,'bg-primary':item.queue_number!==currentQueueNumber}">
+                    <td>
+                      <label style="font-size: 6rem; letter-spacing: 2px;"
+                        class="font-weight-bold">{{item.queue_number}}</label>
+                    </td>
+                    <td style="text-align: right;">
+                      <label style="font-size: 6rem;" class="font-weight-bold">{{item.room_number}}</label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
           </div>
-          <div class="col-md-6">
+          <div class="col-md-7">
 
             <div class="card bg-primary card-img-holder text-white">
 
