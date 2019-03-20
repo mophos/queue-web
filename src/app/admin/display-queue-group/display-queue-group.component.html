@@ -58,15 +58,36 @@
         </div>
 
         <div class="row">
-          <div class="col-md-4">
-            <div class="card bg-primary card-img-holder text-white">
+          <div class="col-md-5">
+            <div class="card bg-primary text-white">
               <!-- <div class="card-header" style="font-size: 3rem;" class="font-weight-normal">ประวัติการเรียก</div> -->
-              <div class="card-body">
-                <table class="table">
+              <div class="card-body" style="padding: 1rem 2.5rem">
+                <div class="row">
+                  <div class="col-md-6 font-weight-bold" style="font-size: 3rem;">ลำดับที่</div>
+                  <div class="col-md-6 font-weight-bold" style="font-size: 3rem; text-align: right">ช่องบริการ</div>
+                </div>
+
+                <div *ngFor="let item of workingItemsHistory">
+                  <div class="row">
+                    <div class="col-md-9">
+                      <span class="font-weight-bold" style="letter-spacing: 1px; font-size: 6rem;">
+                        {{ item.queue_number || '-'}}
+                      </span>
+                    </div>
+                    <div class="col-md-3" style="text-align: right;">
+                      <span class="font-weight-bold" style="font-size: 6rem; color:yellow">
+                        {{ item.room_number || '-' }}
+                      </span>
+                    </div>
+                  </div>
+                  <hr style="margin:0;border-top-width: 4px;" color="white" noshade="noshade">
+                </div>
+
+                <!-- <table class="table">
                   <thead>
                     <tr>
-                      <th><span class="h1">ลำดับที่</span></th>
-                      <th><span class="h1">ช่องบริการ</span></th>
+                      <th><span class="h1 font-weight-bold">ลำดับที่</span></th>
+                      <th><span class="h1 font-weight-bold">ช่องบริการ</span></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -82,36 +103,32 @@
                         <label style="font-size: 6rem; color: yellow;"
                           class="font-weight-bold">{{item.room_number}}</label>
                       </td>
-                      <!-- <td>
-                          <label style="font-size: 2.5rem;" class="font-weight-bold">{{item.hn}}</label>
-                        </td> -->
                     </tr>
                   </tbody>
-                </table>
+                </table> -->
               </div>
             </div>
           </div>
-          <div class="col-md-8">
+          <div class="col-md-7">
 
             <div class="card bg-primary card-img-holder text-white">
 
               <div class="card-body" style="padding: 1rem 2.5rem">
                 <div style="font-size: 3rem;" class="font-weight-normal">
                   <div class="row">
-                    <div class="col-md-6">ลำดับที่</div>
-                    <div class="col-md-6" style="text-align: right">ช่องบริการ</div>
+                    <div class="col-md-6 font-weight-bold">ลำดับที่</div>
+                    <div class="col-md-6 font-weight-bold" style="text-align: right">ช่องบริการ</div>
                   </div>
                 </div>
                 <div *ngFor="let item of workingItems">
                   <div class="row">
                     <div class="col-md-9">
-                      <span class="font-weight-bold" style="letter-spacing: 10px; font-size: 10rem;">{{
+                      <span class="font-weight-bold" style="font-size: 10rem;">{{
                         item.queue_number
                         || '-'}}</span>
                     </div>
                     <div class="col-md-3" style="text-align: right;">
-                      <span class="font-weight-bold"
-                        style="letter-spacing: 5px; font-size: 10rem; line-height: 150px; color:yellow">{{item.room_number
+                      <span class="font-weight-bold" style="font-size: 10rem; color:yellow">{{item.room_number
                         || '-'}}</span>
                     </div>
                   </div>
