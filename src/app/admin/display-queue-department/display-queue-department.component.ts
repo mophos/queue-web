@@ -207,8 +207,13 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
       } else {
         this.isPlayingSound = false;
+        console.log(that.playlists);
         // remove queue in playlist
         const idx = _.findIndex(that.playlists, { queueNumber: strQueue, roomNumber: strRoomNumber });
+        console.log(strQueue);
+        console.log(strRoomNumber);
+        console.log(idx);
+
         if (idx > -1) that.playlists.splice(idx, 1);
         // call sound again
         setTimeout(() => {
@@ -260,6 +265,26 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
     const that = this;
 
+    this.client.on('connect', () => {
+      console.log('Connected!');
+      that.zone.run(() => {
+        that.isOffline = false;
+      });
+
+      that.client.subscribe(topic, { qos: 0 }, (error) => {
+        if (error) {
+          that.zone.run(() => {
+            that.isOffline = true;
+            try {
+              that.counter.restart();
+            } catch (error) {
+              console.log(error);
+            }
+          });
+        }
+      });
+    });
+
     this.client.on('message', (topic, payload) => {
       that.getCurrentQueue();
 
@@ -279,26 +304,6 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
         console.log(error);
       }
 
-    });
-
-    this.client.on('connect', () => {
-      console.log('Connected!');
-      that.zone.run(() => {
-        that.isOffline = false;
-      });
-
-      that.client.subscribe(topic, (error) => {
-        if (error) {
-          that.zone.run(() => {
-            that.isOffline = true;
-            try {
-              that.counter.restart();
-            } catch (error) {
-              console.log(error);
-            }
-          });
-        }
-      });
     });
 
     this.client.on('close', () => {
