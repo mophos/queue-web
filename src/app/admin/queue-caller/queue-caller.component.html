@@ -133,8 +133,8 @@
                   <span class="h3-x">{{item.hn}}</span>
                 </td>
                 <!-- <td>
-                  <span class="h3-x">{{item.time_serv}}</span>
-                </td> -->
+                        <span class="h3-x">{{item.time_serv}}</span>
+                      </td> -->
                 <td>
                   <span class="h3-x">{{item.title}}{{item.first_name}} {{item.last_name}}</span>
                 </td>
@@ -147,10 +147,10 @@
                   </label>
                 </td>
                 <!-- <td>
-                  <label class="badge badge-primary">
-                    <span class="h3-x font-weight-bold" style="letter-spacing: 2px;">{{item.queue_id}}</span>
-                  </label>
-                </td> -->
+                        <label class="badge badge-primary">
+                          <span class="h3-x font-weight-bold" style="letter-spacing: 2px;">{{item.queue_id}}</span>
+                        </label>
+                      </td> -->
                 <td>
                   <span *ngIf="item.is_interview === 'Y'" class="mdi mdi-check text-success"></span>
                   <span *ngIf="item.is_interview === 'N' || !item.is_interview"
@@ -203,7 +203,7 @@
                         ยกเลิก
                       </span>
                     </button>
-                    <button class="btn btn-sm btn-danger" (click)="showSelectPointForMarkPending(item)">
+                    <button class="btn btn-sm btn-primary" (click)="showSelectPointForMarkPending(item)">
                       <span class="h4">
                         ส่งต่อ
                       </span>
