@@ -142,8 +142,8 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
 
     this.isPlayingSound = true;
 
-    let _queue = _.cloneWith(_.map(strQueue, (v: any) => { return v.replace(' ', '') }));
-    _queue = _.map(_queue, (v: any) => { return v.replace('-', '') })
+    let _queue = _.cloneWith(_.map(strQueue, (v: any) => { return v.toString().replace(' ', '') }));
+    _queue = _.map(_queue, (v: any) => { return v.toString().replace('-', '') })
 
     const _strQueue = _.map(_queue, (v: any) => { return v.split('') });
     const _strRoom = strRoomNumber.split('');

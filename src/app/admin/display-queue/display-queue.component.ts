@@ -150,8 +150,8 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
     this.isPlayingSound = true;
 
-    let _queue = strQueue.replace(' ', '');
-    _queue = _queue.replace('-', '');
+    let _queue = strQueue.toString().replace(' ', '');
+    _queue = _queue.toString().replace('-', '');
 
     const _strQueue = _queue.split('');
     const _strRoom = strRoomNumber.split('');
