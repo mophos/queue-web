@@ -83,6 +83,11 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
+  async getHistoryQueueByDepartment(departmentId: any, limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/department/history/${departmentId}?limit=${limit}&offset=${offset}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
   async searchQueueByDepartment(departmentId: any, limit: number = 20, offset: number = 0, query: string = '') {
     const _url = `${this.apiUrl}/queue/department/search/${departmentId}?limit=${limit}&offset=${offset}&query=${query}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
