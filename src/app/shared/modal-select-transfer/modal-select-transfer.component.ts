@@ -21,7 +21,7 @@ export class ModalSelectTransferComponent implements OnInit {
 
   points: any = [];
   priorities: any = [];
-
+  isQueueOld = false;
   isAll: boolean = false;
 
   constructor(
@@ -38,7 +38,7 @@ export class ModalSelectTransferComponent implements OnInit {
     this.isAll = isAll;
     this.getList();
     this.getPriorities();
-
+    this.getQueueOld();
     this.modalReference = this.modalService.open(this.content, {
       ariaLabelledBy: 'modal-basic-title',
       keyboard: false,

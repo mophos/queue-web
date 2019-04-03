@@ -3,7 +3,7 @@ import { ModalAddServicePointComponent } from 'src/app/shared/modal-add-service-
 import { AlertService } from 'src/app/shared/alert.service';
 import { ServicePointService } from 'src/app/shared/service-point.service';
 import { ModalRoomsComponent } from 'src/app/shared/modal-rooms/modal-rooms.component';
-
+import { ModalSettingSoundComponent } from './../../../shared/modal-setting-sound/modal-setting-sound.component';
 @Component({
   selector: 'app-service-point',
   templateUrl: './service-point.component.html',
@@ -12,12 +12,14 @@ import { ModalRoomsComponent } from 'src/app/shared/modal-rooms/modal-rooms.comp
 export class ServicePointComponent implements OnInit {
 
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalAddServicePointComponent;
+  @ViewChild('mdlSettingSound') private mdlSettingSound: ModalSettingSoundComponent;
   @ViewChild('mdlRooms') private mdlRooms: ModalRoomsComponent;
 
   items: any = [];
   info: any = {};
   servicePointId: any;
   servicePointName: any;
+  isModalSound = false;
 
   constructor(private alertService: AlertService, private servicePointService: ServicePointService) { }
 
@@ -84,4 +86,14 @@ export class ServicePointComponent implements OnInit {
   onSaveRoom(event: any) {
 
   }
+
+  showModalSound(item) {
+    this.servicePointId = item.service_point_id;
+    this.mdlSettingSound.open(item);
+  }
+
+  async onSaveSound() {
+    await this.getList();
+  }
+
 }

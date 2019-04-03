@@ -66,6 +66,9 @@
                   <button class="btn btn-sm btn-gradient-primary" (click)="showRooms(item)">
                     <i class="mdi mdi-format-list-bulleted"></i> ช่องบริการ
                   </button>
+                  <button class="btn btn-sm btn-gradient-primary" (click)="showModalSound(item)">
+                    <i class="mdi mdi-access-point"></i> ตั้งค่าเสียง
+                  </button>
                   <button class="btn btn-sm btn-gradient-danger" (click)="remove(item)">
                     <i class="mdi mdi-delete-outline"></i> ลบ
                   </button>
@@ -82,3 +85,6 @@
 <app-modal-add-service-point [info]="info" #mdlServicePoint (onSave)="onSave($event)"></app-modal-add-service-point>
 <app-modal-rooms [servicePointId]="servicePointId" [servicePointName]="servicePointName" #mdlRooms
   (onSave)="onSaveRoom($event)"></app-modal-rooms>
+
+<app-modal-setting-sound [servicePointId]="servicePointId" (onSave)="onSaveSound()" #mdlSettingSound>
+</app-modal-setting-sound>

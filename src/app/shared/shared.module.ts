@@ -25,6 +25,8 @@ import { ModalSelectPriorityComponent } from './modal-select-priority/modal-sele
 import { ModalSelectDepartmentComponent } from './modal-select-department/modal-select-department.component';
 import { AlertWarningPrinterComponent } from './alert-warning-printer/alert-warning-printer.component';
 import { ModalSelectRoomComponent } from './modal-select-room/modal-select-room.component';
+import { ModalSettingSoundComponent } from './modal-setting-sound/modal-setting-sound.component';
+import { SoundService } from './sound.service';
 
 @NgModule({
   imports: [
@@ -48,6 +50,7 @@ import { ModalSelectRoomComponent } from './modal-select-room/modal-select-room.
     ModalSelectDepartmentComponent,
     AlertWarningPrinterComponent,
     ModalSelectRoomComponent,
+    ModalSettingSoundComponent
   ],
   exports: [
     ModalAddServicePointComponent,
@@ -64,7 +67,8 @@ import { ModalSelectRoomComponent } from './modal-select-room/modal-select-room.
     ModalSelectPriorityComponent,
     ModalSelectDepartmentComponent,
     AlertWarningPrinterComponent,
-    ModalSelectRoomComponent
+    ModalSelectRoomComponent,
+    ModalSettingSoundComponent
   ],
   providers: [
     ServicePointService,
@@ -74,7 +78,8 @@ import { ModalSelectRoomComponent } from './modal-select-room/modal-select-room.
     AuthGuardService,
     LoginService,
     TokenService,
-    DepartmentService
+    DepartmentService,
+    SoundService
   ]
 })
 export class SharedModule { }
