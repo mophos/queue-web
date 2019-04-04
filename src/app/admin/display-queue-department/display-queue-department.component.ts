@@ -1,3 +1,4 @@
+import { ServicePointService } from './../../shared/service-point.service';
 import { Component, OnInit, ViewChild, NgZone, Inject, OnDestroy, Directive, HostListener } from '@angular/core';
 import { ModalSelectServicepointsComponent } from 'src/app/shared/modal-select-servicepoints/modal-select-servicepoints.component';
 import { ModalSelectDepartmentComponent } from 'src/app/shared/modal-select-department/modal-select-department.component';
@@ -69,12 +70,16 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
   notifyUrl: string;
   token: any;
 
+  servicePoints = [];
+  soundFile: any;
+  servicePointId: any;
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,
     private zone: NgZone,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private servicePointService: ServicePointService
   ) {
 
     this.route.queryParams
@@ -98,7 +103,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
         this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
         this.notifyUser = decodedToken.NOTIFY_USER;
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
-
+        this.getServicePoints();
         if (this.token) {
           if (sessionStorage.getItem('servicePoints')) {
             const _servicePoints = sessionStorage.getItem('servicePoints');
@@ -170,7 +175,15 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
       audioFiles.push(`./assets/audio/${v}.mp3`);
     });
 
-    audioFiles.push('./assets/audio/channel.mp3');
+    const idx = _.findIndex(this.servicePoints, { 'service_point_id': this.servicePointId });
+    if (idx > -1) {
+      this.soundFile = this.servicePoints[idx].sound_file;
+    }
+    if (this.soundFile) {
+      audioFiles.push(`./assets/audio/${this.soundFile}`);
+    } else {
+      audioFiles.push('./assets/audio/channel.mp3');
+    }
 
     _strRoom.forEach(v => {
       audioFiles.push(`./assets/audio/${v}.mp3`);
@@ -296,6 +309,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
           if (+that.departmentId === +_payload.departmentId) {
             // play sound
             const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString() };
+            this.servicePointId = _payload.servicePointId;
             that.playlists.push(sound);
             that.prepareSound();
           }
@@ -372,6 +386,17 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.log(error);
       this.alertService.error();
+    }
+  }
+
+  async getServicePoints() {
+    try {
+      const rs: any = await this.servicePointService.list();
+      if (rs.statusCode === 200) {
+        this.servicePoints = rs.results;
+      }
+    } catch (error) {
+      this.alertService.serverError();
     }
   }
 
