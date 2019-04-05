@@ -69,6 +69,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   token: string;
 
   soundFile: any;
+  soundSpeed: any;
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,
@@ -159,8 +160,8 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
 
     const audioFiles = [];
 
-    audioFiles.push('./assets/audio/please.mp3')
-    audioFiles.push('./assets/audio/silent.mp3')
+    audioFiles.push('./assets/audio/please.mp3');
+    audioFiles.push('./assets/audio/silent.mp3');
 
     _strQueue.forEach(v => {
       audioFiles.push(`./assets/audio/${v}.mp3`);
@@ -211,7 +212,9 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
         this.isPlayingSound = false;
         // remove queue in playlist
         const idx = _.findIndex(that.playlists, { queueNumber: strQueue, roomNumber: strRoomNumber });
-        if (idx > -1) that.playlists.splice(idx, 1);
+        if (idx > -1) {
+          that.playlists.splice(idx, 1);
+        }
         // call sound again
         setTimeout(() => {
           that.isPlayingSound = false;
@@ -220,21 +223,23 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       }
     };
 
-    audioFiles.forEach(function (current, i) {
+    for (let i = 0; i < audioFiles.length; i++) {
       howlerBank.push(new Howl({
         src: [audioFiles[i]],
         onend: onEnd,
         preload: true,
         html5: true,
       }));
-    });
+      if (this.soundSpeed) {
+        howlerBank[i].rate(this.soundSpeed);
+      }
+    }
 
     try {
       howlerBank[0].play();
     } catch (error) {
       console.log(error);
     }
-
   }
 
   logout() {
@@ -331,17 +336,34 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     this.mdlServicePoint.open();
   }
 
-  onSelectedPoint(event: any) {
+  async onSelectedPoint(event: any) {
     this.servicePointName = event.service_point_name;
     this.servicePointId = event.service_point_id;
-    this.soundFile = event.sound_file;
+    if (event.sound_file) {
+      this.soundFile = event.sound_file;
+      this.soundSpeed = event.sound_speed;
+    } else {
+      await this.getSound(this.servicePointId);
+    }
     this.initialSocket();
+  }
+
+  async getSound(servicePointId) {
+    try {
+      const rs: any = await this.queueService.getSound(servicePointId, this.token);
+      if (rs.statusCode === 200) {
+        this.soundFile = rs.results[0].sound_file;
+        this.soundSpeed = rs.results[0].sound_speed;
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error(error);
+    }
   }
 
   initialSocket() {
     // connect mqtt
     this.connectWebSocket();
-
     this.getCurrentQueue();
     this.getWorkingHistory();
   }

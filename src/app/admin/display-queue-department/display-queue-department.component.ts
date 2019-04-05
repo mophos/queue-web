@@ -72,6 +72,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
   servicePoints = [];
   soundFile: any;
+  soundSpeed: any;
   servicePointId: any;
   constructor(
     private queueService: QueueService,
@@ -85,6 +86,9 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
     this.route.queryParams
       .subscribe(params => {
         this.token = params.token || null;
+        if (this.token) {
+          sessionStorage.setItem('token', this.token);
+        }
         this.departmentId = +params.departmentId || null;
         this.departmentName = params.departmentName || null;
       });
@@ -175,9 +179,10 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
       audioFiles.push(`./assets/audio/${v}.mp3`);
     });
 
-    const idx = _.findIndex(this.servicePoints, { 'service_point_id': this.servicePointId });
-    if (idx > -1) {
-      this.soundFile = this.servicePoints[idx].sound_file;
+    const idxS = _.findIndex(this.servicePoints, { 'service_point_id': this.servicePointId });
+    if (idxS > -1) {
+      this.soundFile = this.servicePoints[idxS].sound_file;
+      this.soundSpeed = this.servicePoints[idxS].sound_speed;
     }
     if (this.soundFile) {
       audioFiles.push(`./assets/audio/${this.soundFile}`);
@@ -220,14 +225,12 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
       } else {
         this.isPlayingSound = false;
-        console.log(that.playlists);
         // remove queue in playlist
         const idx = _.findIndex(that.playlists, { queueNumber: strQueue, roomNumber: strRoomNumber });
-        console.log(strQueue);
-        console.log(strRoomNumber);
-        console.log(idx);
 
-        if (idx > -1) that.playlists.splice(idx, 1);
+        if (idx > -1) {
+          that.playlists.splice(idx, 1);
+        }
         // call sound again
         setTimeout(() => {
           that.isPlayingSound = false;
@@ -236,14 +239,17 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
       }
     };
 
-    audioFiles.forEach(function (current, i) {
+    for (let i = 0; i < audioFiles.length; i++) {
       howlerBank.push(new Howl({
         src: [audioFiles[i]],
         onend: onEnd,
         preload: true,
         html5: true,
       }));
-    });
+      if (this.soundSpeed) {
+        howlerBank[i].rate(this.soundSpeed);
+      }
+    }
 
     try {
       howlerBank[0].play();
@@ -304,8 +310,6 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
       try {
         const _payload = JSON.parse(payload.toString());
         if (that.isSound) {
-          console.log(that.departmentId, _payload.departmentId);
-
           if (+that.departmentId === +_payload.departmentId) {
             // play sound
             const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString() };

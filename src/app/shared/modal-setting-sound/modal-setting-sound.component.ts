@@ -24,6 +24,7 @@ export class ModalSettingSoundComponent implements OnInit {
   sounds = [];
   soundId: any;
   servicePointId: any;
+  speed = 1;
   // selectSound: any;
 
   // isAll = false;
@@ -35,8 +36,8 @@ export class ModalSettingSoundComponent implements OnInit {
 
   ) { }
 
-  ngOnInit() {
-    this.getSoundList();
+  async ngOnInit() {
+    await this.getSoundList();
   }
 
   async getSoundList() {
@@ -44,7 +45,6 @@ export class ModalSettingSoundComponent implements OnInit {
     if (rs.statusCode === 200) {
       this.sounds = rs.results;
     }
-    console.log('getsound');
 
   }
 
@@ -57,6 +57,7 @@ export class ModalSettingSoundComponent implements OnInit {
       preload: true,
       html5: true,
     }));
+    howlerBank.rate(this.speed);
     howlerBank.play();
   }
 
@@ -69,6 +70,7 @@ export class ModalSettingSoundComponent implements OnInit {
       // centered: true
     });
     this.soundId = item.sound_id;
+    this.speed = item.sound_speed;
     this.modalReference.result.then((result) => { });
   }
 
@@ -78,7 +80,7 @@ export class ModalSettingSoundComponent implements OnInit {
 
   async save() {
     try {
-      await this.soundService.save(this.servicePointId, this.soundId);
+      await this.soundService.save(this.servicePointId, this.soundId, this.speed);
       this.onSave.emit();
       this.modalReference.close();
     } catch (error) {
@@ -87,5 +89,8 @@ export class ModalSettingSoundComponent implements OnInit {
 
   }
 
+  changeSpeed(speed) {
+    this.speed = +speed;
+  }
 
 }
