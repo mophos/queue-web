@@ -196,10 +196,10 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
           if (no >= 10) {
             if (no >= 30) {
               audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+              audioFiles.push(`./assets/audio/10.mp3`);
             } else if (no >= 20) {
               audioFiles.push(`./assets/audio/20.mp3`);
             }
-            audioFiles.push(`./assets/audio/10.mp3`);
             no -= +no.toString().substr(0, 1) * 10;
             if (no === 1) {
               audioFiles.push(`./assets/audio/11.mp3`);
@@ -250,10 +250,10 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
         if (no >= 10) {
           if (no >= 30) {
             audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+            audioFiles.push(`./assets/audio/10.mp3`);
           } else if (no >= 20) {
             audioFiles.push(`./assets/audio/20.mp3`);
           }
-          audioFiles.push(`./assets/audio/10.mp3`);
           no -= +no.toString().substr(0, 1) * 10;
           if (no === 1) {
             audioFiles.push(`./assets/audio/11.mp3`);
