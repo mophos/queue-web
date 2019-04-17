@@ -195,7 +195,6 @@ export class QueueCenterPatientComponent implements OnInit {
 
   async getList() {
     try {
-      var lastItemQueue = null;
       var updatedDate = 0;
 
       const rs: any = await this.queueService.getCurrentQueueList(this.token);
@@ -211,15 +210,6 @@ export class QueueCenterPatientComponent implements OnInit {
 
         });
 
-        var _items = [];
-        if (rs.results.length >= 2) {
-          _items = _.chunk(rs.results, 2);
-
-        } else {
-          _items = _.chunk(rs.results, 1);
-        }
-        this.items1 = _items[0] || [];
-        this.items2 = _items[1] || [];
         this.lastupdateTime = new Date();
       } else {
         this.alertService.error(rs.message);

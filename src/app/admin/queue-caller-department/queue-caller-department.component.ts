@@ -26,7 +26,6 @@ export class QueueCallerDepartmentComponent implements OnInit {
   @ViewChild('mdlSelectTransfer') private mdlSelectTransfer: ModalSelectTransferComponent;
   @ViewChild('mdlSelectRoom') private mdlSelectRoom: ModalSelectRoomComponent;
 
-
   message: string;
   servicePointId: any;
   servicePointName: any;
@@ -35,6 +34,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
   queues = [];
   pendingItems: any = [];
   historyItems: any = [];
+  historyTotal: any;
   rooms: any = [];
   queueNumber: any;
   roomNumber: any;
@@ -67,6 +67,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
   selectedQueue: any = {};
   notifyUrl: string;
   query: any;
+  pendingOldQueue: any;
 
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
@@ -285,6 +286,28 @@ export class QueueCallerDepartmentComponent implements OnInit {
     }
   }
 
+  async getHistory() {
+    try {
+      const rs: any = await this.queueService.getHistoryQueueByDepartment(this.departmentId, this.pageSize, this.offset);
+      if (rs.statusCode === 200) {
+        for (const i of rs.results) {
+          const rm: any = await this.roomService.list(i.service_point_id);
+          if (rm.statusCode === 200) {
+            i.rooms = rm.results;
+          }
+        }
+        this.historyItems = rs.results;
+        this.historyTotal = rs.total;
+      } else {
+        console.log(rs.message);
+        this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
+    }
+  }
+
   async getPending() {
     try {
       const rs: any = await this.queueService.getPendingByDepartment(this.departmentId);
@@ -326,6 +349,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
   onSelectedTransfer(event: any) {
     this.pendingToServicePointId = event.servicePointId;
     this.pendingToPriorityId = event.priorityId;
+    this.pendingOldQueue = event.pendingOldQueue
 
     this.doMarkPending(this.selectedQueue);
   }
@@ -337,7 +361,12 @@ export class QueueCallerDepartmentComponent implements OnInit {
       const _confirm = await this.alertService.confirm(`ต้องการส่งต่อคิว [${item.queue_number}] และพิมพ์บัตรคิว ใช่หรือไม่?`);
       if (_confirm) {
         try {
-          const rs: any = await this.queueService.markPending(item.queue_id, this.pendingToServicePointId, this.pendingToPriorityId);
+          const rs: any = await this.queueService.markPending(
+            item.queue_id,
+            this.pendingToServicePointId,
+            this.pendingToPriorityId,
+            this.pendingOldQueue);
+
           if (rs.statusCode === 200) {
             this.alertService.success();
             this.selectedQueue = {};
@@ -364,6 +393,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
   getAllList() {
     this.getQueues();
     this.getPending();
+    this.getHistory();
   }
 
 

@@ -65,6 +65,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   selectedQueue: any = {};
   notifyUrl: string;
   departmentId: any;
+  pendingOldQueue: any;
 
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
@@ -342,6 +343,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   onSelectedTransfer(event: any) {
     this.pendingToServicePointId = event.servicePointId;
     this.pendingToPriorityId = event.priorityId;
+    this.pendingOldQueue = event.pendingOldQueue
 
     this.doMarkPending(this.selectedQueue);
   }
@@ -422,24 +424,36 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   }
 
   async doMarkPending(item: any) {
+
+    var printPendingQueue = localStorage.getItem('printPendingQueue') || 'N';
+    var _printPendingQueue = printPendingQueue == 'Y' ? true : false;
+
     if (this.servicePointId === this.pendingToServicePointId) {
       this.alertService.error('ไม่สามารถสร้างคิวในแผนกเดียวกันได้');
     } else {
-      const _confirm = await this.alertService.confirm(`ต้องการพักคิวนี้ [${item.queue_number}] ใช่หรือไม่?`);
+      var textShow = _printPendingQueue ? `ต้องการพักคิวนี้ [${item.queue_number}] ใช่หรือไม่?` : `ต้องการพักคิวนี้ [${item.queue_number}] และพิมพ์คิวใหม่ ใช่หรือไม่?`;
+      const _confirm = await this.alertService.confirm(textShow);
+
       if (_confirm) {
         try {
-          const rs: any = await this.queueService.markPending(item.queue_id, this.pendingToServicePointId, this.pendingToPriorityId);
+          const rs: any = await this.queueService.markPending(item.queue_id, this.pendingToServicePointId, this.pendingToPriorityId, this.pendingOldQueue);
           if (rs.statusCode === 200) {
             this.alertService.success();
             this.selectedQueue = {};
             this.isMarkPending = false;
             const queueNumber = rs.queueNumber;
             const newQueueId = rs.queueId;
-            const confirm = await this.alertService.confirm(`คิวใหม่ของคุณคือ ${queueNumber} ต้องการพิมพ์บัตรคิว หรือไม่?`);
-            if (confirm) {
+
+            if (_printPendingQueue) {
+              const confirm = await this.alertService.confirm(`คิวใหม่ของคุณคือ ${queueNumber} ต้องการพิมพ์บัตรคิว หรือไม่?`);
+              if (confirm) {
+                this.printQueue(newQueueId);
+              }
+            } else {
               this.printQueue(newQueueId);
             }
             this.getAllList();
+            this.getWaiting();
           } else {
             this.alertService.error(rs.message);
           }

@@ -72,6 +72,8 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
 
   queryWaiting = '';
   queryHistory = '';
+  pendingOldQueue: any;
+
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
   constructor(
@@ -253,7 +255,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     if (this.isOffline) {
       this.alertService.error('กรุณาตรวจสอบการเชื่อมต่อกับ Notify Server');
     } else {
-      console.log(room);
 
       const roomId = room.room_id;
       const queueId = this.queueId;
@@ -315,8 +316,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
 
   async getWorking() {
     try {
-      console.log('getWorking');
-
       const rs: any = await this.queueService.getWorkingGroup(this.servicePointId);
       if (rs.statusCode === 200) {
         this.workingItems = rs.results;
@@ -380,21 +379,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     }
   }
 
-  // async getPending() {
-  //   try {
-  //     const rs: any = await this.queueService.getPending(this.servicePointId);
-  //     if (rs.statusCode === 200) {
-  //       this.pendingItems = rs.results;
-  //     } else {
-  //       console.log(rs.message);
-  //       this.alertService.error('เกิดข้อผิดพลาด');
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     this.alertService.error();
-  //   }
-  // }
-
   async getRooms() {
     try {
       const rs: any = await this.roomService.list(this.servicePointId);
@@ -424,24 +408,20 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   onSelectedPoint(event: any) {
     // console.log(event);
     if (event) {
-      if (!this.isMarkPending) {
+      this.servicePointName = event.service_point_name;
+      this.servicePointId = event.service_point_id;
+      this.priorityId = '';
 
-        this.servicePointName = event.service_point_name;
-        this.servicePointId = event.service_point_id;
-
-        this.connectWebSocket();
-        this.getAllList();
-        this.getRooms();
-      } else {
-        this.pendingToServicePointId = event.service_point_id;
-        this.doMarkPending(this.selectedQueue);
-      }
+      this.connectWebSocket();
+      this.getAllList();
+      this.getRooms();
     }
   }
 
   onSelectedTransfer(event: any) {
     this.pendingToServicePointId = event.servicePointId;
     this.pendingToPriorityId = event.priorityId;
+    this.pendingOldQueue = event.pendingOldQueue
 
     this.doMarkPending(this.selectedQueue);
   }
@@ -484,16 +464,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
     this.doCallQueueAgain(queue.room_id, queue.room_number);
   }
 
-  // prepareQueue(room: any) {
-  //   this.doCallQueue(room.room_id, room.room_number);
-  // }
-
-  // prepareQueueGroup(room: any) {
-  //   this.roomId = room.room_id;
-  //   this.roomNumber = room.room_number;
-  //   this.doCallQueueGroup(room.room_id, room.room_number);
-  // }
-
   onChangeRooms(event: any) {
     var _roomId = event.target.value;
     var idx = _.findIndex(this.rooms, { room_id: +_roomId });
@@ -517,8 +487,6 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
           queue_running: v.queue_running
         }
       });
-
-      console.log(this.tmpWaitingItems);
 
       if (this.tmpWaitingItems.length) {
         this.doCallQueueGroup();
@@ -610,21 +578,30 @@ export class QueueCalleGroupComponent implements OnInit, OnDestroy {
   }
 
   async doMarkPending(item: any) {
+    var printPendingQueue = localStorage.getItem('printPendingQueue') || 'N';
+    var _printPendingQueue = printPendingQueue == 'Y' ? true : false;
+
     if (this.servicePointId === this.pendingToServicePointId) {
       this.alertService.error('ไม่สามารถสร้างคิวในแผนกเดียวกันได้');
     } else {
-      const _confirm = await this.alertService.confirm(`ต้องการพักคิวนี้ [${item.queue_number}] ใช่หรือไม่?`);
+      var textShow = _printPendingQueue ? `ต้องการพักคิวนี้ [${item.queue_number}] ใช่หรือไม่?` : `ต้องการพักคิวนี้ [${item.queue_number}] และพิมพ์คิวใหม่ ใช่หรือไม่?`;
+      const _confirm = await this.alertService.confirm(textShow);
+
       if (_confirm) {
         try {
-          const rs: any = await this.queueService.markPending(item.queue_id, this.pendingToServicePointId, this.pendingToPriorityId);
+          const rs: any = await this.queueService.markPending(item.queue_id, this.pendingToServicePointId, this.pendingToPriorityId, this.pendingOldQueue);
           if (rs.statusCode === 200) {
             this.alertService.success();
             this.selectedQueue = {};
             this.isMarkPending = false;
             const queueNumber = rs.queueNumber;
             const newQueueId = rs.queueId;
-            const confirm = await this.alertService.confirm(`คิวใหม่ของคุณคือ ${queueNumber} ต้องการพิมพ์บัตรคิว หรือไม่?`);
-            if (confirm) {
+            if (_printPendingQueue) {
+              const confirm = await this.alertService.confirm(`คิวใหม่ของคุณคือ ${queueNumber} ต้องการพิมพ์บัตรคิว หรือไม่?`);
+              if (confirm) {
+                this.printQueue(newQueueId);
+              }
+            } else {
               this.printQueue(newQueueId);
             }
             this.getAllList();

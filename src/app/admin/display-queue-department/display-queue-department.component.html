@@ -32,33 +32,6 @@
   </nav>
   <!-- partial -->
   <div class="container-fluid page-body-wrapper">
-    <!-- partial:../../partials/_sidebar.html -->
-    <!-- <nav class="sidebar sidebar-offcanvas" id="sidebar">
-      <div class="mr-2 ml-2">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th><span class="h1">คิว</span></th>
-              <th><span class="h1">ช่อง</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="!workingItems.length">
-              <td colspan="2">กรุณาเลือกจุดบริการ</td>
-            </tr>
-            <tr *ngFor="let item of workingItems">
-              <td style="text-align: center;">
-                <label style="font-size: 3.5rem; letter-spacing: 5px;" class="font-weight-bold">{{item.queue_number}}</label>
-              </td>
-              <td style="text-align: center;">
-                <label style="font-size: 3.5rem;" class="font-weight-bold">{{item.room_number}}</label>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </nav> -->
-    <!-- partial -->
     <div class="main-panel">
       <div class="content-wrapper">
 
@@ -74,52 +47,76 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-md-6">
-            <table class="table table-sm">
-              <thead>
-                <tr>
-                  <th><span class="h1">ลำดับที่</span></th>
-                  <th><span class="h1">ช่องบริการ</span></th>
-                  <!-- <th><span class="h1">HN</span></th> -->
-                </tr>
-              </thead>
-              <tbody>
-                <!-- <tr>
-                  <td>C 0001</td>
-                  <td>5</td>
-                </tr> -->
-                <tr *ngIf="!workingItems.length">
-                  <td colspan="3">กรุณาเลือกจุดบริการ</td>
-                </tr>
-                <tr *ngFor="let item of workingItems"
-                  [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber,'backgroud-queue-white':item.queue_number!==currentQueueNumber}">
-                  <td style="border-radius: 10px 0px 0px 10px">
-                    <label style="font-size: 3.5rem; letter-spacing: 2px;"
-                      class="font-weight-bold">{{item.queue_number}}</label>
-                  </td>
-                  <td style="border-radius: 0px 10px 10px 0px">
-                    <label style="font-size: 3.5rem;" class="font-weight-bold">{{item.room_number}}</label>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="row" style="margin-top: 0px;">
+          <div class="col-md-6" style="padding-left: 50px; padding-right: 50px;">
+            <span class="h2 font-weight-bold">หมายเลข</span>
+            <span class="h2 font-weight-bold float-right">ห้องตรวจ</span>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6" style="padding-left: 50px; padding-right: 50px;">
+            <span class="h2 font-weight-bold">หมายเลข</span>
+            <span class="h2 font-weight-bold float-right">ห้องตรวจ</span>
+          </div>
+        </div>
 
+        <div class="row">
+          <div class="col-md-6" *ngFor="let item of workingItems; let idx = index;">
+            <div [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}" class="row bg-primary text-white"
+              style="margin: 20px 5px 0px 5px; border-radius: 20px;
+                            border: 10px solid white; padding: 20px;">
+              <div class="col-md-9">
+                <span class="font-weight-bold" style="letter-spacing: 1px; font-size: 10rem;">
+                  {{ item.queue_number || '-' }}
+                </span>
+              </div>
+              <div class="col-md-3" style="text-align: right;">
+                <span class="font-weight-bold" style="font-size: 10rem;">
+                  {{ item.room_number || '-' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- 
+        <div class="row">
+          <div class="col-md-5">
+            <div class="card bg-primary text-white">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th><span class="h1 font-weight-bold">ลำดับที่</span></th>
+                    <th style="text-align: right;"><span class="h1 font-weight-bold">ช่องบริการ</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="!workingItems.length">
+                    <td colspan="3" style="font-size: 3rem;">กรุณาเลือกจุดบริการ</td>
+                  </tr>
+                  <tr *ngFor="let item of workingItems"
+                    [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber,'bg-primary':item.queue_number!==currentQueueNumber}">
+                    <td>
+                      <label style="font-size: 6rem; letter-spacing: 2px;"
+                        class="font-weight-bold">{{item.queue_number}}</label>
+                    </td>
+                    <td style="text-align: right;">
+                      <label style="font-size: 6rem;" class="font-weight-bold">{{item.room_number}}</label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-7">
             <div class="card bg-primary card-img-holder text-white">
-
               <div class="card-body">
-                <div style="font-size: 3rem;" class="font-weight-normal">ลำดับที่</div>
+                <div style="font-size: 3rem;" class="font-weight-bold">ลำดับที่</div>
                 <span class="font-weight-bold" style="letter-spacing: 12px; font-size: 11rem;">{{currentQueueNumber
                   || '-'}}</span>
-                <!-- <h1 class="card-text">HN: {{currentHn || '-'}}</h1> -->
-                <div style="font-size: 3rem;" class="font-weight-normal">ช่องบริการ</div>
+                <div style="font-size: 3rem;" class="font-weight-bold">ช่องบริการ</div>
                 <span class="font-weight-bold" style="letter-spacing: 12px; font-size: 11rem;">{{currentRoomNumber
                   || '-'}}</span>
                 <div style="font-size: 3rem;" class="card-text">{{currentRoomName || '-'}}</div>
               </div>
-
               <div class="card-footer">
                 <div class="float-left">
                   <i style="cursor: pointer;" *ngIf="isSound" (click)="toggleSound()"
@@ -134,6 +131,18 @@
               </div>
             </div>
           </div>
+        </div> -->
+
+        <hr style="color: white">
+        <div class="float-left">
+          <i style="cursor: pointer;" *ngIf="isSound" (click)="toggleSound()"
+            class="h2 text-danger float-right mdi mdi-bell-ring"></i>
+          <i style="cursor: pointer;" *ngIf="!isSound" (click)="toggleSound()"
+            class="h2 text-muted float-right mdi mdi-bell-off"></i>
+        </div>
+        <div class="float-right">
+          <span class="h2 font-weight-bold" style="cursor: pointer" (click)="selectDepartment()">{{departmentName
+                            || 'กรุณาเลือกแผนก'}}</span>
         </div>
       </div>
 

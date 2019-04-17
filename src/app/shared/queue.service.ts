@@ -83,6 +83,11 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
+  async getHistoryQueueByDepartment(departmentId: any, limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/department/history/${departmentId}?limit=${limit}&offset=${offset}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
   async searchQueueByDepartment(departmentId: any, limit: number = 20, offset: number = 0, query: string = '') {
     const _url = `${this.apiUrl}/queue/department/search/${departmentId}?limit=${limit}&offset=${offset}&query=${query}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
@@ -196,12 +201,32 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
-  async markPending(queueId: any, servicePointId: any, priorityId: any) {
+  async servicePointList(token: any = null) {
+    const _url = `${this.apiUrl}/queue/service-points`;
+
+    var _httpOptions: any = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
+  }
+
+  async markPending(queueId: any, servicePointId: any, priorityId: any, pendigOldQueue: any) {
     const _url = `${this.apiUrl}/queue/pending`;
     return this.httpClient.post(_url, {
       queueId: queueId,
       servicePointId: servicePointId,
-      priorityId: priorityId
+      priorityId: priorityId,
+      pendigOldQueue: pendigOldQueue
     }, this.httpOptions).toPromise();
   }
 
@@ -212,7 +237,6 @@ export class QueueService {
 
   async callQueueGroups(servicePointId: any, roomId: any, roomNumber: any, isCompleted: any = 'Y', queue: any) {
     const _url = `${this.apiUrl}/queue/caller-groups`;
-    console.log(_url);
 
     return this.httpClient.post(_url, {
       servicePointId: servicePointId,
@@ -294,4 +318,39 @@ export class QueueService {
     return this.httpClient.get(_url, _httpOptions).toPromise();
   }
 
+  async getSound(servicePointId: any, token: any = null) {
+    const _url = `${this.apiUrl}/queue/sound/${servicePointId}`;
+    var _httpOptions = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
+  }
+
+  async getSettingSpeak(token: any = null) {
+    const _url = `${this.apiUrl}/queue/setting/speak`;
+    let _httpOptions = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
+  }
 }

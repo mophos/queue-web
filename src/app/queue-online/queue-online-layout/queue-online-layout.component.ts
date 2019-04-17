@@ -11,6 +11,7 @@ export class QueueOnlineLayoutComponent implements OnInit {
   isCollapsed = true;
   fullname: string;
   userType: string;
+  isCollapedSettings = true;
 
   constructor(private router: Router) { }
 

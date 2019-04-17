@@ -3,6 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AlertService } from '../alert.service';
 import { ServicePointService } from '../service-point.service';
 import { PriorityService } from '../priority.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-modal-select-transfer',
@@ -16,12 +17,15 @@ export class ModalSelectTransferComponent implements OnInit {
   @ViewChild('content') public content: any;
   modalReference: NgbModalRef;
 
+  pendingOldQueue: boolean
+  _pendingOldQueue: any;
+
   servicePointId: any;
   priorityId: any;
 
   points: any = [];
   priorities: any = [];
-
+  // isQueueOld = false;
   isAll: boolean = false;
 
   constructor(
@@ -33,12 +37,20 @@ export class ModalSelectTransferComponent implements OnInit {
 
   ngOnInit() { }
 
-  open(isAll: boolean = false) {
 
+  async getOldQueue(event: any) {
+    var point = _.findIndex(this.points, { service_point_id: +event.target.value });
+    console.log(this.points[point].use_old_queue);
+    if (point > -1) {
+      this.pendingOldQueue = this.points[point].use_old_queue == 'Y' ? true : false;
+    }
+  }
+
+  open(isAll: boolean = false) {
     this.isAll = isAll;
     this.getList();
     this.getPriorities();
-
+    // this.getQueueOld();
     this.modalReference = this.modalService.open(this.content, {
       ariaLabelledBy: 'modal-basic-title',
       keyboard: false,
@@ -101,11 +113,9 @@ export class ModalSelectTransferComponent implements OnInit {
   // }
 
   doTransfer() {
-    console.log(this.servicePointId);
-    console.log(this.priorityId);
     if (this.servicePointId && this.priorityId) {
       this.modalReference.close();
-      this.onSelected.emit({ servicePointId: this.servicePointId, priorityId: this.priorityId });
+      this.onSelected.emit({ servicePointId: this.servicePointId, priorityId: this.priorityId, pendigOldQueue: this.pendingOldQueue ? 'Y' : 'N' });
     } else {
       this.alertService.error('กรุณาเลือกจุดให้บริการและประเภทผู้ป่วย');
     }

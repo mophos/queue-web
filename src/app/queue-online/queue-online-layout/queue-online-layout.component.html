@@ -54,23 +54,32 @@
 
         <div class="border-bottom"></div>
 
-        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" routerLink="/admin/departments">
-            <span class="menu-title">กำหนดค่า TIME SLOT</span>
-            <i class="mdi mdi-timetable menu-icon"></i>
+        <li class="nav-item">
+          <a class="nav-link" (click)="isCollapedSettings = !isCollapedSettings" data-toggle="collapse"
+            href="javascript://" aria-expanded="false" aria-controls="ui-basic">
+            <span class="menu-title font-weight-bold">ตั้งค่าการใช้งาน</span>
+            <i class="mdi mdi-chevron-right menu-icon" *ngIf="isCollapedSettings"></i>
+            <i class="mdi mdi-chevron-down menu-icon" *ngIf="!isCollapedSettings"></i>
           </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" routerLink="/queue-online/service-times">
-            <span class="menu-title">ช่วงเวลาเปิดให้บริการ</span>
-            <i class="mdi mdi-timetable menu-icon"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" routerLink="/admin/service-point">
-            <span class="menu-title">แผนกที่เปิดให้บริการ</span>
-            <i class="mdi mdi-playlist-edit menu-icon"></i>
-          </a>
+          <div [ngbCollapse]="isCollapedSettings" class="collapse" id="ui-basic">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+                <a class="nav-link" href="javascript://" routerLink="/admin/departments">
+                  <span class="menu-title">กำหนดค่า TIME SLOT</span>
+                </a>
+              </li>
+              <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+                <a class="nav-link" href="javascript://" routerLink="/queue-online/service-times">
+                  <span class="menu-title">ช่วงเวลาเปิดให้บริการ</span>
+                </a>
+              </li>
+              <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+                <a class="nav-link" href="javascript://" routerLink="/admin/service-point">
+                  <span class="menu-title">แผนกที่เปิดให้บริการ</span>
+                </a>
+              </li>
+            </ul>
+          </div>
         </li>
 
         <li class="nav-item sidebar-actions">

@@ -52,7 +52,8 @@
               เกิดข้อผิดพลาดในการเชื่อมต่อกับ Notify Server.
             </p>
             <button class="btn btn-danger" (click)="connectWebSocket()">เชื่อมต่อใหม่ (<strong>
-                <countdown [config]="{leftTime: 15, template: '$!s!'}" (finished)="onFinished()" (notify)="onNotify($event)"></countdown>
+                <countdown [config]="{leftTime: 15, template: '$!s!'}" (finished)="onFinished()"
+                  (notify)="onNotify($event)"></countdown>
               </strong>)</button>
           </div>
         </div>
@@ -80,140 +81,71 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="row" style="margin-top: 0px;">
+          <div class="col-md-6">
             <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <div class="card">
-                  <div class="card-header h2">ลำดับที่กำลังรับบริการ</div>
-
-                  <div class="card-body">
-
-                    <div class="table-responsive">
-
-                      <table class="table table-striped">
-                        <thead>
-                          <tr>
-                            <th>
-                              <span style="font-size: 2rem;">จุดให้บริการ</span>
-                            </th>
-                            <th>
-                              <span style="font-size: 2rem;">ช่องบริการ</span>
-                            </th>
-                            <th>
-                              <span style="font-size: 2rem;">ลำดับ</span>
-                            </th>
-                            <th>
-                              <span style="font-size: 2rem;">รอเรียก</span>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngIf="!items1.length">
-                            <td colspan="4">ไม่พบคิวให้บริการ</td>
-                          </tr>
-                          <tr *ngFor="let item of items1" [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}">
-                            <td>
-                              <span style="font-size: 3rem;">{{item.service_point_name}}</span>
-                            </td>
-                            <td>
-                              <span class="font-weight-bold" style="letter-spacing: 5px; font-size: 3rem;">{{
-                                item.room_number }}</span>
-                            </td>
-                            <td>
-                              <span class="font-weight-bold" style="letter-spacing: 5px; font-size: 3rem;">{{item.queue_number}}</span>
-                            </td>
-                            <td>
-                              <span class="font-weight-bold" style="letter-spacing: 5px; font-size: 3rem;">{{item.total
-                                | number}}</span>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
+              <div class="col-md-6" style="padding-left: 50px; padding-right: 50px;">
+                <span class="h2 font-weight-bold">จุดให้บริการ</span>
               </div>
-              <div class="col-md-6 col-sm-12">
-                <div class="card">
-                  <div class="card-header h2">ลำดับที่กำลังรับบริการ</div>
-
-                  <div class="card-body">
-
-                    <div class="table-responsive">
-
-                      <table class="table table-striped">
-                        <thead>
-                          <tr>
-                            <th>
-                              <span style="font-size: 2rem;">จุดให้บริการ</span>
-                            </th>
-                            <th>
-                              <span style="font-size: 2rem;">ช่องบริการ</span>
-                            </th>
-                            <th>
-                              <span style="font-size: 2rem;">ลำดับ</span>
-                            </th>
-                            <th>
-                              <span style="font-size: 2rem;">รอเรียก</span>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngIf="!items2.length">
-                            <td colspan="4">ไม่พบคิวให้บริการ</td>
-                          </tr>
-                          <tr *ngFor="let item of items2" [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}">
-                            <td>
-                              <span style="font-size: 3rem;">{{item.service_point_name}}</span>
-                            </td>
-                            <td>
-                              <span class="font-weight-bold" style="letter-spacing: 5px; font-size: 3rem;">{{
-                                item.room_number }}</span>
-                            </td>
-                            <td>
-                              <span class="font-weight-bold" style="letter-spacing: 5px; font-size: 3rem;">{{item.queue_number}}</span>
-                            </td>
-                            <td>
-                              <span class="font-weight-bold" style="letter-spacing: 5px; font-size: 3rem;">{{item.total
-                                | number}}</span>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
+              <div class="col-md-2" style="padding-left: 50px; padding-right: 50px;">
+                <span class="h2 font-weight-bold">ช่อง</span>
+              </div>
+              <div class="col-md-2" style="padding-left: 50px; padding-right: 50px;">
+                <span class="h2 font-weight-bold">หมายเลข</span>
+              </div>
+              <div class="col-md-2" style="padding-left: 50px; padding-right: 50px;">
+                <span class="h2 font-weight-bold">รอ</span>
               </div>
             </div>
           </div>
-          <!-- <div class="col-lg-4 col-md-12 col-sm-12">
-            <div class="card text-white bg-primary mb-3">
-              <div class="card-header h2">ลำดับปัจจุบัน</div>
-
-              <div class="card-body">
-                <div class="text-center">
-                  <div style="font-size: 3rem;" class="font-weight-bold">แผนกทันตกรรม</div>
-                  <div class="font-weight-bold mb-2" style="letter-spacing: 20px; font-size: 10rem;">18001</div>
-                  <div class="font-weight-bold mb-2" style="font-size: 5rem;">ช่องบริการ 1</div>
-                </div>
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-6" style="padding-left: 50px; padding-right: 50px;">
+                <span class="h2 font-weight-bold">จุดให้บริการ</span>
+              </div>
+              <div class="col-md-2" style="padding-left: 50px; padding-right: 50px;">
+                <span class="h2 font-weight-bold">ช่อง</span>
+              </div>
+              <div class="col-md-2" style="padding-left: 50px; padding-right: 50px;">
+                <span class="h2 font-weight-bold">หมายเลข</span>
+              </div>
+              <div class="col-md-2" style="padding-left: 50px; padding-right: 50px;">
+                <span class="h2 font-weight-bold">รอ</span>
               </div>
             </div>
+          </div>
+        </div>
 
-          </div> -->
+        <div class="row">
+          <div class="col-md-6" *ngFor="let item of items;">
+            <div [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}" class="row bg-primary text-white"
+              style="margin: 10px 5px 0px 5px; border-radius: 20px; border: 5px solid white; padding: 10px;">
+              <div class="col-md-6">
+                <span class="font-weight-bold" style="letter-spacing: 1px; font-size: 3rem;">
+                  {{ item.service_point_name || '-' }}
+                </span>
+              </div>
+              <div class="col-md-2" style="text-align: right;">
+                <span class="font-weight-bold" style="font-size: 3rem;">
+                  {{ item.room_number || '-' }}
+                </span>
+              </div>
+              <div class="col-md-3" style="text-align: right;">
+                <span class="font-weight-bold" style="font-size: 3rem;">
+                  {{ item.queue_number || '-' }}
+                </span>
+              </div>
+              <div class="col-md-1" style="text-align: right;">
+                <span class="font-weight-bold" style="font-size: 3rem;">
+                  {{ item.total | number }}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
-      <!-- content-wrapper ends -->
-      <!-- partial:../../partials/_footer.html -->
-      <!-- <footer class="footer">
-        <div class="d-sm-flex justify-content-center justify-content-sm-between">
-          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.moph.go.th/"
-              target="_blank">Ministry Of Public Health (MOPH)</a>. All rights reserved.</span>
-          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Made with <i class="mdi mdi-heart text-danger"></i></span>
-        </div>
-      </footer> -->
-      <!-- partial -->
+
     </div>
     <!-- main-panel ends -->
   </div>

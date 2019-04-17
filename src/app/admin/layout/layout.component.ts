@@ -21,6 +21,9 @@ export class LayoutComponent implements OnInit {
   userType: string;
   openSidebar: boolean = false;
   hideSidebar: boolean = false;
+  isCollapedDisplay: boolean = true;
+  isCollapedCaller: boolean = true;
+  isCollapedSettings: boolean = true;
 
   constructor(private router: Router) { }
 
