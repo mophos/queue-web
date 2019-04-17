@@ -76,8 +76,8 @@
           <a class="nav-link" (click)="isCollapedCaller = !isCollapedCaller" data-toggle="collapse" href="javascript://"
             aria-expanded="false" aria-controls="ui-basic">
             <span class="menu-title font-weight-bold">เรียกคิว</span>
-            <i class="menu-arrow" *ngIf="isCollapedCaller"></i>
-            <i class="mdi mdi-cast menu-icon"></i>
+            <i class="mdi mdi-chevron-right menu-icon" *ngIf="isCollapedCaller"></i>
+            <i class="mdi mdi-chevron-down menu-icon" *ngIf="!isCollapedCaller"></i>
           </a>
           <div [ngbCollapse]="isCollapedCaller" class="collapse" id="ui-basic">
             <ul class="nav flex-column sub-menu">
@@ -106,8 +106,8 @@
           <a class="nav-link" (click)="isCollapedDisplay = !isCollapedDisplay" data-toggle="collapse"
             href="javascript://" aria-expanded="false" aria-controls="ui-basic">
             <span class="menu-title font-weight-bold">การแสดงคิว</span>
-            <i class="menu-arrow" *ngIf="isCollapedDisplay"></i>
-            <i class="mdi mdi-airplay menu-icon"></i>
+            <i class="mdi mdi-chevron-right menu-icon" *ngIf="isCollapedDisplay"></i>
+            <i class="mdi mdi-chevron-down menu-icon" *ngIf="!isCollapedDisplay"></i>
           </a>
           <div [ngbCollapse]="isCollapedDisplay" class="collapse" id="ui-basic">
             <ul class="nav flex-column sub-menu">
@@ -147,8 +147,8 @@
           <a class="nav-link" (click)="isCollapedSettings = !isCollapedSettings" data-toggle="collapse"
             href="javascript://" aria-expanded="false" aria-controls="ui-basic">
             <span class="menu-title font-weight-bold">ตั้งค่าการใช้งาน</span>
-            <i class="menu-arrow" *ngIf="isCollapedSettings"></i>
-            <i class="mdi mdi-settings menu-icon"></i>
+            <i class="mdi mdi-chevron-right menu-icon" *ngIf="isCollapedSettings"></i>
+            <i class="mdi mdi-chevron-down menu-icon" *ngIf="!isCollapedSettings"></i>
           </a>
           <div [ngbCollapse]="isCollapedSettings" class="collapse" id="ui-basic">
             <ul class="nav flex-column sub-menu">
