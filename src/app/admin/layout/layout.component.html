@@ -56,91 +56,126 @@
             <i class="mdi mdi-human-male-female menu-icon"></i>
           </a>
         </li>
-        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/departments">
-            <span class="menu-title">แผนก</span>
-            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/service-point">
-            <span class="menu-title">จุดให้บริการ</span>
-            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/priority">
-            <span class="menu-title">ประเภทผู้ป่วย</span>
-            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/users">
-            <span class="menu-title">ผู้ใช้งานระบบ</span>
-            <i class="mdi mdi-account-group menu-icon"></i>
-          </a>
-        </li>
+
         <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
           <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/generate-token">
             <span class="menu-title">Generate token</span>
             <i class="mdi mdi-key menu-icon"></i>
           </a>
         </li>
-        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/printer">
-            <span class="menu-title">ตั้งค่าเครื่องพิมพ์</span>
-            <i class="mdi mdi-printer-wireless menu-icon"></i>
+
+        <div class="border-bottom"></div>
+
+        <li class="nav-item">
+          <a class="nav-link" (click)="isCollapedDisplay = !isCollapedDisplay" data-toggle="collapse"
+            href="javascript://" aria-expanded="false" aria-controls="ui-basic">
+            <span class="menu-title font-weight-bold">การแสดงคิว</span>
+            <i class="menu-arrow" *ngIf="isCollapedDisplay"></i>
+            <i class="mdi mdi-airplay menu-icon"></i>
           </a>
+          <div [ngbCollapse]="isCollapedDisplay" class="collapse" id="ui-basic">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false"
+                  routerLink="/queue-center-patient">
+                  <span class="menu-title">แสดงคิว (ทั้งหมด)</span>
+                </a>
+              </li>
+
+              <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/display-queue">
+                  <span class="menu-title">แสดงคิว (ห้องตรวจ)</span>
+                </a>
+              </li>
+
+              <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false"
+                  routerLink="/display-queue-department">
+                  <span class="menu-title">แสดงคิว (แผนก)</span>
+                </a>
+              </li>
+
+              <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false"
+                  routerLink="/display-queue-group">
+                  <span class="menu-title">แสดงคิว (กลุ่ม)</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" (click)="isCollapedCaller = !isCollapedCaller" data-toggle="collapse" href="javascript://"
+            aria-expanded="false" aria-controls="ui-basic">
+            <span class="menu-title font-weight-bold">การแสดงคิว</span>
+            <i class="menu-arrow" *ngIf="isCollapedCaller"></i>
+            <i class="mdi mdi-cast menu-icon"></i>
+          </a>
+          <div [ngbCollapse]="isCollapedCaller" class="collapse" id="ui-basic">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/queue-caller">
+                  <span class="menu-title">เรียกคิวห้องตรวจ</span>
+                </a>
+              </li>
+              <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false"
+                  routerLink="/admin/queue-caller-department">
+                  <span class="menu-title">เรียกคิว (แผนก)</span>
+                </a>
+              </li>
+              <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false"
+                  routerLink="/admin/queue-caller-group">
+                  <span class="menu-title">เรียกคิว (กลุ่ม)</span>
+                </a>
+              </li>
+            </ul>
+          </div>
         </li>
 
         <div class="border-bottom"></div>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/queue-center-patient">
-            <span class="menu-title">แสดงคิว (ทั้งหมด)</span>
-            <i class="mdi mdi-airplay menu-icon"></i>
+
+        <li class="nav-item">
+          <a class="nav-link" (click)="isCollapedSettings = !isCollapedSettings" data-toggle="collapse"
+            href="javascript://" aria-expanded="false" aria-controls="ui-basic">
+            <span class="menu-title font-weight-bold">ตั้งค่าการใช้งาน</span>
+            <i class="menu-arrow" *ngIf="isCollapedSettings"></i>
+            <i class="mdi mdi-settings menu-icon"></i>
           </a>
+          <div [ngbCollapse]="isCollapedSettings" class="collapse" id="ui-basic">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/departments">
+                  <span class="menu-title">แผนก</span>
+                </a>
+              </li>
+              <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false"
+                  routerLink="/admin/service-point">
+                  <span class="menu-title">จุดให้บริการ</span>
+                </a>
+              </li>
+              <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/priority">
+                  <span class="menu-title">ประเภทผู้ป่วย</span>
+                </a>
+              </li>
+              <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/users">
+                  <span class="menu-title">ผู้ใช้งานระบบ</span>
+                </a>
+              </li>
+              <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/printer">
+                  <span class="menu-title">ตั้งค่าเครื่องพิมพ์</span>
+                </a>
+              </li>
+            </ul>
+          </div>
         </li>
 
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/display-queue">
-            <span class="menu-title">แสดงคิว (ห้องตรวจ)</span>
-            <i class="mdi mdi-airplay menu-icon"></i>
-          </a>
-        </li>
-
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/display-queue-department">
-            <span class="menu-title">แสดงคิว (แผนก)</span>
-            <i class="mdi mdi-airplay menu-icon"></i>
-          </a>
-        </li>
-
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/display-queue-group">
-            <span class="menu-title">แสดงคิว (กลุ่ม)</span>
-            <i class="mdi mdi-airplay menu-icon"></i>
-          </a>
-        </li>
-
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/queue-caller">
-            <span class="menu-title">เรียกคิวห้องตรวจ</span>
-            <i class="mdi mdi-cast menu-icon"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false"
-            routerLink="/admin/queue-caller-department">
-            <span class="menu-title">เรียกคิว (แผนก)</span>
-            <i class="mdi mdi-cast menu-icon"></i>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/queue-caller-group">
-            <span class="menu-title">เรียกคิว (กลุ่ม)</span>
-            <i class="mdi mdi-cast menu-icon"></i>
-          </a>
-        </li>
       </ul>
     </nav>
 

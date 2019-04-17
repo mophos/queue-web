@@ -26,7 +26,6 @@ export class QueueCallerDepartmentComponent implements OnInit {
   @ViewChild('mdlSelectTransfer') private mdlSelectTransfer: ModalSelectTransferComponent;
   @ViewChild('mdlSelectRoom') private mdlSelectRoom: ModalSelectRoomComponent;
 
-
   message: string;
   servicePointId: any;
   servicePointName: any;
@@ -68,6 +67,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
   selectedQueue: any = {};
   notifyUrl: string;
   query: any;
+  pendingOldQueue: any;
 
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
@@ -349,6 +349,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
   onSelectedTransfer(event: any) {
     this.pendingToServicePointId = event.servicePointId;
     this.pendingToPriorityId = event.priorityId;
+    this.pendingOldQueue = event.pendingOldQueue
 
     this.doMarkPending(this.selectedQueue);
   }
@@ -360,7 +361,12 @@ export class QueueCallerDepartmentComponent implements OnInit {
       const _confirm = await this.alertService.confirm(`ต้องการส่งต่อคิว [${item.queue_number}] และพิมพ์บัตรคิว ใช่หรือไม่?`);
       if (_confirm) {
         try {
-          const rs: any = await this.queueService.markPending(item.queue_id, this.pendingToServicePointId, this.pendingToPriorityId);
+          const rs: any = await this.queueService.markPending(
+            item.queue_id,
+            this.pendingToServicePointId,
+            this.pendingToPriorityId,
+            this.pendingOldQueue);
+
           if (rs.statusCode === 200) {
             this.alertService.success();
             this.selectedQueue = {};

@@ -201,12 +201,13 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
-  async markPending(queueId: any, servicePointId: any, priorityId: any) {
+  async markPending(queueId: any, servicePointId: any, priorityId: any, pendigOldQueue: any) {
     const _url = `${this.apiUrl}/queue/pending`;
     return this.httpClient.post(_url, {
       queueId: queueId,
       servicePointId: servicePointId,
-      priorityId: priorityId
+      priorityId: priorityId,
+      pendigOldQueue: pendigOldQueue
     }, this.httpOptions).toPromise();
   }
 
