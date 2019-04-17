@@ -174,7 +174,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
     const audioFiles = [];
 
     audioFiles.push('./assets/audio/please.mp3');
-    audioFiles.push('./assets/audio/silent.mp3');
+    // audioFiles.push('./assets/audio/silent.mp3');
 
     if (this.speakSingle) {
       _strQueue.forEach(v => {
