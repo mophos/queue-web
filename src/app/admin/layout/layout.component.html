@@ -66,6 +66,37 @@
 
         <div class="border-bottom"></div>
 
+
+        <li class="nav-item">
+          <a class="nav-link" (click)="isCollapedCaller = !isCollapedCaller" data-toggle="collapse" href="javascript://"
+            aria-expanded="false" aria-controls="ui-basic">
+            <span class="menu-title font-weight-bold">เรียกคิว</span>
+            <i class="menu-arrow" *ngIf="isCollapedCaller"></i>
+            <i class="mdi mdi-cast menu-icon"></i>
+          </a>
+          <div [ngbCollapse]="isCollapedCaller" class="collapse" id="ui-basic">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/queue-caller">
+                  <span class="menu-title">เรียกคิวห้องตรวจ</span>
+                </a>
+              </li>
+              <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false"
+                  routerLink="/admin/queue-caller-department">
+                  <span class="menu-title">เรียกคิว (แผนก)</span>
+                </a>
+              </li>
+              <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false"
+                  routerLink="/admin/queue-caller-group">
+                  <span class="menu-title">เรียกคิว (กลุ่ม)</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link" (click)="isCollapedDisplay = !isCollapedDisplay" data-toggle="collapse"
             href="javascript://" aria-expanded="false" aria-controls="ui-basic">
@@ -99,36 +130,6 @@
                 <a class="nav-link" href="javascript://" (click)="openSidebar = false"
                   routerLink="/display-queue-group">
                   <span class="menu-title">แสดงคิว (กลุ่ม)</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" (click)="isCollapedCaller = !isCollapedCaller" data-toggle="collapse" href="javascript://"
-            aria-expanded="false" aria-controls="ui-basic">
-            <span class="menu-title font-weight-bold">การแสดงคิว</span>
-            <i class="menu-arrow" *ngIf="isCollapedCaller"></i>
-            <i class="mdi mdi-cast menu-icon"></i>
-          </a>
-          <div [ngbCollapse]="isCollapedCaller" class="collapse" id="ui-basic">
-            <ul class="nav flex-column sub-menu">
-              <li class="nav-item" routerLinkActive="active">
-                <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/queue-caller">
-                  <span class="menu-title">เรียกคิวห้องตรวจ</span>
-                </a>
-              </li>
-              <li class="nav-item" routerLinkActive="active">
-                <a class="nav-link" href="javascript://" (click)="openSidebar = false"
-                  routerLink="/admin/queue-caller-department">
-                  <span class="menu-title">เรียกคิว (แผนก)</span>
-                </a>
-              </li>
-              <li class="nav-item" routerLinkActive="active">
-                <a class="nav-link" href="javascript://" (click)="openSidebar = false"
-                  routerLink="/admin/queue-caller-group">
-                  <span class="menu-title">เรียกคิว (กลุ่ม)</span>
                 </a>
               </li>
             </ul>

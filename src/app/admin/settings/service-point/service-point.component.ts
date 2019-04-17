@@ -1,9 +1,10 @@
+import { ModalSettingSoundComponent } from './../../../shared/modal-setting-sound/modal-setting-sound.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalAddServicePointComponent } from 'src/app/shared/modal-add-service-point/modal-add-service-point.component';
 import { AlertService } from 'src/app/shared/alert.service';
 import { ServicePointService } from 'src/app/shared/service-point.service';
 import { ModalRoomsComponent } from 'src/app/shared/modal-rooms/modal-rooms.component';
-import { ModalSettingSoundComponent } from './../../../shared/modal-setting-sound/modal-setting-sound.component';
+
 @Component({
   selector: 'app-service-point',
   templateUrl: './service-point.component.html',
@@ -12,8 +13,8 @@ import { ModalSettingSoundComponent } from './../../../shared/modal-setting-soun
 export class ServicePointComponent implements OnInit {
 
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalAddServicePointComponent;
-  @ViewChild('mdlSettingSound') private mdlSettingSound: ModalSettingSoundComponent;
   @ViewChild('mdlRooms') private mdlRooms: ModalRoomsComponent;
+  @ViewChild('mdlSettingSound') private mdlSettingSound: ModalSettingSoundComponent;
 
   items: any = [];
   info: any = {};
@@ -95,5 +96,4 @@ export class ServicePointComponent implements OnInit {
   async onSaveSound() {
     await this.getList();
   }
-
 }

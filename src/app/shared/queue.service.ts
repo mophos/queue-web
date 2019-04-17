@@ -201,6 +201,25 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
+  async servicePointList(token: any = null) {
+    const _url = `${this.apiUrl}/queue/service-points`;
+
+    var _httpOptions: any = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
+  }
+
   async markPending(queueId: any, servicePointId: any, priorityId: any, pendigOldQueue: any) {
     const _url = `${this.apiUrl}/queue/pending`;
     return this.httpClient.post(_url, {

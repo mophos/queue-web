@@ -63,19 +63,19 @@
               <!-- <div class="card-header" style="font-size: 3rem;" class="font-weight-normal">ประวัติการเรียก</div> -->
               <div class="card-body" style="padding: 1rem 2.5rem">
                 <div class="row">
-                  <div class="col-md-6 font-weight-bold" style="font-size: 3rem;">ลำดับที่</div>
-                  <div class="col-md-6 font-weight-bold" style="font-size: 3rem; text-align: right">ช่องบริการ</div>
+                  <div class="col-md-6 font-weight-bold" style="font-size: 3rem;">หมายเลข</div>
+                  <div class="col-md-6 font-weight-bold" style="font-size: 3rem; text-align: right">ห้องตรวจ</div>
                 </div>
 
                 <div *ngFor="let item of workingItemsHistory">
                   <div class="row">
                     <div class="col-md-9">
-                      <span class="font-weight-bold" style="letter-spacing: 1px; font-size: 6rem;">
+                      <span class="font-weight-bold" style="letter-spacing: 1px; font-size: 7rem;">
                         {{ item.queue_number || '-'}}
                       </span>
                     </div>
                     <div class="col-md-3" style="text-align: right;">
-                      <span class="font-weight-bold" style="font-size: 6rem; color:yellow">
+                      <span class="font-weight-bold" style="font-size: 7rem; color:yellow">
                         {{ item.room_number || '-' }}
                       </span>
                     </div>

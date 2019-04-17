@@ -88,15 +88,15 @@
         <div class="row">
           <div class="col-md-6" *ngFor="let item of workingItems; let idx = index;">
             <div [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}" class="row bg-primary text-white"
-              style="margin: 20px 5px 0px 5px; border-radius: 10px;
-              border: 5px solid white;">
+              style="margin: 20px 5px 0px 5px; border-radius: 20px;
+              border: 5px solid white; padding: 20px;">
               <div class="col-md-9">
-                <span class="font-weight-bold" style="letter-spacing: 1px; font-size: 7rem;">
+                <span class="font-weight-bold" style="letter-spacing: 1px; font-size: 10rem;">
                   {{ item.queue_number || '-' }}
                 </span>
               </div>
               <div class="col-md-3" style="text-align: right;">
-                <span class="font-weight-bold" style="font-size: 7rem;">
+                <span class="font-weight-bold" style="font-size: 10rem;">
                   {{ item.room_number || '-' }}
                 </span>
               </div>
@@ -114,7 +114,7 @@
                 class="h2 text-muted float-right mdi mdi-bell-off"></i>
             </div>
             <div class="float-right">
-              <span class="h2 font-weight-bold" style="cursor: pointer" (click)="selectServicePoint()">
+              <span class="h2 font-weight-bold text-primary" style="cursor: pointer" (click)="selectServicePoint()">
                 {{servicePointName || 'กรุณาเลือกจุดบริการ'}}</span>
             </div>
           </div>
@@ -126,7 +126,6 @@
   </div>
   <!-- page-body-wrapper ends -->
 </div>
-
 
 <app-modal-select-servicepoints (onSelected)="onSelectedPoint($event)" #mdlServicePoint>
 </app-modal-select-servicepoints>

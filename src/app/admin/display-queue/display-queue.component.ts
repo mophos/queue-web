@@ -440,8 +440,8 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     try {
       const rs: any = await this.queueService.getSound(servicePointId, this.token);
       if (rs.statusCode === 200) {
-        this.soundFile = rs.results[0].sound_file;
-        this.soundSpeed = rs.results[0].sound_speed;
+        this.soundFile = rs.results.length ? rs.results[0].sound_file : null;
+        this.soundSpeed = rs.results.length ? rs.results[0].sound_speed : null;
       }
     } catch (error) {
       console.log(error);

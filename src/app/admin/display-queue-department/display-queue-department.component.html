@@ -61,15 +61,15 @@
         <div class="row">
           <div class="col-md-6" *ngFor="let item of workingItems; let idx = index;">
             <div [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}" class="row bg-primary text-white"
-              style="margin: 20px 5px 0px 5px; border-radius: 10px;
-                            border: 5px solid white;">
+              style="margin: 20px 5px 0px 5px; border-radius: 20px;
+                            border: 10px solid white; padding: 20px;">
               <div class="col-md-9">
-                <span class="font-weight-bold" style="letter-spacing: 1px; font-size: 7rem;">
+                <span class="font-weight-bold" style="letter-spacing: 1px; font-size: 10rem;">
                   {{ item.queue_number || '-' }}
                 </span>
               </div>
               <div class="col-md-3" style="text-align: right;">
-                <span class="font-weight-bold" style="font-size: 7rem;">
+                <span class="font-weight-bold" style="font-size: 10rem;">
                   {{ item.room_number || '-' }}
                 </span>
               </div>

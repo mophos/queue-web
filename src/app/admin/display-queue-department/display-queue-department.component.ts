@@ -104,31 +104,27 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
         const decodedToken = this.jwtHelper.decodeToken(token);
 
         this.departmentTopic = decodedToken.DEPARTMENT_TOPIC || 'queue/department';
-
         this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
         this.notifyUser = decodedToken.NOTIFY_USER;
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
+
         await this.getServicePoints();
+
         const spk: any = await this.queueService.getSettingSpeak(token);
         if (spk.statusCode === 200) {
           this.speakSingle = spk.results === 'N' ? false : true;
         }
-        if (this.token) {
-          if (sessionStorage.getItem('servicePoints')) {
-            const _servicePoints = sessionStorage.getItem('servicePoints');
-            const jsonDecodedServicePoint = JSON.parse(_servicePoints);
-            const _department = _.unionBy(jsonDecodedServicePoint, 'department_id');
-            if (_department.length === 1) {
-              this.onSelectDepartment(_department[0]);
-            }
-          } else {
-            if (this.departmentId) {
-              this.onSelectDepartment({ 'department_id': this.departmentId, 'department_name': this.departmentName });
-            } else {
-              this.initialSocket();
-            }
+
+        if (sessionStorage.getItem('servicePoints')) {
+          const _servicePoints = sessionStorage.getItem('servicePoints');
+          const jsonDecodedServicePoint = JSON.parse(_servicePoints);
+          const _department = _.unionBy(jsonDecodedServicePoint, 'department_id');
+          if (_department.length === 1) {
+            this.onSelectDepartment(_department[0]);
           }
         }
+
+        this.initialSocket();
       }
     } catch (error) {
       console.log(error);
@@ -485,7 +481,8 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
 
   async getServicePoints() {
     try {
-      const rs: any = await this.servicePointService.list();
+      // const rs: any = await this.servicePointService.list();
+      const rs: any = await this.queueService.servicePointList(this.token);
       if (rs.statusCode === 200) {
         this.servicePoints = rs.results;
       }
