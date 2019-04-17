@@ -1,3 +1,4 @@
+import { ModalSettingSoundComponent } from './../../../shared/modal-setting-sound/modal-setting-sound.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalAddServicePointComponent } from 'src/app/shared/modal-add-service-point/modal-add-service-point.component';
 import { AlertService } from 'src/app/shared/alert.service';
@@ -13,11 +14,13 @@ export class ServicePointComponent implements OnInit {
 
   @ViewChild('mdlServicePoint') private mdlServicePoint: ModalAddServicePointComponent;
   @ViewChild('mdlRooms') private mdlRooms: ModalRoomsComponent;
+  @ViewChild('mdlSettingSound') private mdlSettingSound: ModalSettingSoundComponent;
 
   items: any = [];
   info: any = {};
   servicePointId: any;
   servicePointName: any;
+  isModalSound = false;
 
   constructor(private alertService: AlertService, private servicePointService: ServicePointService) { }
 
@@ -83,5 +86,14 @@ export class ServicePointComponent implements OnInit {
 
   onSaveRoom(event: any) {
 
+  }
+
+  showModalSound(item) {
+    this.servicePointId = item.service_point_id;
+    this.mdlSettingSound.open(item);
+  }
+
+  async onSaveSound() {
+    await this.getList();
   }
 }

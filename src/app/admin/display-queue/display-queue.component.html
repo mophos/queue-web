@@ -74,96 +74,48 @@
           </div>
         </div>
 
+        <div class="row" style="margin-top: 0px;">
+          <div class="col-md-6" style="padding-left: 50px; padding-right: 50px;">
+            <span class="h2 font-weight-bold">หมายเลข</span>
+            <span class="h2 font-weight-bold float-right">ห้องตรวจ</span>
+          </div>
+          <div class="col-md-6" style="padding-left: 50px; padding-right: 50px;">
+            <span class="h2 font-weight-bold">หมายเลข</span>
+            <span class="h2 font-weight-bold float-right">ห้องตรวจ</span>
+          </div>
+        </div>
+
         <div class="row">
-          <div class="col-md-5">
-            <div class="card bg-primary text-white">
-              <div class="card-body">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th><span class="font-weight-bold" style="font-size: 4rem;">ลำดับที่</span></th>
-                      <th style="text-align: right;"><span class="font-weight-bold"
-                          style="font-size: 4rem;">ช่องบริการ</span></th>
-                      <!-- <th><span class="h1">HN</span></th> -->
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngIf="!workingItems.length">
-                      <td colspan="3">กรุณาเลือกจุดบริการ</td>
-                    </tr>
-                    <tr *ngFor="let item of workingItems"
-                      [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}">
-                      <td>
-                        <label style="font-size: 7rem; letter-spacing: 2px;"
-                          class="font-weight-bold">{{item.queue_number}}</label>
-                      </td>
-                      <td style="text-align: right;">
-                        <label style="font-size: 7rem;" class="font-weight-bold">{{item.room_number}}</label>
-                      </td>
-                      <!-- <td>
-                        <label style="font-size: 2.5rem;" class="font-weight-bold">{{item.hn}}</label>
-                      </td> -->
-                    </tr>
-                  </tbody>
-                </table>
+          <div class="col-md-6" *ngFor="let item of workingItems; let idx = index;">
+            <div [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber}" class="row bg-primary text-white"
+              style="margin: 20px 5px 0px 5px; border-radius: 20px;
+              border: 5px solid white; padding: 20px;">
+              <div class="col-md-9">
+                <span class="font-weight-bold" style="letter-spacing: 1px; font-size: 10rem;">
+                  {{ item.queue_number || '-' }}
+                </span>
+              </div>
+              <div class="col-md-3" style="text-align: right;">
+                <span class="font-weight-bold" style="font-size: 10rem;">
+                  {{ item.room_number || '-' }}
+                </span>
               </div>
             </div>
-            <!-- <div style="margin-top: 20px;"></div>
-            <div class="card">
-              <div class="card-header h2">ประวัติการเรียก</div>
-              <div class="card-body">
-                <table class="table table-sm table-striped">
-                  <thead>
-                    <tr>
-                      <th><span class="h1">ลำดับที่</span></th>
-                      <th style="text-align: right;"><span class="h1">ช่องบริการ</span></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngIf="!workingItemsHistory.length">
-                      <td colspan="3">กรุณาเลือกจุดบริการ</td>
-                    </tr>
-                    <tr *ngFor="let item of workingItemsHistory">
-                      <td>
-                        <label style="font-size: 5rem; letter-spacing: 2px;"
-                          class="font-weight-bold">{{item.queue_number}}</label>
-                      </td>
-                      <td style="text-align: right;">
-                        <label style="font-size: 5rem;" class="font-weight-bold">{{item.room_number}}</label>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div> -->
           </div>
-          <div class="col-md-7">
 
-            <div class="card bg-primary card-img-holder text-white">
-
-              <div class="card-body">
-                <div style="font-size: 4rem;" class="font-weight-bold">ลำดับที่</div>
-                <span class="font-weight-bold" style="letter-spacing: 12px; font-size: 13rem;">{{currentQueueNumber
-                  || '-'}}</span>
-                <!-- <h1 class="card-text">HN: {{currentHn || '-'}}</h1> -->
-                <div style="font-size: 4rem;" class="font-weight-bold">ช่องบริการ</div>
-                <span class="font-weight-bold" style="letter-spacing: 12px; font-size: 13rem;">{{currentRoomNumber
-                  || '-'}}</span>
-                <div style="font-size: 5rem;" class="card-text font-weight-bold">{{currentRoomName || '-'}}</div>
-              </div>
-
-              <div class="card-footer">
-                <div class="float-left">
-                  <i style="cursor: pointer;" *ngIf="isSound" (click)="toggleSound()"
-                    class="h2 text-warning float-right mdi mdi-bell-ring"></i>
-                  <i style="cursor: pointer;" *ngIf="!isSound" (click)="toggleSound()"
-                    class="h2 text-muted float-right mdi mdi-bell-off"></i>
-                </div>
-                <div class="float-right">
-                  <span class="h2 text-white font-weight-bold" style="cursor: pointer" (click)="selectServicePoint()">{{servicePointName
-                    || 'กรุณาเลือกจุดบริการ'}}</span>
-                </div>
-              </div>
+        </div>
+        <hr style="color: white;">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="float-left">
+              <i style="cursor: pointer;" *ngIf="isSound" (click)="toggleSound()"
+                class="h2 text-danger float-right mdi mdi-bell-ring"></i>
+              <i style="cursor: pointer;" *ngIf="!isSound" (click)="toggleSound()"
+                class="h2 text-muted float-right mdi mdi-bell-off"></i>
+            </div>
+            <div class="float-right">
+              <span class="h2 font-weight-bold text-primary" style="cursor: pointer" (click)="selectServicePoint()">
+                {{servicePointName || 'กรุณาเลือกจุดบริการ'}}</span>
             </div>
           </div>
         </div>
@@ -174,7 +126,6 @@
   </div>
   <!-- page-body-wrapper ends -->
 </div>
-
 
 <app-modal-select-servicepoints (onSelected)="onSelectedPoint($event)" #mdlServicePoint>
 </app-modal-select-servicepoints>

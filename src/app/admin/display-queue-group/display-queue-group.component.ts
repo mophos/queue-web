@@ -64,6 +64,10 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
   token: string;
 
   hide = false;
+  soundFile: any;
+  soundSpeed: any;
+  speakSingle = true;
+
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,
@@ -86,9 +90,10 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     try {
       const token = this.token || sessionStorage.getItem('token');
+
       if (token) {
         const decodedToken = this.jwtHelper.decodeToken(token);
 
@@ -97,7 +102,13 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
         this.notifyUser = decodedToken.NOTIFY_USER;
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
 
+        const spk: any = await this.queueService.getSettingSpeak(token);
+        if (spk.statusCode === 200) {
+          this.speakSingle = spk.results === 'N' ? false : true;
+        }
+
         if (this.servicePointId && this.servicePointName) {
+          this.onSelectedPoint({ 'service_point_id': this.servicePointId, 'service_point_name': this.servicePointName });
           this.initialSocket();
         }
       }
@@ -153,18 +164,104 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     audioFiles.push('./assets/audio/please.mp3')
     // audioFiles.push('./assets/audio/silent.mp3')
 
-    _strQueue.forEach((array: any) => {
-      array.forEach(v => {
+    if (this.speakSingle) {
+      _strQueue.forEach(v => {
         audioFiles.push(`./assets/audio/${v}.mp3`);
       });
-      // audioFiles.push('./assets/audio/silent.mp3')
-    });
+    } else {
+      const arrQueue: any = (_strQueue.join('')).match(/[a-z]+|[^a-z]+/gi);
+      arrQueue.forEach(v => {
+        if (!isNaN(v)) {
+          let no = +v;
+          if (no >= 10000) {
+            audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+            audioFiles.push(`./assets/audio/10000.mp3`);
+            no -= +no.toString().substr(0, 1) * 10000;
+          }
 
-    audioFiles.push('./assets/audio/channel.mp3');
+          if (no >= 1000) {
+            audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+            audioFiles.push(`./assets/audio/1000.mp3`);
+            no -= +no.toString().substr(0, 1) * 1000;
+          }
+          if (no >= 100) {
+            audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+            audioFiles.push(`./assets/audio/100.mp3`);
+            no -= +no.toString().substr(0, 1) * 100;
+          }
+          if (no >= 10) {
+            if (no >= 30) {
+              audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+              audioFiles.push(`./assets/audio/10.mp3`);
+            } else if (no >= 20) {
+              audioFiles.push(`./assets/audio/20.mp3`);
+            }
+            no -= +no.toString().substr(0, 1) * 10;
+            if (no === 1) {
+              audioFiles.push(`./assets/audio/11.mp3`);
+              no -= 1;
+            }
+          }
+          if (no >= 1) {
+            audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+            // audioFiles.push(`./assets/audio/10.mp3`);
+            no -= +no.toString().substr(0, 1);
+          }
+        } else {
+          audioFiles.push(`./assets/audio/${v}.mp3`);
+        }
+      });
+    }
 
-    _strRoom.forEach(v => {
-      audioFiles.push(`./assets/audio/${v}.mp3`);
-    });
+    if (this.soundFile) {
+      audioFiles.push(`./assets/audio/${this.soundFile}`);
+    } else {
+      audioFiles.push('./assets/audio/channel.mp3');
+    }
+
+    if (this.speakSingle) {
+      _strRoom.forEach(v => {
+        audioFiles.push(`./assets/audio/${v}.mp3`);
+      });
+    } else {
+      const arrRoom: any = (_strRoom.join('')).match(/[a-z]+|[^a-z]+/gi);
+      if (!isNaN(arrRoom)) {
+        let no = +arrRoom;
+        if (no >= 10000) {
+          audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+          audioFiles.push(`./assets/audio/10000.mp3`);
+          no -= +no.toString().substr(0, 1) * 10000;
+        }
+
+        if (no >= 1000) {
+          audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+          audioFiles.push(`./assets/audio/1000.mp3`);
+          no -= +no.toString().substr(0, 1) * 1000;
+        }
+        if (no >= 100) {
+          audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+          audioFiles.push(`./assets/audio/100.mp3`);
+          no -= +no.toString().substr(0, 1) * 100;
+        }
+        if (no >= 10) {
+          if (no >= 30) {
+            audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+            audioFiles.push(`./assets/audio/10.mp3`);
+          } else if (no >= 20) {
+            audioFiles.push(`./assets/audio/20.mp3`);
+          }
+          no -= +no.toString().substr(0, 1) * 10;
+          if (no === 1) {
+            audioFiles.push(`./assets/audio/11.mp3`);
+            no -= 1;
+          }
+        }
+        if (no >= 1) {
+          audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+          no -= +no.toString().substr(0, 1);
+        }
+      }
+    }
 
     audioFiles.push('./assets/audio/ka.mp3');
 
@@ -209,14 +306,17 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
       }
     };
 
-    audioFiles.forEach(function (current, i) {
+    for (let i = 0; i < audioFiles.length; i++) {
       howlerBank.push(new Howl({
         src: [audioFiles[i]],
         onend: onEnd,
         preload: true,
         html5: true,
       }));
-    });
+      if (this.soundSpeed) {
+        howlerBank[i].rate(this.soundSpeed);
+      }
+    }
 
     try {
 
@@ -323,17 +423,35 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     this.mdlServicePoint.open();
   }
 
-  onSelectedPoint(event: any) {
+  async onSelectedPoint(event: any) {
     this.servicePointName = event.service_point_name;
     this.servicePointId = event.service_point_id;
-
+    if (event.sound_file) {
+      this.soundFile = event.sound_file;
+      this.soundSpeed = event.sound_speed;
+    } else {
+      await this.getSound(this.servicePointId);
+    }
     this.initialSocket();
+  }
+
+  async getSound(servicePointId) {
+    try {
+      const rs: any = await this.queueService.getSound(servicePointId, this.token);
+      if (rs.statusCode === 200) {
+        this.soundFile = rs.results[0].sound_file;
+        this.soundSpeed = rs.results[0].sound_speed;
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error(error);
+    }
   }
 
   async initialSocket() {
     // connect mqtt
     this.connectWebSocket();
-    this._workingItems = []
+    this._workingItems = [];
     await this.getCurrentQueue();
     this._workingItems.length === 1 ? this.workingItems = await _.cloneDeep(this._workingItems[0]) : '';
     this.getWorkingHistory();

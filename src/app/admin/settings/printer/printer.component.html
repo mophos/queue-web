@@ -19,6 +19,9 @@
               <input type="checkbox" class="form-check-input" id="printSmallQueue" name="printSmallQueue"
                 [(ngModel)]="printSmallQueue">
               <label class="form-check-label" for="printSmallQueue">พิมพ์บัตรคิวขนาดเล็ก (Small Queue)</label>
+              <input type="checkbox" class="form-check-input" id="printPendingQueue" name="printPendingQueue"
+                [(ngModel)]="printPendingQueue">
+              <label class="form-check-label" for="printPendingQueue">ยืนยันการพิมพ์บัตรคิวเมื่อส่งต่อ</label>
             </div>
             <div class="col-md-12">
               <button type="button" class="btn btn-primary" (click)="save()">บันทึก</button>

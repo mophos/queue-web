@@ -1,0 +1,47 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-basic-title">ตั้งค่าเสียง</h3>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-body">
+        <div class="form-group">
+
+          <div class="row" style="padding: 20px">
+            <div class="col-md-4">
+              <button class="btn" (click)="changeSpeed(1)"
+                [ngClass]="{'btn-success':speed == 1,'btn-outline-success':speed != 1}">ปกติ
+              </button>
+            </div>
+            <div class="col-md-4">
+              <button class="btn" (click)="changeSpeed(1.25)"
+                [ngClass]="{'btn-success':speed == 1.25,'btn-outline-success':speed != 1.25}">เร็ว
+              </button>
+            </div>
+            <div class="col-md-4">
+              <button class="btn" (click)="changeSpeed(1.5)"
+                [ngClass]="{'btn-success':speed == 1.5,'btn-outline-success':speed != 1.5}">เร็วมาก
+              </button>
+            </div>
+          </div>
+          <div class="row" *ngFor="let s of sounds" style="padding: 20px">
+            <div class="col-md-8">
+              {{s.sound_name}}
+              <i class="mdi mdi-access-point" title="play" (click)="playSound(s)"></i>
+            </div>
+            <div class="col-md-4">
+              <input type="radio" name="selectSound" [value]="s.sound_id" [(ngModel)]="soundId">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="save()">บันทึก</button>
+    <button type="button" class="btn btn-outline-danger" (click)="dismiss()">ยกเลิก</button>
+  </div>
+</ng-template>

@@ -10,7 +10,8 @@
       <div class="card-body">
         <div class="form-group">
           <label for="slServicePoints">เลือกจุดให้บริการ</label>
-          <select class="form-control" name="slServicePoints" [(ngModel)]="servicePointId">
+          <select class="form-control" name="slServicePoints" (change)="getOldQueue($event)"
+            [(ngModel)]="servicePointId">
             <option *ngFor="let item of points" [value]="item.service_point_id">{{item.local_code}} -
               {{item.service_point_name}}</option>
           </select>
@@ -22,6 +23,9 @@
               (prefix: {{item.priority_prefix}})</option>
           </select>
         </div>
+        <input type="checkbox" class="form-check-input" id="pendingOldQueue" name="pendingOldQueue"
+          [(ngModel)]="pendingOldQueue">
+        <label class="form-check-label" for="pendingOldQueue">ส่งต่อด้วยคิวเดิม</label>
       </div>
     </div>
   </div>
