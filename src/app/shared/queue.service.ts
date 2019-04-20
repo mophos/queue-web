@@ -335,22 +335,5 @@ export class QueueService {
 
     return this.httpClient.get(_url, _httpOptions).toPromise();
   }
-
-  async getSettingSpeak(token: any = null) {
-    const _url = `${this.apiUrl}/queue/setting/speak`;
-    let _httpOptions = {};
-
-    if (token) {
-      _httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
-        })
-      };
-    } else {
-      _httpOptions = this.httpOptions;
-    }
-
-    return this.httpClient.get(_url, _httpOptions).toPromise();
-  }
+  
 }

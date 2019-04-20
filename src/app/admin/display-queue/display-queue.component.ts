@@ -97,10 +97,8 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
         this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
         this.notifyUser = decodedToken.NOTIFY_USER;
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
-        const spk: any = await this.queueService.getSettingSpeak(token);
-        if (spk.statusCode === 200) {
-          this.speakSingle = spk.results === 'N' ? false : true;
-        }
+        this.speakSingle = decodedToken.SPEAK_SINGLE === 'Y' ? true : false;
+
         if (sessionStorage.getItem('servicePoints')) {
           const _servicePoints = sessionStorage.getItem('servicePoints');
           const jsonDecodedServicePoint = JSON.parse(_servicePoints);
@@ -168,54 +166,9 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     audioFiles.push('./assets/audio/please.mp3');
     audioFiles.push('./assets/audio/silent.mp3');
 
-    if (this.speakSingle) {
-      _strQueue.forEach(v => {
-        audioFiles.push(`./assets/audio/${v}.mp3`);
-      });
-    } else {
-      const arrQueue = (_strQueue.join('')).match(/[a-z]+|[^a-z]+/gi);
-      arrQueue.forEach(v => {
-        if (!isNaN(v)) {
-          let no = +v;
-          if (no >= 10000) {
-            audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
-            audioFiles.push(`./assets/audio/10000.mp3`);
-            no -= +no.toString().substr(0, 1) * 10000;
-          }
-
-          if (no >= 1000) {
-            audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
-            audioFiles.push(`./assets/audio/1000.mp3`);
-            no -= +no.toString().substr(0, 1) * 1000;
-          }
-          if (no >= 100) {
-            audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
-            audioFiles.push(`./assets/audio/100.mp3`);
-            no -= +no.toString().substr(0, 1) * 100;
-          }
-          if (no >= 10) {
-            if (no >= 30) {
-              audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
-              audioFiles.push(`./assets/audio/10.mp3`);
-            } else if (no >= 20) {
-              audioFiles.push(`./assets/audio/20.mp3`);
-            }
-            no -= +no.toString().substr(0, 1) * 10;
-            if (no === 1) {
-              audioFiles.push(`./assets/audio/11.mp3`);
-              no -= 1;
-            }
-          }
-          if (no >= 1) {
-            audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
-            // audioFiles.push(`./assets/audio/10.mp3`);
-            no -= +no.toString().substr(0, 1);
-          }
-        } else {
-          audioFiles.push(`./assets/audio/${v}.mp3`);
-        }
-      });
-    }
+    _strQueue.forEach(v => {
+      audioFiles.push(`./assets/audio/${v}.mp3`);
+    });
 
     if (this.soundFile) {
       audioFiles.push(`./assets/audio/${this.soundFile}`);
