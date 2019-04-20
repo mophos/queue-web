@@ -82,12 +82,6 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
         this.servicePointId = +params.servicePointId || null;
         this.servicePointName = params.servicePointName || null;
       });
-
-    const _servicePoints = sessionStorage.getItem('servicePoints');
-    const jsonDecodedServicePoint = JSON.parse(_servicePoints);
-    if (jsonDecodedServicePoint.length === 1) {
-      this.onSelectedPoint(jsonDecodedServicePoint[0]);
-    }
   }
 
   async ngOnInit() {
@@ -101,10 +95,13 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
         this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
         this.notifyUser = decodedToken.NOTIFY_USER;
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
+        this.speakSingle = decodedToken.SPEAK_SINGLE === 'Y' ? true : false;
 
-        const spk: any = await this.queueService.getSettingSpeak(token);
-        if (spk.statusCode === 200) {
-          this.speakSingle = spk.results === 'N' ? false : true;
+        const _servicePoints = sessionStorage.getItem('servicePoints');
+        const jsonDecodedServicePoint = JSON.parse(_servicePoints);
+
+        if (jsonDecodedServicePoint.length === 1) {
+          this.onSelectedPoint(jsonDecodedServicePoint[0]);
         }
 
         if (this.servicePointId && this.servicePointName) {
@@ -164,8 +161,10 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     audioFiles.push('./assets/audio/please.mp3')
     // audioFiles.push('./assets/audio/silent.mp3')
 
-    _strQueue.forEach(v => {
-      audioFiles.push(`./assets/audio/${v}.mp3`);
+    _strQueue.forEach((v: any) => {
+      v.forEach((z: any) => {
+        audioFiles.push(`./assets/audio/${z}.mp3`);
+      });
     });
 
     if (this.soundFile) {
