@@ -27,18 +27,20 @@
           <thead>
             <tr>
               <th>ช่วงเวลา</th>
+              <th>PREFIX</th>
               <th>ใช้งาน</th>
               <th style="width: 80px;">#</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngIf="!items.length">
-              <td colspan="3">
+              <td colspan="4">
                 <p>ไม่พบรายการ</p>
               </td>
             </tr>
             <tr *ngFor="let v of items">
               <td><span class="h2">{{v.time_start | serviceTime}} - {{v.time_end | serviceTime}}</span></td>
+              <td><strong>{{v.prefix}}</strong></td>
               <td>
                 <i class="mdi mdi-check text-success" *ngIf="v.is_active === 'Y'"></i>
                 <i class="mdi mdi-close text-danger" *ngIf="v.is_active === 'N'"></i>

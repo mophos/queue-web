@@ -1,0 +1,62 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title"><strong>{{labelAction}}</strong> ข้อมูลการให้บริการ</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-body">
+        <form>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="totalQueue" class="required">แผนกที่เปิดให้บริการ</label>
+              <select [disabled]="totalGenerated" class="form-control" name="departmentId" [(ngModel)]="departmentId">
+                <option value="">เลือกแผนกที่ให้บริการ</option>
+                <option *ngFor="let item of departments" [value]="item.department_id">{{item.department_name}}</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="totalQueue" class="required">วันที่เปิดให้บริการ</label>
+              <div class="input-group">
+                <input readonly class="form-control" placeholder="วันที่" id="serviceDate" name="serviceDate"
+                  [(ngModel)]="serviceDate" ngbDatepicker #d1="ngbDatepicker">
+                <div class="input-group-append">
+                  <button [disabled]="totalGenerated" class="btn btn-sm btn-primary calendar" (click)="d1.toggle()"
+                    type="button">
+                    <i class="mdi mdi-calendar"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="totalQueue" class="required">เวลาที่เปิด</label>
+              <select [disabled]="totalGenerated" class="form-control" name="timeId" [(ngModel)]="timeId">
+                <option value="">เวลา</option>
+                <option *ngFor="let item of times" [value]="item.time_id">{{item.time_start}} - {{item.time_end}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="totalQueue" class="required">จำนวนคิวเปิดให้บริการ</label>
+              <input type="number" [disabled]="totalGenerated" class="form-control" name="totalQueue"
+                [(ngModel)]="totalQueue" id="totalQueue">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group form-check col-md-12">
+              <input type="checkbox" class="form-check-input" id="isActive" name="isActive" [(ngModel)]="isActive">
+              <label class="form-check-label" for="isActive">ใช้งาน</label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="save()">บันทึก</button>
+    <button type="button" class="btn btn-outline-danger" (click)="dismiss()">ยกเลิก</button>
+  </div>
+</ng-template>

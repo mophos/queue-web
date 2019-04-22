@@ -8,9 +8,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ServiceTimesComponent } from './service-times/service-times.component';
+import { QueueOnlineDepartmentComponent } from './department/department.component';
+import { QueueOnlineServiceSlotComponent } from './service-slots/service-slots.component';
 
 @NgModule({
-  declarations: [QueueOnlineMainComponent, QueueOnlineLayoutComponent, ServiceTimesComponent],
+  declarations: [
+    QueueOnlineMainComponent,
+    QueueOnlineLayoutComponent,
+    ServiceTimesComponent,
+    QueueOnlineDepartmentComponent,
+    QueueOnlineServiceSlotComponent],
   imports: [
     CommonModule,
     QueueOnlineRoutingModule,

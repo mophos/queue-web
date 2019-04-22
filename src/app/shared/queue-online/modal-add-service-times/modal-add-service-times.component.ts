@@ -17,6 +17,7 @@ export class ModalAddServiceTimesComponent implements OnInit {
   timeStart: any;
   timeEnd: any;
   isActive: any;
+  prefix: any;
 
   timeId: any;
 
@@ -42,6 +43,8 @@ export class ModalAddServiceTimesComponent implements OnInit {
       backdrop: 'static',
     });
 
+    this.prefix = null;
+
     if (item) {
       var s = moment(item.time_start, 'HH:mm:ss');
       var e = moment(item.time_end, 'HH:mm:ss');
@@ -50,6 +53,8 @@ export class ModalAddServiceTimesComponent implements OnInit {
       this.timeStart = { hour: s.get('hour'), minute: s.get('minute') };
       this.timeEnd = { hour: e.get('hour'), minute: e.get('minute') };
       this.isActive = item.is_active === 'Y' ? true : false;
+
+      this.prefix = item.prefix;
     }
 
     this.modalReference.result.then((result) => { });
@@ -71,12 +76,13 @@ export class ModalAddServiceTimesComponent implements OnInit {
           var _timeStart = `${this.timeStart.hour}:${this.timeStart.minute}`;
           var _timeEnd = `${this.timeEnd.hour}:${this.timeEnd.minute}`;
           var _isActive = this.isActive ? 'Y' : 'N';
+          var _prefix = this.prefix;
 
           var rs: any;
           if (this.timeId) {
-            rs = await this.serviceTimeService.update(this.timeId, _timeStart, _timeEnd, _isActive);
+            rs = await this.serviceTimeService.update(this.timeId, _timeStart, _timeEnd, _prefix, _isActive);
           } else {
-            rs = await this.serviceTimeService.save(_timeStart, _timeEnd, _isActive);
+            rs = await this.serviceTimeService.save(_timeStart, _timeEnd, _prefix, _isActive);
           }
 
           if (rs.statusCode === 200) {

@@ -1,6 +1,6 @@
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">เพิ่มช่วงเวลที่ให้บริการ</h4>
+    <h4 class="modal-title" id="modal-basic-title">เพิ่มข้อมูลแผนก (จุดให้บริการ)</h4>
     <button type="button" class="close" aria-label="Close" (click)="dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -10,21 +10,25 @@
       <div class="card-body">
         <form>
           <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="timeStart" class="required">เวลาเริ่มต้น</label>
-              <ngb-timepicker [(ngModel)]="timeStart" name="timeStart"></ngb-timepicker>
-            </div>
-            <div class="form-group col-md-6">
-              <label for="timeEnd" class="required">เวลาสิ้นสุด</label>
-              <ngb-timepicker [(ngModel)]="timeEnd" name="timeEnd"></ngb-timepicker>
+            <div class="form-group col-md-12">
+              <label for="departmentName" class="required">ชื่อแผนก</label>
+              <input type="text" class="form-control" maxlength="50" name="departmentName" [(ngModel)]="departmentName"
+                id="departmentName">
             </div>
           </div>
           <div class="form-row">
-            <div class="form-group form-check col-md-6">
-              <input type="text" class="form-control" id="prefix" name="prefix" [(ngModel)]="prefix">
-              <label class="form-check-label" for="prefix">Prefix</label>
+            <div class="form-group col-md-6">
+              <label for="prefix" class="required">PREFIX</label>
+              <input type="text" class="form-control" maxlength="1" name="prefix" [(ngModel)]="prefix" id="prefix">
             </div>
-            <div class="form-group form-check col-md-6">
+            <div class="form-group col-md-6">
+              <label for="hisDepCode" class="required">HIS DEPCODE</label>
+              <input type="text" class="form-control" maxlength="10" name="hisDepCode" [(ngModel)]="hisDepCode"
+                id="hisDepCode">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group form-check col-md-12">
               <input type="checkbox" class="form-check-input" id="isActive" name="isActive" [(ngModel)]="isActive">
               <label class="form-check-label" for="isActive">ใช้งาน</label>
             </div>

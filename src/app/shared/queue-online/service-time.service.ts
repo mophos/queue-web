@@ -24,21 +24,23 @@ export class QueueOnlineServiceTimeService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
-  async save(timeStart: any, timeEnd: any, isActive: any = 'Y') {
+  async save(timeStart: any, timeEnd: any, prefix: any, isActive: any = 'Y') {
     const _url = `${this.mophQueueUrl}/queue-online/service-times`;
     const body: any = {
       timeStart: timeStart,
       timeEnd: timeEnd,
+      prefix: prefix,
       isActive: isActive
     };
     return this.httpClient.post(_url, body, this.httpOptions).toPromise();
   }
 
-  async update(timeId: any, timeStart: any, timeEnd: any, isActive: any = 'Y') {
+  async update(timeId: any, timeStart: any, timeEnd: any, prefix: any, isActive: any = 'Y') {
     const _url = `${this.mophQueueUrl}/queue-online/service-times/${timeId}`;
     const body: any = {
       timeStart: timeStart,
       timeEnd: timeEnd,
+      prefix: prefix,
       isActive: isActive
     };
     return this.httpClient.post(_url, body, this.httpOptions).toPromise();

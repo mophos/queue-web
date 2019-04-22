@@ -1,0 +1,67 @@
+<div class="page-header">
+  <h1 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-key"></i>
+    </span>
+    <span style="font-size: 1.4rem;">แผนกที่เปิดให้บริการ</span>
+  </h1>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript://" routerLink="/queue-online">หน้าหลัก</a></li>
+      <li class="breadcrumb-item active" aria-current="page">แผนกที่เปิดให้บริการ</li>
+    </ol>
+  </nav>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+
+        <div class="row">
+          <div class="col-md-12">
+            <button class="float-right btn btn-sm btn-success" (click)="openModalNew()">+ เพิ่มข้อมูล</button>
+          </div>
+        </div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ชื่อแผนก</th>
+              <th style="width: 80px;">PREFIX</th>
+              <th style="width: 150px;">HIS DEPCODE</th>
+              <th style="width: 100px;">สถานะ</th>
+              <th style="width: 80px;">#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="!items.length">
+              <td colspan="5">
+                <p>ไม่พบรายการ</p>
+              </td>
+            </tr>
+            <tr *ngFor="let v of items">
+              <td>{{v.department_name }}</td>
+              <td>{{v.prefix }}</td>
+              <td>{{v.his_depcode }}</td>
+              <td>
+                <span class="mdi mdi-check text-success" *ngIf="v.is_active === 'Y'"></span>
+                <span class="mdi mdi-close text-danger" *ngIf="v.is_active === 'N'"></span>
+              </td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-primary" (click)="openEdit(v)">
+                    <i class="mdi mdi-library-plus"></i> แก้ไข
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<app-queue-online-modal-add-department (onSuccess)="onSuccess()" #mdlAddDepartment>
+</app-queue-online-modal-add-department>

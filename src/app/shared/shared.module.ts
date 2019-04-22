@@ -30,6 +30,10 @@ import { AlertWarningPrinterComponent } from './alert-warning-printer/alert-warn
 import { ModalSelectRoomComponent } from './modal-select-room/modal-select-room.component';
 import { ModalSettingSoundComponent } from './modal-setting-sound/modal-setting-sound.component';
 import { SoundService } from './sound.service';
+import { QueueOnlineModalAddDepartmentComponent } from './queue-online/modal-add-department/modal-add-department.component';
+import { QueueOnlineServiceSlotService } from './queue-online/queue-online-service-slot.service';
+import { QueueOnlineModalAddServiceSlotComponent } from './queue-online/modal-add-service-slot/modal-add-service-slot.component';
+import { QueueOnlineService } from './queue-online/queue-online.service';
 
 @NgModule({
   imports: [
@@ -39,6 +43,8 @@ import { SoundService } from './sound.service';
   ],
   declarations: [
     ModalAddServicePointComponent,
+    QueueOnlineModalAddDepartmentComponent,
+    QueueOnlineModalAddServiceSlotComponent,
     ModalAddUserComponent,
     ModalRoomsComponent,
     ModalSelectServicepointsComponent,
@@ -59,6 +65,8 @@ import { SoundService } from './sound.service';
   ],
   exports: [
     ModalAddServicePointComponent,
+    QueueOnlineModalAddDepartmentComponent,
+    QueueOnlineModalAddServiceSlotComponent,
     ModalAddUserComponent,
     ModalRoomsComponent,
     ModalSelectServicepointsComponent,
@@ -88,6 +96,8 @@ import { SoundService } from './sound.service';
     DepartmentService,
     SoundService,
     QueueOnlineServiceTimeService,
+    QueueOnlineServiceSlotService,
+    QueueOnlineService
   ]
 })
 export class SharedModule { }
