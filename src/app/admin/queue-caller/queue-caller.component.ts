@@ -365,13 +365,13 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.prepareQueue({ 'room_id': item.roomId, 'room_number': item.roomNumber });
   }
 
-  setCallDetail(item: any) {
+  setCallDetail(item: any, isCompleted: any = 'Y') {
     this.queueId = item.queue_id;
     this.queueNumber = item.queue_number;
     if (this.rooms.length === 1) {
       this.roomId = this.rooms[0].room_id;
       this.roomNumber = this.rooms[0].room_number;
-      this.doCallQueue();
+      this.doCallQueue(isCompleted);
     }
   }
 
@@ -380,7 +380,9 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.roomId = queue.room_id;
     this.queueNumber = queue.queue_number;
     this.queueId = queue.queue_id;
-    this.doCallQueue();
+
+    var _isCompleted = queue.is_completed || 'N';
+    this.doCallQueue(_isCompleted);
   }
 
   prepareQueue(room: any) {
