@@ -33,6 +33,11 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
+  async visitHistoryList(servicePointCode: any, query: any, limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/his-visit-history?servicePointCode=${servicePointCode}&query=${query}&limit=${limit}&offset=${offset}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
   async changeRoomGroup(queueId: any, roomId: any, servicePointId: any, roomNumber: any, queueNumber: any, queueRunning: any) {
     const _url = `${this.apiUrl}/queue/change-room-group`;
     return this.httpClient.post(_url, {
@@ -335,5 +340,5 @@ export class QueueService {
 
     return this.httpClient.get(_url, _httpOptions).toPromise();
   }
-  
+
 }

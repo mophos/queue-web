@@ -146,12 +146,13 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       if (this.playlists.length) {
         const queueNumber = this.playlists[0].queueNumber;
         const roomNumber = this.playlists[0].roomNumber;
-        this.playSound(queueNumber, roomNumber);
+        const isInterview = this.playlists[0].isInterview;
+        this.playSound(queueNumber, roomNumber, isInterview);
       }
     }
   }
 
-  playSound(strQueue: string, strRoomNumber: string) {
+  playSound(strQueue: string, strRoomNumber: string, isInterview: string) {
 
     this.isPlayingSound = true;
 
@@ -169,11 +170,14 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     _strQueue.forEach(v => {
       audioFiles.push(`./assets/audio/${v}.mp3`);
     });
-
-    if (this.soundFile) {
-      audioFiles.push(`./assets/audio/${this.soundFile}`);
+    if (isInterview === 'Y') {
+      audioFiles.push(`./assets/audio/interview-table.mp3`);
     } else {
-      audioFiles.push('./assets/audio/channel.mp3');
+      if (this.soundFile) {
+        audioFiles.push(`./assets/audio/${this.soundFile}`);
+      } else {
+        audioFiles.push('./assets/audio/channel.mp3');
+      }
     }
 
     if (this.speakSingle) {
@@ -317,7 +321,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
         if (that.isSound) {
           if (+that.servicePointId === +_payload.servicePointId) {
             // play sound
-            const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString() };
+            const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString(), isInterview: _payload.isInterview };
             that.playlists.push(sound);
             that.prepareSound();
           }

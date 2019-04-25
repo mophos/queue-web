@@ -1,84 +1,191 @@
 <app-alert-warning-printer></app-alert-warning-printer>
-<div class="row">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-body">
-        <!-- <h4 class="card-title">
-          รายชื่อผู้ป่วยที่รอรับบริการ
-        </h4> -->
-        <p class="card-description">
-          แสดงเฉพาะรายชื่อจุดให้บริการที่มีการ <code>เปิดให้บริการ</code> เท่านั้น
-          <!-- <button (click)="openPrinter()" class="float-right btn btn-sm btn-success"> <i class="mdi mdi-printer"></i>
-            ตั้งค่าเครื่องพิมพ์</button> -->
 
-        </p>
-        <div class="row">
-          <div class="col-md-9">
-            <div class="input-group" style="width: 250px;">
-              <input type="text" (click)="$event.target.select()" class="form-control" name="query"
-                (keyup)="doSearch($event)" [(ngModel)]="query" placeholder="ระบุคำค้นหา.." aria-label="ระบุคำค้นหา"
-                aria-describedby="button-addon2">
-              <div class="input-group-append">
-                <button class="btn btn-primary btn-sm" (click)="getVisit()" type="button" id="button-addon2">
-                  <i class="mdi mdi-account-search"></i>
-                  ค้นหา
-                </button>
+<ngb-tabset>
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      <span class="h3">ทะเบียนผู้รับบริการ
+        <!-- <label class="badge badge-danger">
+          <span class="h3 font-weight-bold">{{workingItems.length || 0}}</span>
+        </label> -->
+      </span>
+    </ng-template>
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <!-- <h4 class="card-title">
+                    รายชื่อผู้ป่วยที่รอรับบริการ
+                  </h4> -->
+              <p class="card-description">
+                แสดงเฉพาะรายชื่อจุดให้บริการที่มีการ <code>เปิดให้บริการ</code> เท่านั้น
+                <!-- <button (click)="openPrinter()" class="float-right btn btn-sm btn-success"> <i class="mdi mdi-printer"></i>
+                      ตั้งค่าเครื่องพิมพ์</button> -->
+
+              </p>
+              <div class="row">
+                <div class="col-md-9">
+                  <div class="input-group" style="width: 250px;">
+                    <input type="text" (click)="$event.target.select()" class="form-control" name="query"
+                      (keyup)="doSearch($event)" [(ngModel)]="query" placeholder="ระบุคำค้นหา.."
+                      aria-label="ระบุคำค้นหา" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary btn-sm" (click)="getVisit()" type="button" id="button-addon2">
+                        <i class="mdi mdi-account-search"></i>
+                        ค้นหา
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <select aria-placeholder="เลือกจุดให้บริการ" (change)="changeServicePoints($event)"
+                      class="form-control form-control-sm" name="servicePointId">
+                      <!-- <option value="">เลือกจุดให้บริการ</option> -->
+                      <option *ngFor="let s of servicePoints" [value]="s.local_code">{{s.local_code}} -
+                        {{s.service_point_name}}</option>
+                      <!-- <option value="">ทั้งหมด</option> -->
+                    </select>
+
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <select aria-placeholder="เลือกจุดให้บริการ" (change)="changeServicePoints($event)"
-                class="form-control form-control-sm" name="servicePointId">
-                <!-- <option value="">เลือกจุดให้บริการ</option> -->
-                <option *ngFor="let s of servicePoints" [value]="s.local_code">{{s.local_code}} -
-                  {{s.service_point_name}}</option>
-                <!-- <option value="">ทั้งหมด</option> -->
-              </select>
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>เวลา</th>
+                    <th>HN</th>
+                    <th>ชื่อ - สกุล</th>
+                    <th>แผนก</th>
+                    <th style="width: 80px;">#</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="!visit.length">
+                    <td colspan="5">
+                      <p>ไม่พบรายการ</p>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let v of visit">
+                    <td>{{v.time_serv}}</td>
+                    <td>{{v.hn}}</td>
+                    <td>{{v.first_name}} {{v.last_name}}</td>
+                    <td>{{v.clinic_code}} - {{v.clinic_name}}</td>
+                    <td>
+                      <button class="btn btn-sm btn-gradient-primary" (click)="openPriority(v)">
+                        <i class="mdi mdi-library-plus"></i> สร้างคิว
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div *ngIf="visit.length" style="padding-top: 25px;">
+                <ngb-pagination class="d-flex justify-content-center" [rotate]="true" [collectionSize]="total"
+                  [maxSize]="maxSizePage" [boundaryLinks]="true" [pageSize]="pageSize"
+                  (pageChange)="onPageChange($event)" [(page)]="currentPage" aria-label="pagination"></ngb-pagination>
+              </div>
 
             </div>
           </div>
         </div>
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>เวลา</th>
-              <th>HN</th>
-              <th>ชื่อ - สกุล</th>
-              <th>แผนก</th>
-              <th style="width: 80px;">#</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="!visit.length">
-              <td colspan="5">
-                <p>ไม่พบรายการ</p>
-              </td>
-            </tr>
-            <tr *ngFor="let v of visit">
-              <td>{{v.time_serv}}</td>
-              <td>{{v.hn}}</td>
-              <td>{{v.first_name}} {{v.last_name}}</td>
-              <td>{{v.clinic_code}} - {{v.clinic_name}}</td>
-              <td>
-                <button class="btn btn-sm btn-gradient-primary" (click)="openPriority(v)">
-                  <i class="mdi mdi-library-plus"></i> สร้างคิว
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div *ngIf="visit.length" style="padding-top: 25px;">
-          <ngb-pagination class="d-flex justify-content-center" [rotate]="true" [collectionSize]="total"
-            [maxSize]="maxSizePage" [boundaryLinks]="true" [pageSize]="pageSize" (pageChange)="onPageChange($event)"
-            [(page)]="currentPage" aria-label="pagination"></ngb-pagination>
-        </div>
-
       </div>
-    </div>
-  </div>
-</div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      <span class="h3">ประวัติการสร้างคิว
+        <!-- <label class="badge badge-danger">
+          <span class="h3 font-weight-bold">{{workingItems.length || 0}}</span> 
+        </label> -->
+      </span>
+    </ng-template>
+    <ng-template ngbTabContent>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <!-- <h4 class="card-title">
+                        รายชื่อผู้ป่วยที่รอรับบริการ
+                      </h4> -->
+              <p class="card-description">
+                แสดงเฉพาะรายชื่อจุดให้บริการที่มีการ <code>เปิดให้บริการ</code> เท่านั้น
+                <!-- <button (click)="openPrinter()" class="float-right btn btn-sm btn-success"> <i class="mdi mdi-printer"></i>
+                          ตั้งค่าเครื่องพิมพ์</button> -->
+
+              </p>
+              <div class="row">
+                <div class="col-md-9">
+                  <div class="input-group" style="width: 250px;">
+                    <input type="text" (click)="$event.target.select()" class="form-control" name="query"
+                      (keyup)="doSearch($event)" [(ngModel)]="query" placeholder="ระบุคำค้นหา.."
+                      aria-label="ระบุคำค้นหา" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary btn-sm" (click)="getVisit()" type="button" id="button-addon2">
+                        <i class="mdi mdi-account-search"></i>
+                        ค้นหา
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <select aria-placeholder="เลือกจุดให้บริการ" (change)="changeServicePoints($event)"
+                      class="form-control form-control-sm" name="servicePointId">
+                      <!-- <option value="">เลือกจุดให้บริการ</option> -->
+                      <option *ngFor="let s of servicePoints" [value]="s.local_code">{{s.local_code}} -
+                        {{s.service_point_name}}</option>
+                      <!-- <option value="">ทั้งหมด</option> -->
+                    </select>
+
+                  </div>
+                </div>
+              </div>
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>เวลา</th>
+                    <th>HN</th>
+                    <th>ชื่อ - สกุล</th>
+                    <th>แผนก</th>
+                    <th style="width: 80px;">#</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="!visit.length">
+                    <td colspan="5">
+                      <p>ไม่พบรายการ</p>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let v of visitHistory">
+                    <td>{{v.time_serv}}</td>
+                    <td>{{v.hn}}</td>
+                    <td>{{v.first_name}} {{v.last_name}}</td>
+                    <td>{{v.clinic_code}} - {{v.clinic_name}}</td>
+                    <td>
+                      <button class="btn btn-sm btn-gradient-primary" (click)="printAgain(v.queue_id)">
+                        <i class="mdi mdi-printer"></i> พิมพ์คิว
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div *ngIf="visit.length" style="padding-top: 25px;">
+                <ngb-pagination class="d-flex justify-content-center" [rotate]="true" [collectionSize]="totalHistory"
+                  [maxSize]="maxSizePage" [boundaryLinks]="true" [pageSize]="pageSize"
+                  (pageChange)="onPageChange($event)" [(page)]="currentPage" aria-label="pagination"></ngb-pagination>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>
+
+
 
 <app-modal-select-priority #mdlSelectPriority (onSelected)="onSelectedPriority($event)" [patientName]="patientName">
 </app-modal-select-priority>
