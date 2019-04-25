@@ -323,8 +323,6 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.selectedQueue = item;
     this.isMarkPending = true;
     this.mdlSelectTransfer.open(true);
-    console.log(item);
-    
   }
 
   onSelectedPoint(event: any) {
