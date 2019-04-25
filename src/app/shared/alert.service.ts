@@ -16,7 +16,7 @@ export class AlertService {
       type: 'error',
       confirmButtonText: 'ตกลง'
     };
-    swal(option);
+    swal.fire(option);
 
   }
 
@@ -27,7 +27,7 @@ export class AlertService {
       type: 'info',
       confirmButtonText: 'ตกลง'
     };
-    swal(option);
+    swal.fire(option);
 
   }
 
@@ -40,7 +40,7 @@ export class AlertService {
       type: 'success',
       confirmButtonText: 'ตกลง'
     };
-    swal(option)
+    swal.fire(option)
       .then(
         function () { },
         // handling the promise rejection
@@ -58,7 +58,7 @@ export class AlertService {
       type: 'error',
       confirmButtonText: 'ตกลง'
     };
-    swal(option);
+    swal.fire(option);
 
   }
 
@@ -74,7 +74,7 @@ export class AlertService {
       cancelButtonText: 'ยกเลิก',
     };
 
-    let result = await swal(option);
+    let result = await swal.fire(option);
     if (result.dismiss) return false;
     if (result.value) return true;
 
@@ -82,7 +82,7 @@ export class AlertService {
   }
 
   async showLoading() {
-    const resp = await swal({
+    const resp = await swal.fire({
       title: 'ประมวลผล!',
       html: 'กรุณารอซักครู่ระบบกำลังประมวลผล.',
       allowOutsideClick: false,
@@ -93,6 +93,5 @@ export class AlertService {
     if (resp.dismiss === swal.DismissReason.timer) { }
 
   }
-
 
 }
