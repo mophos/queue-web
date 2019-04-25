@@ -115,6 +115,16 @@ export class VisitComponent implements OnInit {
     }
   }
 
+  doSearchHistory(event: any) {
+    if (this.query) {
+      if (event.keyCode === 13) {
+        this.isSearch = true;
+        this.servicePointCode = '';
+        this.getHistory();
+      }
+    }
+  }
+
   async printQueue(queueId: any) {
     const usePrinter = localStorage.getItem('clientUserPrinter');
     const printerId = localStorage.getItem('clientPrinterId');
@@ -177,7 +187,6 @@ export class VisitComponent implements OnInit {
     });
 
     this.client.on('message', (topic, payload) => {
-      console.log(topic);
       this.getVisit();
       this.getHistory();
     });

@@ -118,10 +118,10 @@
                 <div class="col-md-9">
                   <div class="input-group" style="width: 250px;">
                     <input type="text" (click)="$event.target.select()" class="form-control" name="query"
-                      (keyup)="doSearch($event)" [(ngModel)]="query" placeholder="ระบุคำค้นหา.."
+                      (keyup)="doSearchHistory($event)" [(ngModel)]="query" placeholder="ระบุคำค้นหา.."
                       aria-label="ระบุคำค้นหา" aria-describedby="button-addon2">
                     <div class="input-group-append">
-                      <button class="btn btn-primary btn-sm" (click)="getVisit()" type="button" id="button-addon2">
+                      <button class="btn btn-primary btn-sm" (click)="getHistory()" type="button" id="button-addon2">
                         <i class="mdi mdi-account-search"></i>
                         ค้นหา
                       </button>
@@ -152,7 +152,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngIf="!visit.length">
+                  <tr *ngIf="!visitHistory.length">
                     <td colspan="5">
                       <p>ไม่พบรายการ</p>
                     </td>
