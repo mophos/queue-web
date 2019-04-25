@@ -380,7 +380,11 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.roomId = queue.room_id;
     this.queueNumber = queue.queue_number;
     this.queueId = queue.queue_id;
-    this.doCallQueue();
+    if (queue.is_completed === 'N') {
+      this.doCallQueue('N');
+    } else {
+      this.doCallQueue();
+    }
   }
 
   prepareQueue(room: any) {
