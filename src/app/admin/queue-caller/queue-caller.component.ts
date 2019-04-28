@@ -343,7 +343,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   onSelectedTransfer(event: any) {
     this.pendingToServicePointId = event.servicePointId;
     this.pendingToPriorityId = event.priorityId;
-    this.pendingOldQueue = event.pendingOldQueue
+    this.pendingOldQueue = event.pendingOldQueue;
 
     this.doMarkPending(this.selectedQueue);
   }
@@ -365,13 +365,13 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.prepareQueue({ 'room_id': item.roomId, 'room_number': item.roomNumber });
   }
 
-  setCallDetail(item: any) {
+  setCallDetail(item: any, isCompleted: any = 'Y') {
     this.queueId = item.queue_id;
     this.queueNumber = item.queue_number;
     if (this.rooms.length === 1) {
       this.roomId = this.rooms[0].room_id;
       this.roomNumber = this.rooms[0].room_number;
-      this.doCallQueue();
+      this.doCallQueue(isCompleted);
     }
   }
 
@@ -380,7 +380,8 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.roomId = queue.room_id;
     this.queueNumber = queue.queue_number;
     this.queueId = queue.queue_id;
-    this.doCallQueue();
+    const _isCompleted = queue.is_completed || 'Y';
+    this.doCallQueue(_isCompleted);
   }
 
   prepareQueue(room: any) {
@@ -425,13 +426,13 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
 
   async doMarkPending(item: any) {
 
-    var printPendingQueue = localStorage.getItem('printPendingQueue') || 'N';
-    var _printPendingQueue = printPendingQueue == 'Y' ? true : false;
+    const printPendingQueue = localStorage.getItem('printPendingQueue') || 'N';
+    const _printPendingQueue = printPendingQueue === 'Y' ? true : false;
 
     if (this.servicePointId === this.pendingToServicePointId) {
       this.alertService.error('ไม่สามารถสร้างคิวในแผนกเดียวกันได้');
     } else {
-      var textShow = _printPendingQueue ? `ต้องการพักคิวนี้ [${item.queue_number}] ใช่หรือไม่?` : `ต้องการพักคิวนี้ [${item.queue_number}] และพิมพ์คิวใหม่ ใช่หรือไม่?`;
+      const textShow = _printPendingQueue ? `ต้องการพักคิวนี้ [${item.queue_number}] ใช่หรือไม่?` : `ต้องการพักคิวนี้ [${item.queue_number}] และพิมพ์คิวใหม่ ใช่หรือไม่?`;
       const _confirm = await this.alertService.confirm(textShow);
 
       if (_confirm) {
@@ -486,7 +487,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   async printQueue(queueId: any) {
     const usePrinter = localStorage.getItem('clientUserPrinter');
     const printerId = localStorage.getItem('clientPrinterId');
-    var printSmallQueue = localStorage.getItem('printSmallQueue') || 'N';
+    const printSmallQueue = localStorage.getItem('printSmallQueue') || 'N';
 
     if (usePrinter === 'Y') {
       const topic = `/printer/${printerId}`;

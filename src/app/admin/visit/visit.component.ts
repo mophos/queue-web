@@ -26,8 +26,10 @@ export class VisitComponent implements OnInit {
 
   priorities: any = [];
   visit: any = [];
+  visitHistory: any = [];
 
   total = 0;
+  totalHistory = 0;
   pageSize = 10;
   maxSizePage = 5;
   currentPage = 1;
@@ -113,20 +115,29 @@ export class VisitComponent implements OnInit {
     }
   }
 
+  doSearchHistory(event: any) {
+    if (this.query) {
+      if (event.keyCode === 13) {
+        this.isSearch = true;
+        this.servicePointCode = '';
+        this.getHistory();
+      }
+    }
+  }
+
   async printQueue(queueId: any) {
-    var usePrinter = localStorage.getItem('clientUserPrinter');
-    var printerId = localStorage.getItem('clientPrinterId');
-    var printSmallQueue = localStorage.getItem('printSmallQueue') || 'N';
+    const usePrinter = localStorage.getItem('clientUserPrinter');
+    const printerId = localStorage.getItem('clientPrinterId');
+    const printSmallQueue = localStorage.getItem('printSmallQueue') || 'N';
 
     if (usePrinter === 'Y') {
-      var topic = `/printer/${printerId}`;
-      console.log(topic);
+      const topic = `/printer/${printerId}`;
       try {
-        var rs: any = await this.queueService.printQueueGateway(queueId, topic, printSmallQueue);
+        const rs: any = await this.queueService.printQueueGateway(queueId, topic, printSmallQueue);
         if (rs.statusCode === 200) {
-          //success
+          // success
         } else {
-          this.alertService.error('ไม่สามารถพิมพ์บัตรคิวได้')
+          this.alertService.error('ไม่สามารถพิมพ์บัตรคิวได้');
         }
       } catch (error) {
         console.log(error);
@@ -176,8 +187,8 @@ export class VisitComponent implements OnInit {
     });
 
     this.client.on('message', (topic, payload) => {
-      console.log(topic);
       this.getVisit();
+      this.getHistory();
     });
 
     this.client.on('close', () => {
@@ -215,12 +226,14 @@ export class VisitComponent implements OnInit {
     }
 
     await this.getVisit();
+    await this.getHistory();
   }
 
   changeServicePoints(event: any) {
     this.servicePointCode = event.target.value;
     this.query = '';
     this.getVisit();
+    this.getHistory();
   }
 
   async getVisit() {
@@ -230,6 +243,28 @@ export class VisitComponent implements OnInit {
       if (rs.statusCode === 200) {
         this.visit = rs.results;
         this.total = rs.total;
+
+        if (this.isSearch) {
+          if (this.visit.length === 1) {
+            this.openPriority(this.visit[0])
+          }
+        }
+      } else {
+        this.alertService.error(rs.message);
+      }
+    } catch (error) {
+      console.error(error);
+      this.alertService.error('เกิดข้อผิดพลาด');
+    }
+  }
+
+  async getHistory() {
+    try {
+      const rs: any = await this.queueService.visitHistoryList(this.servicePointCode, this.query, this.pageSize, this.offset);
+
+      if (rs.statusCode === 200) {
+        this.visitHistory = rs.results;
+        this.totalHistory = rs.total;
 
         if (this.isSearch) {
           if (this.visit.length === 1) {
@@ -295,6 +330,15 @@ export class VisitComponent implements OnInit {
     } catch (error) {
       console.log(error);
       this.alertService.error('เกิดข้อผิดพลาด');
+    }
+  }
+
+  async printAgain(queueId) {
+    const confirm = await this.alertService.confirm('ต้องการพิมพ์บัตรคิว หรือไม่?');
+    if (confirm) {
+      console.log(confirm);
+
+      this.printQueue(queueId);
     }
   }
 }

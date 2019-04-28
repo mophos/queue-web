@@ -146,12 +146,13 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       if (this.playlists.length) {
         const queueNumber = this.playlists[0].queueNumber;
         const roomNumber = this.playlists[0].roomNumber;
-        this.playSound(queueNumber, roomNumber);
+        const isInterview = this.playlists[0].isInterview;
+        this.playSound(queueNumber, roomNumber, isInterview);
       }
     }
   }
 
-  playSound(strQueue: string, strRoomNumber: string) {
+  playSound(strQueue: string, strRoomNumber: string, isInterview: string) {
 
     this.isPlayingSound = true;
 
@@ -170,10 +171,14 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
       audioFiles.push(`./assets/audio/${v}.mp3`);
     });
 
-    if (this.soundFile) {
-      audioFiles.push(`./assets/audio/${this.soundFile}`);
+    if (isInterview === 'Y') {
+      audioFiles.push(`./assets/audio/interview-table.mp3`);
     } else {
-      audioFiles.push('./assets/audio/channel.mp3');
+      if (this.soundFile) {
+        audioFiles.push(`./assets/audio/${this.soundFile}`);
+      } else {
+        audioFiles.push('./assets/audio/channel.mp3');
+      }
     }
 
     if (this.speakSingle) {
@@ -181,42 +186,30 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
         audioFiles.push(`./assets/audio/${v}.mp3`);
       });
     } else {
-      const arrRoom: any = (_strRoom.join('')).match(/[a-z]+|[^a-z]+/gi);
-      if (!isNaN(arrRoom)) {
-        let no = +arrRoom;
-        if (no >= 10000) {
-          audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
-          audioFiles.push(`./assets/audio/10000.mp3`);
-          no -= +no.toString().substr(0, 1) * 10000;
-        }
 
-        if (no >= 1000) {
-          audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
-          audioFiles.push(`./assets/audio/1000.mp3`);
-          no -= +no.toString().substr(0, 1) * 1000;
-        }
-        if (no >= 100) {
-          audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
-          audioFiles.push(`./assets/audio/100.mp3`);
-          no -= +no.toString().substr(0, 1) * 100;
-        }
-        if (no >= 10) {
-          if (no >= 30) {
-            audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
+      try {
+        if (_strRoom.length === 2) {
+          var _roomNumber = +strRoomNumber;
+          if (_roomNumber >= 30) {
+            audioFiles.push(`./assets/audio/${_strRoom[0]}.mp3`);
             audioFiles.push(`./assets/audio/10.mp3`);
-          } else if (no >= 20) {
+          } else if (_roomNumber >= 20) {
             audioFiles.push(`./assets/audio/20.mp3`);
+          } else {
+            audioFiles.push(`./assets/audio/10.mp3`);
           }
-          no -= +no.toString().substr(0, 1) * 10;
-          if (no === 1) {
+
+          if (+_strRoom[1] === 1) {
             audioFiles.push(`./assets/audio/11.mp3`);
-            no -= 1;
+          } else if (+_strRoom[1] > 0) {
+            audioFiles.push(`./assets/audio/${_strRoom[1]}.mp3`);
           }
+
+        } else {
+          audioFiles.push(`./assets/audio/${_strRoom[0]}.mp3`);
         }
-        if (no >= 1) {
-          audioFiles.push(`./assets/audio/${no.toString().substr(0, 1)}.mp3`);
-          no -= +no.toString().substr(0, 1);
-        }
+      } catch (error) {
+        console.log('Not numeric!');
       }
     }
 
@@ -317,7 +310,7 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
         if (that.isSound) {
           if (+that.servicePointId === +_payload.servicePointId) {
             // play sound
-            const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString() };
+            const sound = { queueNumber: _payload.queueNumber, roomNumber: _payload.roomNumber.toString(), isInterview: _payload.isInterview };
             that.playlists.push(sound);
             that.prepareSound();
           }
