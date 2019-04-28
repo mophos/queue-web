@@ -13,6 +13,16 @@ import * as _ from 'lodash';
 export class ModalSelectTransferComponent implements OnInit {
 
   @Output('onSelected') onSelected: EventEmitter<any> = new EventEmitter<any>();
+  
+  @Input('servicePointId')
+  set setServicePointId(value: any) {
+    this.servicePointId = value;
+  }
+
+  @Input('priorityId')
+  set setPriorityId(value: any) {
+    this.priorityId = value;
+  }
 
   @ViewChild('content') public content: any;
   modalReference: NgbModalRef;
