@@ -286,6 +286,12 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   }
 
   connectWebSocket() {
+
+    try {
+      this.client.end(true);
+    } catch (error) {
+
+    }
     const rnd = new Random();
     const username = sessionStorage.getItem('username');
     const strRnd = rnd.integer(1111111111, 9999999999);
