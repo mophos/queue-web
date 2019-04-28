@@ -109,9 +109,6 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
         this.speakSingle = decodedToken.SPEAK_SINGLE === 'Y' ? true : false;
 
-        await this.getServicePoints();
-
-
         if (sessionStorage.getItem('servicePoints')) {
           const _servicePoints = sessionStorage.getItem('servicePoints');
           const jsonDecodedServicePoint = JSON.parse(_servicePoints);
@@ -119,9 +116,13 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
           if (_department.length === 1) {
             this.onSelectDepartment(_department[0]);
           }
+        } else {
+          await this.getServicePoints();
         }
 
         this.initialSocket();
+      } else {
+        this.alertService.error('ไม่พบ token');
       }
     } catch (error) {
       console.log(error);
@@ -179,10 +180,12 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
     });
 
     const idxS = _.findIndex(this.servicePoints, { 'service_point_id': this.servicePointId });
+
     if (idxS > -1) {
       this.soundFile = this.servicePoints[idxS].sound_file;
       this.soundSpeed = this.servicePoints[idxS].sound_speed;
     }
+
     if (isInterview === 'Y') {
       audioFiles.push(`./assets/audio/interview-table.mp3`);
     } else {
