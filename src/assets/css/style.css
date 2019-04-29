@@ -18299,6 +18299,13 @@ input:focus {
   src: url("../fonts/thaisanslite_r1-webfont.woff2") format("woff2"), url("../fonts/thaisanslite_r1-webfont.woff") format("woff"), url("../fonts/thaisanslite_r1-webfont.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: 'thsarabun';
+  src: url("../fonts/Sarabun-Medium.eot");
+  /* IE9 Compat Modes */
+  src: url("../fonts/Sarabun-Medium.woff2") format("woff2"), url("../fonts/Sarabun-Medium.woff") format("woff"), url("../fonts/Sarabun-Medium.ttf") format("truetype");
+}
+
 /* Backgrounds  */
 .bg-gradient-primary, #theme-settings .settings-close {
   background: linear-gradient(to right, #da8cff, #9a55ff);

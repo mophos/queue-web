@@ -33,8 +33,8 @@ export class QueueService {
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 
-  async visitHistoryList(servicePointCode: any, query: any, limit: number = 20, offset: number = 0) {
-    const _url = `${this.apiUrl}/queue/his-visit-history?servicePointCode=${servicePointCode}&query=${query}&limit=${limit}&offset=${offset}`;
+  async visitHistoryList(servicePointId: any, query: any, limit: number = 20, offset: number = 0) {
+    const _url = `${this.apiUrl}/queue/his-visit-history?servicePointId=${servicePointId}&query=${query}&limit=${limit}&offset=${offset}`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
 

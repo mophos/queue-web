@@ -104,11 +104,10 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
         this.notifyUser = decodedToken.NOTIFY_USER;
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
         this.speakSingle = decodedToken.SPEAK_SINGLE === 'Y' ? true : false;
-
+        await this.getServicePoints();
         if (this.departmentId && this.departmentName) {
           this.onSelectDepartment({ department_id: this.departmentId, department_name: this.departmentName });
         }
-
       } else {
         this.alertService.error('ไม่พบ token');
       }
@@ -168,7 +167,6 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
     });
 
     const idxS = _.findIndex(this.servicePoints, { 'service_point_id': this.servicePointId });
-
     if (idxS > -1) {
       this.soundFile = this.servicePoints[idxS].sound_file;
       this.soundSpeed = this.servicePoints[idxS].sound_speed;
