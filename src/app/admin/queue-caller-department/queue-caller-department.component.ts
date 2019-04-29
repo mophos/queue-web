@@ -144,7 +144,6 @@ export class QueueCallerDepartmentComponent implements OnInit {
     const topicDepartment = `${this.departmentTopic}/${this.departmentId}`;
     const visitTopic = this.globalTopic;
 
-
     this.client.on('connect', () => {
       console.log('Connected!');
       that.zone.run(() => {
