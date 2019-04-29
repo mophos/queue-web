@@ -35,6 +35,7 @@ export class VisitComponent implements OnInit {
   currentPage = 1;
   offset = 0;
   servicePointCode: any = '';
+  servicePointId: any;
   servicePoints: any = [];
 
   isOffline = false;
@@ -119,7 +120,7 @@ export class VisitComponent implements OnInit {
     if (this.query) {
       if (event.keyCode === 13) {
         this.isSearch = true;
-        this.servicePointCode = '';
+        // this.servicePointId = '';
         this.getHistory();
       }
     }
@@ -223,6 +224,7 @@ export class VisitComponent implements OnInit {
     this.servicePoints = jsonDecoded;
     if (this.servicePoints) {
       this.servicePointCode = this.servicePoints[0].local_code;
+      this.servicePointId = this.servicePoints[0].service_point_id;
     }
 
     await this.getVisit();
@@ -233,6 +235,11 @@ export class VisitComponent implements OnInit {
     this.servicePointCode = event.target.value;
     this.query = '';
     this.getVisit();
+  }
+
+  changeServicePointsHistory(event: any) {
+    this.servicePointId = event.target.value;
+    this.query = '';
     this.getHistory();
   }
 
@@ -246,7 +253,7 @@ export class VisitComponent implements OnInit {
 
         if (this.isSearch) {
           if (this.visit.length === 1) {
-            this.openPriority(this.visit[0])
+            this.openPriority(this.visit[0]);
           }
         }
       } else {
@@ -260,7 +267,7 @@ export class VisitComponent implements OnInit {
 
   async getHistory() {
     try {
-      const rs: any = await this.queueService.visitHistoryList(this.servicePointCode, this.query, this.pageSize, this.offset);
+      const rs: any = await this.queueService.visitHistoryList(this.servicePointId, this.query, this.pageSize, this.offset);
 
       if (rs.statusCode === 200) {
         this.visitHistory = rs.results;

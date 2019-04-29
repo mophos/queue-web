@@ -18,6 +18,9 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   templateUrl: './display-queue.component.html',
   styles: [
     `
+    .thai-sarabun {
+      font-family: "thaisarabun";
+    }
     .main-panel {
         transition: width 0.25s ease, margin 0.25s ease;
         width: 100%;
