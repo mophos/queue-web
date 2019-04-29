@@ -82,6 +82,9 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     this.route.queryParams
       .subscribe(params => {
         this.token = params.token || null;
+        if (this.token) {
+          sessionStorage.setItem('token', params.token);
+        }
         this.servicePointId = +params.servicePointId || null;
         this.servicePointName = params.servicePointName || null;
       });
@@ -114,12 +117,14 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
             this.initialSocket();
           }
         }
+      } else {
+        this.alertService.error('ไม่พบ token');
       }
     } catch (error) {
+      this.alertService.error('เกิดข้อผิดพลาด');
       console.log(error);
     }
   }
-
 
   public unsafePublish(topic: string, message: string): void {
     try {
@@ -281,6 +286,12 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
   }
 
   connectWebSocket() {
+
+    try {
+      this.client.end(true);
+    } catch (error) {
+
+    }
     const rnd = new Random();
     const username = sessionStorage.getItem('username');
     const strRnd = rnd.integer(1111111111, 9999999999);

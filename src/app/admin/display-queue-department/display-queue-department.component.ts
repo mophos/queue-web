@@ -87,13 +87,9 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
     this.route.queryParams
       .subscribe(params => {
         this.token = params.token || null;
-        if (this.token) {
-          sessionStorage.setItem('token', this.token);
-        }
         this.departmentId = +params.departmentId || null;
         this.departmentName = params.departmentName || null;
       });
-
 
   }
 
@@ -109,19 +105,12 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
         this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
         this.speakSingle = decodedToken.SPEAK_SINGLE === 'Y' ? true : false;
 
-        await this.getServicePoints();
-
-
-        if (sessionStorage.getItem('servicePoints')) {
-          const _servicePoints = sessionStorage.getItem('servicePoints');
-          const jsonDecodedServicePoint = JSON.parse(_servicePoints);
-          const _department = _.unionBy(jsonDecodedServicePoint, 'department_id');
-          if (_department.length === 1) {
-            this.onSelectDepartment(_department[0]);
-          }
+        if (this.departmentId && this.departmentName) {
+          this.onSelectDepartment({ department_id: this.departmentId, department_name: this.departmentName });
         }
 
-        this.initialSocket();
+      } else {
+        this.alertService.error('ไม่พบ token');
       }
     } catch (error) {
       console.log(error);
@@ -179,10 +168,12 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
     });
 
     const idxS = _.findIndex(this.servicePoints, { 'service_point_id': this.servicePointId });
+
     if (idxS > -1) {
       this.soundFile = this.servicePoints[idxS].sound_file;
       this.soundSpeed = this.servicePoints[idxS].sound_speed;
     }
+
     if (isInterview === 'Y') {
       audioFiles.push(`./assets/audio/interview-table.mp3`);
     } else {
@@ -295,6 +286,12 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
   }
 
   connectWebSocket() {
+
+    try {
+      this.client.end(true);
+    } catch (error) {
+
+    }
     const rnd = new Random();
     const username = sessionStorage.getItem('username');
     const strRnd = rnd.integer(1111111111, 9999999999);
@@ -321,6 +318,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
       });
 
       that.client.subscribe(topic, { qos: 0 }, (error) => {
+        console.log('Subscribed: ' + topic);
         if (error) {
           that.zone.run(() => {
             that.isOffline = true;
@@ -355,11 +353,12 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
     });
 
     this.client.on('close', () => {
-      console.log('MQTT Conection Close');
+      console.log('Conection close');
     });
 
     this.client.on('error', (error) => {
-      console.log('MQTT Error');
+      console.log(error);
+      console.log('Connection error');
       that.zone.run(() => {
         that.isOffline = true;
         that.counter.restart();
@@ -367,7 +366,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
     });
 
     this.client.on('offline', () => {
-      console.log('MQTT Offline');
+      console.log('Connection offline');
       that.zone.run(() => {
         that.isOffline = true;
         try {
