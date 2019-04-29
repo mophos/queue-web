@@ -166,8 +166,6 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
       audioFiles.push(`./assets/audio/${v}.mp3`);
     });
 
-    console.log(this.servicePointId, this.servicePoints);
-
     const idxS = _.findIndex(this.servicePoints, { 'service_point_id': this.servicePointId });
     if (idxS > -1) {
       this.soundFile = this.servicePoints[idxS].sound_file;
