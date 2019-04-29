@@ -117,13 +117,13 @@ export class VisitComponent implements OnInit {
   }
 
   doSearchHistory(event: any) {
-    if (this.query) {
-      if (event.keyCode === 13) {
-        this.isSearch = true;
-        // this.servicePointId = '';
-        this.getHistory();
-      }
+    // if (this.query) {
+    if (event.keyCode === 13) {
+      this.isSearch = true;
+      // this.servicePointId = '';
+      this.getHistory();
     }
+    // }
   }
 
   async printQueue(queueId: any) {

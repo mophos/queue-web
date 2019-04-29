@@ -138,7 +138,7 @@
                     <th>เวลา</th>
                     <th>HN</th>
                     <th>ชื่อ - สกุล</th>
-                    <!-- <th>แผนก</th> -->
+                    <th>คิว</th>
                     <th style="width: 80px;">#</th>
                   </tr>
                 </thead>
@@ -152,7 +152,7 @@
                     <td>{{v.time_serv}}</td>
                     <td>{{v.hn}}</td>
                     <td>{{v.first_name}} {{v.last_name}}</td>
-                    <!-- <td>{{v.clinic_code}} - {{v.clinic_name}}</td> -->
+                    <td>{{v.queue_number}}</td>
                     <td>
                       <button class="btn btn-sm btn-gradient-primary" (click)="printAgain(v.queue_id)">
                         <i class="mdi mdi-printer"></i> พิมพ์คิว
