@@ -266,3 +266,11 @@ select.form-control {
     color: black;
     font-weight: bold;
 }
+
+.breadcrumb .breadcrumb-item {
+    font-size: 1rem;
+}
+
+input.form-control {
+  font-size: 1.1rem;
+}

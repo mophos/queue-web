@@ -22,11 +22,18 @@ import { ModalAddDepartmentComponent } from './modal-add-department/modal-add-de
 import { ModalAddPriorityComponent } from './modal-add-priority/modal-add-priority.component';
 import { ModalSetPrinterComponent } from './modal-set-printer/modal-set-printer.component';
 import { ModalSelectPriorityComponent } from './modal-select-priority/modal-select-priority.component';
+import { ModalAddServiceTimesComponent } from './queue-online/modal-add-service-times/modal-add-service-times.component';
+import { QueueOnlineServiceTimeService } from './queue-online/service-time.service';
+import { ServiceTimePipe } from './service-time.pipe';
 import { ModalSelectDepartmentComponent } from './modal-select-department/modal-select-department.component';
 import { AlertWarningPrinterComponent } from './alert-warning-printer/alert-warning-printer.component';
 import { ModalSelectRoomComponent } from './modal-select-room/modal-select-room.component';
 import { ModalSettingSoundComponent } from './modal-setting-sound/modal-setting-sound.component';
 import { SoundService } from './sound.service';
+import { QueueOnlineModalAddDepartmentComponent } from './queue-online/modal-add-department/modal-add-department.component';
+import { QueueOnlineServiceSlotService } from './queue-online/queue-online-service-slot.service';
+import { QueueOnlineModalAddServiceSlotComponent } from './queue-online/modal-add-service-slot/modal-add-service-slot.component';
+import { QueueOnlineService } from './queue-online/queue-online.service';
 
 @NgModule({
   imports: [
@@ -36,17 +43,21 @@ import { SoundService } from './sound.service';
   ],
   declarations: [
     ModalAddServicePointComponent,
+    QueueOnlineModalAddDepartmentComponent,
+    QueueOnlineModalAddServiceSlotComponent,
     ModalAddUserComponent,
     ModalRoomsComponent,
     ModalSelectServicepointsComponent,
     ShortTimePipe,
     ThaiDatePipe,
+    ServiceTimePipe,
     ToggleFullscreenDirective,
     ModalUserServicePointsComponent,
     ModalAddDepartmentComponent,
     ModalAddPriorityComponent,
     ModalSetPrinterComponent,
     ModalSelectPriorityComponent,
+    ModalAddServiceTimesComponent,
     ModalSelectDepartmentComponent,
     AlertWarningPrinterComponent,
     ModalSelectRoomComponent,
@@ -54,6 +65,8 @@ import { SoundService } from './sound.service';
   ],
   exports: [
     ModalAddServicePointComponent,
+    QueueOnlineModalAddDepartmentComponent,
+    QueueOnlineModalAddServiceSlotComponent,
     ModalAddUserComponent,
     ModalRoomsComponent,
     ModalSelectServicepointsComponent,
@@ -62,9 +75,11 @@ import { SoundService } from './sound.service';
     ModalSetPrinterComponent,
     ShortTimePipe,
     ThaiDatePipe,
+    ServiceTimePipe,
     ToggleFullscreenDirective,
     ModalAddPriorityComponent,
     ModalSelectPriorityComponent,
+    ModalAddServiceTimesComponent,
     ModalSelectDepartmentComponent,
     AlertWarningPrinterComponent,
     ModalSelectRoomComponent,
@@ -79,7 +94,10 @@ import { SoundService } from './sound.service';
     LoginService,
     TokenService,
     DepartmentService,
-    SoundService
+    SoundService,
+    QueueOnlineServiceTimeService,
+    QueueOnlineServiceSlotService,
+    QueueOnlineService
   ]
 })
 export class SharedModule { }

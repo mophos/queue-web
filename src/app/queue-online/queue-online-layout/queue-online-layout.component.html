@@ -1,0 +1,112 @@
+<div class="container-scroller">
+  <!-- partial:../../partials/_navbar.html -->
+  <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+      <a class="navbar-brand brand-logo" href="javascript://">
+        <img style="width: 40px; height: 40px;" src="./assets/images/iconQ4U100.png" alt=""></a>
+      <span class="font-weight-bold" style="font-size: 1.5rem;">
+        ระบบคิวออนไลน์
+      </span>
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-stretch">
+
+      <ul class="navbar-nav navbar-nav-right">
+        <li class="nav-item d-none d-lg-block full-screen-link">
+          <a class="nav-link" (click)="logout()" href="javascript://">
+            <i class="mdi mdi-power text-danger" id="fullscreen-button"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:../../partials/_sidebar.html -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <ul class="nav">
+        <li class="nav-item nav-profile">
+          <a href="javascript://" class="nav-link">
+            <div class="nav-profile-image">
+              <img src="./assets/images/faces/face1.jpg" alt="profile">
+              <span class="login-status online"></span>
+              <!--change to offline or busy as needed-->
+            </div>
+            <div class="nav-profile-text d-flex flex-column">
+              <span class="font-weight-bold mb-2">{{fullname}}</span>
+              <span class="text-secondary text-small">Q4U user</span>
+            </div>
+            <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+          </a>
+        </li>
+
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+          <a class="nav-link" href="javascript://" routerLink="/queue-online/main">
+            <span class="menu-title">รายการจองคิวออนไลน์</span>
+            <i class="mdi mdi-view-list menu-icon"></i>
+          </a>
+        </li>
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+          <a class="nav-link" href="javascript://" routerLink="/admin/visit">
+            <span class="menu-title">นำเข้าข้อมูลการจองคิว</span>
+            <i class="mdi mdi-database-import menu-icon"></i>
+          </a>
+        </li>
+
+        <div class="border-bottom"></div>
+
+        <li class="nav-item">
+          <a class="nav-link" (click)="isCollapedSettings = !isCollapedSettings" data-toggle="collapse"
+            href="javascript://" aria-expanded="false" aria-controls="ui-basic">
+            <span class="menu-title font-weight-bold">ตั้งค่าการใช้งาน</span>
+            <i class="mdi mdi-chevron-right menu-icon" *ngIf="isCollapedSettings"></i>
+            <i class="mdi mdi-chevron-down menu-icon" *ngIf="!isCollapedSettings"></i>
+          </a>
+          <div [ngbCollapse]="isCollapedSettings" class="collapse" id="ui-basic">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+                <a class="nav-link" href="javascript://" routerLink="/queue-online/service-slots">
+                  <span class="menu-title">กำหนดค่า SERVICE SLOT</span>
+                </a>
+              </li>
+              <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+                <a class="nav-link" href="javascript://" routerLink="/queue-online/service-times">
+                  <span class="menu-title">ช่วงเวลาเปิดให้บริการ</span>
+                </a>
+              </li>
+              <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+                <a class="nav-link" href="javascript://" routerLink="/queue-online/department">
+                  <span class="menu-title">แผนกที่เปิดให้บริการ</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="nav-item sidebar-actions">
+          <span class="nav-link">
+
+            <button routerLink="/admin" class="btn btn-outline-primary btn-icon-text">
+              <i class="mdi mdi-home btn-icon-prepend mdi-36px"></i>
+              <span class="d-inline-block text-left">
+                <small class="font-weight-light d-block">กลับหน้าจัดการคิว</small>
+                กลับหน้าหลัก
+              </span>
+            </button>
+
+          </span>
+        </li>
+      </ul>
+    </nav>
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+
+        <router-outlet></router-outlet>
+
+      </div>
+      <!-- content-wrapper ends -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>

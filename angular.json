@@ -32,7 +32,9 @@
               {
                 "input": "./src/assets/css/style.css"
               },
-              "src/styles.css"
+              {
+                "input": "./src/styles.css"
+              }
             ],
             "scripts": []
           },

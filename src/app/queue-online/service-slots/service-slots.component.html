@@ -1,0 +1,99 @@
+<div class="page-header">
+  <h1 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-key"></i>
+    </span>
+    <span style="font-size: 1.4rem;">กำหนด SERVICE SLOT</span>
+  </h1>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="javascript://" routerLink="/queue-online/main">หน้าหลัก</a></li>
+      <li class="breadcrumb-item active" aria-current="page">กำหนด SERVICE SLOT</li>
+    </ol>
+  </nav>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="input-group">
+              <input readonly class="form-control" placeholder="วันที่" id="serviceDate" name="serviceDate"
+                [(ngModel)]="serviceDate" ngbDatepicker #d1="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-sm btn-primary calendar" (click)="d1.toggle()" type="button">
+                  <i class="mdi mdi-calendar"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <select class="form-control">
+                <option value="">เลือกแผนกที่ให้บริการ</option>
+                <option *ngFor="let item of departments" [value]="item.department_id">{{item.department_name}}</option>
+              </select>
+              <div class="input-group-append">
+                <button class="btn btn-sm btn-primary" type="button" (click)="doFilter()">
+                  <i class="mdi mdi-magnify"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <button class="float-right btn btn-sm btn-success" (click)="openService()">+ เพิ่มข้อมูล</button>
+          </div>
+        </div>
+
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ชื่อแผนก</th>
+              <th>วันที่</th>
+              <th>ช่วงเวลา</th>
+              <th>เปิดรับ/สร้าง</th>
+              <th>ยอดจอง</th>
+              <th>สถานะ</th>
+              <th>#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="!items.length">
+              <td colspan="5">
+                <p>ไม่พบรายการ</p>
+              </td>
+            </tr>
+            <tr *ngFor="let v of items">
+              <td>{{v.department_name }}</td>
+              <td>{{v.service_date | thaiDate }}</td>
+              <td>{{v.time_start }} - {{ v.time_end }}</td>
+              <td>{{v.total_queue | number }} / <span class="text-danger">{{v.total_generated | number}}</span></td>
+              <td>0</td>
+              <td>
+                <span class="mdi mdi-check text-success" *ngIf="v.is_active === 'Y'"></span>
+                <span class="mdi mdi-close text-danger" *ngIf="v.is_active === 'N'"></span>
+              </td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-success" (click)="createQueue(v)">
+                    <i class="mdi mdi-database-refresh"></i> สร้างคิว
+                  </button>
+                  <button class="btn btn-sm btn-primary" (click)="openEdit(v)">
+                    <i class="mdi mdi-pencil"></i> แก้ไข
+                  </button>
+                  <button class="btn btn-sm btn-danger" (click)="remove(v)">
+                    <i class="mdi mdi-close"></i> ลบ
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-queue-online-modal-add-service-lot #mdlAddService (onSuccess)="onSuccess()">
+</app-queue-online-modal-add-service-lot>

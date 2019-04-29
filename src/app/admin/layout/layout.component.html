@@ -45,6 +45,12 @@
           </a>
         </li>
         <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" href="javascript://" routerLink="/queue-online">
+            <span class="menu-title">ระบบคิวออนไลน์</span>
+            <i class="mdi mdi-home menu-icon"></i>
+          </a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/queue-center">
             <span class="menu-title">แสดงคิวทั้งหมด</span>
             <i class="mdi mdi-animation-play menu-icon"></i>
@@ -65,7 +71,6 @@
         </li>
 
         <div class="border-bottom"></div>
-
 
         <li class="nav-item">
           <a class="nav-link" (click)="isCollapedCaller = !isCollapedCaller" data-toggle="collapse" href="javascript://"
