@@ -1,0 +1,99 @@
+<div class="container-scroller">
+  <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+      <a class="navbar-brand brand-logo" href="javascript://">
+        <img style="width: 40px; height: 40px;" src="./assets/images/iconQ4U100.png" alt=""></a>
+      <span class="font-weight-bold" style="font-size: 1.5rem;">
+        ระบบคิวออนไลน์
+      </span>
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-stretch">
+
+      <ul class="navbar-nav navbar-nav-right">
+        <li class="nav-item d-none d-lg-block full-screen-link">
+          <a class="nav-link" href="javascript://" routerLink="/admin">
+            <i class="mdi mdi-home text-success"></i>
+          </a>
+        </li>
+        <li class="nav-item d-none d-lg-block full-screen-link">
+          <a class="nav-link" appToggleFullscreen href="javascript://">
+            <i class="mdi mdi-fullscreen text-primary"></i>
+          </a>
+        </li>
+        <li class="nav-item d-none d-lg-block full-screen-link">
+          <a class="nav-link" (click)="logout()" href="javascript://">
+            <i class="mdi mdi-power text-danger"></i>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <div class="main-panel">
+      <div class="content-wrapper">
+
+        <div class="card card-inverse-danger" *ngIf="isOffline">
+          <div class="card-body">
+            <p class="mb-4">
+              เกิดข้อผิดพลาดในการเชื่อมต่อกับ Notify Server.
+            </p>
+            <button class="btn btn-danger" (click)="connectWebSocket()">เชื่อมต่อใหม่ (<strong>
+                <countdown [config]="{leftTime: 15, template: '$!s!'}" (notify)="onNotify($event)"></countdown>
+              </strong>)</button>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 0px;">
+          <div class="col-md-12" style="padding-left: 50px; padding-right: 50px;">
+            <span class="h2 font-weight-bold">หมายเลข</span>
+            <span class="h2 font-weight-bold float-right">ห้องตรวจ</span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12" *ngFor="let item of workingItems; let idx = index;">
+            <div
+              [ngClass]="{'invalid-blink': item.queue_number===currentQueueNumber,'bg-primary':item.queue_number!==currentQueueNumber}"
+              class="row bg-primary text-white" style="margin: 20px 5px 0px 5px; border-radius: 20px;
+              border: 5px solid white; padding: 20px;">
+              <div class="col-md-9">
+                <span class="font-weight-bold" style="letter-spacing: 1px; font-size: 10rem;">
+                  {{ item.queue_number || '-' }}
+                </span>
+              </div>
+              <div class="col-md-3" style="text-align: right;">
+                <span class="font-weight-bold" style="font-size: 10rem;">
+                  {{ item.room_number || '-' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <hr style="color: white;">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="float-left">
+              <i style="cursor: pointer;" *ngIf="isSound" (click)="toggleSound()"
+                class="h2 text-danger float-right mdi mdi-bell-ring"></i>
+              <i style="cursor: pointer;" *ngIf="!isSound" (click)="toggleSound()"
+                class="h2 text-muted float-right mdi mdi-bell-off"></i>
+            </div>
+            <div class="float-right">
+              <span class="h2 font-weight-bold text-primary" style="cursor: pointer" (click)="selectServicePoint()">
+                {{servicePointName || 'กรุณาเลือกจุดบริการ'}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>
+
+<app-modal-select-servicepoints (onSelected)="onSelectedPoint($event)" #mdlServicePoint>
+</app-modal-select-servicepoints>

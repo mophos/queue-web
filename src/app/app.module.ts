@@ -12,7 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginModule } from './login/login.module';
 import { SharedModule } from './shared/shared.module';
 import { environment } from '../environments/environment';
-
+import { EmbedVideo } from 'ngx-embed-video';
 export function tokenGetter() {
   return sessionStorage.getItem('token');
 }
@@ -28,6 +28,7 @@ export const whitelistedDomains = [new RegExp('[\s\S]*')] as RegExp[];
     AppRoutingModule,
     HttpClientModule,
     NgbModule.forRoot(),
+    EmbedVideo.forRoot(),
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

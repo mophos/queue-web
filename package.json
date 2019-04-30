@@ -33,6 +33,7 @@
     "mqtt": "^2.18.8",
     "ngx-clipboard": "^11.1.9",
     "ngx-countdown": "^3.1.0",
+    "ngx-embed-video": "^1.0.4",
     "random-js": "^1.0.8",
     "rxjs": "^6.3.3",
     "screenfull": "^4.0.0",

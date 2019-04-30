@@ -1,0 +1,18 @@
+.thai-sarabun {
+    font-family: "thaisarabun";
+  }
+  .main-panel {
+      transition: width 0.25s ease, margin 0.25s ease;
+      width: 100%;
+      min-height: calc(100vh - 70px);
+      display: flex;
+      flex-direction: column;
+  }
+
+  .bg-primary, .settings-panel .color-tiles .tiles.primary {
+      background-color: #01579b !important;
+  }
+
+  .bg-blue, .settings-panel .color-tiles .tiles.danger {
+      background-color: #1a237e !important;
+  }
