@@ -1,0 +1,143 @@
+<!-- <div class="row" style="padding: 1rem 1rem;">
+  <div class="col-md-12 " style="height: 5rem;text-align: center;border: 1px solid black">
+    โรงพยาบาล
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4" style="background: black;">
+    ข้อมูลจากบัตรประชาชน</div>
+  <div class="col-md-4" style="background: red;"></div>
+  <div class="col-md-4" style="background: blue;"></div>
+</div> -->
+<div class="body">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class='silver'>
+          <div style="font-size: 2.5rem; font-weight: bold;">โรงพยาบาล</div>
+          <h1>ระบบออกคิวอัตโนมัติ (Q4U)</h1>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="tabProfile">
+      <div style="margin: 20px;"></div>
+      <div class="row">
+        <div class="col-4">
+          <div class='silver'>
+            <h1>ข้อมูลจากบัตรประชาชน</h1>
+            <p>เลขบัตรประชาชน</p>
+            <span id="txtCid">-</span>
+            <p>ชื่อ - สกุล</p>
+            <span id="txtFullname">-</span>
+            <p>วันเกิด</p>
+            <span id="txtBirthdate">-</span>
+            <h4 style="text-align: right">**ข้อมูลจากเครื่องอ่านบัตรประชาชน</h4>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class='gold'>
+            <h1>ข้อมูลโรงพยาบาล</h1>
+            <p>HN</p>
+            <span id="txtHISHn">-</span>
+            <p>ชื่อ - สกุล</p>
+            <span id="txtHISFullname">-</span>
+            <p>วันเกิด</p>
+            <span id="txtHISBirthdate">-</span>
+            <h4 style="text-align: right">**จากฐานข้อมูลในโรงพยาบาล</h4>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class='silver'>
+            <h1>ข้อมูลสิทธิการรักษา</h1>
+
+            <p>สิทธิการรักษา</p>
+            <span id="txtNHSORight">-</span>
+            <p>วันที่เริ่มใช้สิทธิ์</p>
+            <span id="txtNHSOStartDart">-</span>
+            <p>หน่วยบริการหลัก</p>
+            <span id="txtNHSOHmain">-</span>
+            <h4 style="text-align: right">**สำนักงานหลักประกันสุขภาพแห่งชาติ</h4>
+          </div>
+        </div>
+      </div>
+      <div style="margin: 20px;"></div>
+
+      <button *ngIf="hn" type="button" class="btn btn-primary"
+        style="height: 6rem; font-size: 1.8em; display: block; margin: auto;"
+        (click)="onSelectServicePointList()">เลือกแผนกเข้ารับบริการ</button>
+
+    </div>
+
+
+    <div id="divDepartment" *ngIf="tabServicePoint">
+      <div style="margin: 20px;"></div>
+      <h1>แผนกที่ต้องการเข้ารับบริการ</h1>
+      <div class="row">
+        <div class="col-3 " [ngClass]="{'col-3': servicePointList.length > 6,'col-4':servicePointList.length <=6}"
+          *ngFor="let i of  servicePointList">
+          <button class="btn btn-primary" style="width: 100%;padding: 2rem;font-size: 2rem">{{i}}</button>
+        </div>
+      </div>
+
+      <div style="margin: 10px;">
+        <button class="btn btn-danger" type="button" (click)="cancel()"
+          style="height: 6rem; font-size: 1.8em; display: block; margin: auto;">ยกเลิก</button>
+
+      </div>
+    </div>
+
+    <!-- <div id="divSetting" style="display: none;">
+      <div style="margin: 20px;"></div>
+  
+      <form class="silver">
+        <span class="h1">Connection setting</span>
+        <div class="row">
+          <div class="column">
+            <label for="txtPrinterId">Printer ID</label>
+            <input type="text" placeholder="OPD-PRINTER" id="txtPrinterId">
+          </div>
+          <div class="column">
+            <label for="txtApiUrl">API URL</label>
+            <input type="text" placeholder="http://" id="txtApiUrl">
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+            <label for="txtApiToken">API TOKEN</label>
+            <input type="text" id="txtApiToken">
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="column">
+            <label for="txtNHSOCid">NHSO CID</label>
+            <input type="text" placeholder="" id="txtNHSOCid">
+          </div>
+          <div class="column">
+            <label for="txtNHSOToken">NHSO TOKEN</label>
+            <input type="text" placeholder="" id="txtNHSOToken">
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="column column-50 column-offset-25">
+            <label for="slPriority">Default priority</label>
+            <select name="slPriority" id="slPriority"></select>
+          </div>
+  
+          <div class="column">
+  
+          </div>
+        </div>
+  
+        <button class="button-primary" type="button" id="btnConnectionSave">SAVE</button>
+        <button class="button-black" type="button" id="btnConnectionCancel">CANCEL</button>
+        |
+        <button class="button-primary" type="button" id="btnExit">Exit program</button>
+  
+    </div> -->
+
+  </div>
+</div>
