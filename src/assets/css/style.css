@@ -29212,3 +29212,11 @@ div.tagsinput span.tag a {
 }
 
 /*# sourceMappingURL=maps/style.css.map */
+
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url("../fonts/ChakraPetch-Regular.woff2") format('woff2'),
+    url("../fonts/ChakraPetch-Regular.woff") format('woff');
+  font-weight: normal;
+  font-style: normal;
+}

@@ -1,3 +1,4 @@
+import { KioskModule } from './kiosk/kiosk.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, InjectionToken } from '@angular/core';
 import { JwtModule } from '@auth0/angular-jwt';
@@ -38,7 +39,8 @@ export const whitelistedDomains = [new RegExp('[\s\S]*')] as RegExp[];
     }),
     SharedModule,
     AdminModule,
-    LoginModule
+    LoginModule,
+    KioskModule
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },

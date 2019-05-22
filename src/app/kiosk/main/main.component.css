@@ -1,0 +1,46 @@
+.body {
+  font: 16px "Chakra Petch";
+  font-family: "Chakra Petch";
+  background: #ecf0f1;
+}
+
+.silver {
+  padding: 10px 10px 10px 10px;
+  width: 100%;
+  background: white;
+  text-align: center;
+  border-radius: 5px;
+}
+
+
+.gold,
+.plat {
+  padding: 10px 10px 10px 10px;
+  width: 100%;
+  background: #3498db;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.gold>.price {
+  background: white;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.gold>h1,
+.gold>h2,
+.gold>p,
+.gold>span {
+  color: white;
+}
+
+
+.wrapper {
+  text-align: center;
+  width: 900px;
+  display: grid;
+  grid-gap: 15px;
+  grid-template-columns: repeat(6, 400px);
+  grid-template-rows: 80px 80px 80px;
+  grid-auto-flow: column;
+}
