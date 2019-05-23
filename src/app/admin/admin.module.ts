@@ -25,6 +25,7 @@ import { ModalSelectTransferComponent } from '../shared/modal-select-transfer/mo
 import { QueueCalleGroupComponent } from './queue-caller-group/queue-caller-group.component';
 import { PrinterComponent } from './settings/printer/printer.component';
 import { DisplayQueueGroupComponent } from './display-queue-group/display-queue-group.component';
+import { SettingKioskComponent } from './setting-kiosk/setting-kiosk.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { DisplayQueueGroupComponent } from './display-queue-group/display-queue-
     ModalSelectTransferComponent,
     QueueCalleGroupComponent,
     PrinterComponent,
-    DisplayQueueGroupComponent
+    DisplayQueueGroupComponent,
+    SettingKioskComponent
   ],
   imports: [
     CommonModule,

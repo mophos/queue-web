@@ -28,7 +28,6 @@ export const whitelistedDomains = [new RegExp('[\s\S]*')] as RegExp[];
     AppRoutingModule,
     HttpClientModule,
     NgbModule.forRoot(),
-    EmbedVideo.forRoot(),
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

@@ -27,6 +27,7 @@ import { AlertWarningPrinterComponent } from './alert-warning-printer/alert-warn
 import { ModalSelectRoomComponent } from './modal-select-room/modal-select-room.component';
 import { ModalSettingSoundComponent } from './modal-setting-sound/modal-setting-sound.component';
 import { SoundService } from './sound.service';
+import { KioskService } from './kiosk.service';
 
 @NgModule({
   imports: [
@@ -79,7 +80,8 @@ import { SoundService } from './sound.service';
     LoginService,
     TokenService,
     DepartmentService,
-    SoundService
+    SoundService,
+    KioskService
   ]
 })
 export class SharedModule { }

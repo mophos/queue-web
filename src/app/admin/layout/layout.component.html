@@ -173,6 +173,12 @@
                   <span class="menu-title">ตั้งค่าเครื่องพิมพ์</span>
                 </a>
               </li>
+              <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'ADMIN'">
+                <a class="nav-link" href="javascript://" (click)="openSidebar = false"
+                  routerLink="/admin/setting-kiosk">
+                  <span class="menu-title">ตั้งค่า KIOSK</span>
+                </a>
+              </li>
             </ul>
           </div>
         </li>

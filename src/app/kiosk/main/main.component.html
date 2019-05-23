@@ -1,20 +1,21 @@
-<!-- <div class="row" style="padding: 1rem 1rem;">
-  <div class="col-md-12 " style="height: 5rem;text-align: center;border: 1px solid black">
-    โรงพยาบาล
+<div class="card card-inverse-danger" *ngIf="isOffline">
+  <div class="card-body">
+    <p class="mb-4">
+      เกิดข้อผิดพลาดในการเชื่อมต่อกับ Notify Server.
+    </p>
+    <button class="btn btn-danger" (click)="connectWebSocket()">เชื่อมต่อใหม่ (<strong>
+        <countdown [config]="{leftTime: 15, template: '$!s!'}" (finished)="onFinished()" (notify)="onNotify($event)">
+        </countdown>
+      </strong>)</button>
   </div>
 </div>
-<div class="row">
-  <div class="col-md-4" style="background: black;">
-    ข้อมูลจากบัตรประชาชน</div>
-  <div class="col-md-4" style="background: red;"></div>
-  <div class="col-md-4" style="background: blue;"></div>
-</div> -->
+
 <div class="body">
   <div class="container">
     <div class="row">
       <div class="col-12">
         <div class='silver'>
-          <div style="font-size: 2.5rem; font-weight: bold;">โรงพยาบาล</div>
+          <div style="font-size: 2.5rem; font-weight: bold;">{{hospname}}</div>
           <h1>ระบบออกคิวอัตโนมัติ (Q4U)</h1>
         </div>
       </div>
@@ -27,24 +28,24 @@
         <div class="col-4">
           <div class='silver'>
             <h1>ข้อมูลจากบัตรประชาชน</h1>
-            <p>เลขบัตรประชาชน</p>
-            <span id="txtCid">-</span>
-            <p>ชื่อ - สกุล</p>
-            <span id="txtFullname">-</span>
-            <p>วันเกิด</p>
-            <span id="txtBirthdate">-</span>
+            <span>เลขบัตรประชาชน</span>
+            <p id="txtCid">{{cardCid || '-'}}</p>
+            <span>ชื่อ - สกุล</span>
+            <p id="txtFullname">{{cardFullName || '-'}}</p>
+            <span>วันเกิด</span>
+            <p id="txtBirthdate">{{cardBirthDate || '-'}}</p>
             <h4 style="text-align: right">**ข้อมูลจากเครื่องอ่านบัตรประชาชน</h4>
           </div>
         </div>
         <div class="col-4">
           <div class='gold'>
             <h1>ข้อมูลโรงพยาบาล</h1>
-            <p>HN</p>
-            <span id="txtHISHn">-</span>
-            <p>ชื่อ - สกุล</p>
-            <span id="txtHISFullname">-</span>
-            <p>วันเกิด</p>
-            <span id="txtHISBirthdate">-</span>
+            <span>HN</span>
+            <p id="txtHISHn">{{hisHn || '-'}}</p>
+            <span>ชื่อ - สกุล</span>
+            <p id="txtHISFullname">{{hisFullName || '-'}}</p>
+            <span>วันเกิด</span>
+            <p id="txtHISBirthdate">{{hisBirthDate || '-'}}</p>
             <h4 style="text-align: right">**จากฐานข้อมูลในโรงพยาบาล</h4>
           </div>
         </div>
@@ -52,19 +53,19 @@
           <div class='silver'>
             <h1>ข้อมูลสิทธิการรักษา</h1>
 
-            <p>สิทธิการรักษา</p>
-            <span id="txtNHSORight">-</span>
-            <p>วันที่เริ่มใช้สิทธิ์</p>
-            <span id="txtNHSOStartDart">-</span>
-            <p>หน่วยบริการหลัก</p>
-            <span id="txtNHSOHmain">-</span>
+            <span>สิทธิการรักษา</span>
+            <p id="txtNHSORight">{{rightName || '-'}}</p>
+            <span>วันที่เริ่มใช้สิทธิ์</span>
+            <p id="txtNHSOStartDart">{{rightStartDate || '-'}}</p>
+            <span>หน่วยบริการหลัก</span>
+            <p id="txtNHSOHmain">{{rightHospital || '-'}}</p>
             <h4 style="text-align: right">**สำนักงานหลักประกันสุขภาพแห่งชาติ</h4>
           </div>
         </div>
       </div>
       <div style="margin: 20px;"></div>
 
-      <button *ngIf="hn" type="button" class="btn btn-primary"
+      <button *ngIf="btnSelectServicePoint" type="button" class="btn btn-primary"
         style="height: 6rem; font-size: 1.8em; display: block; margin: auto;"
         (click)="onSelectServicePointList()">เลือกแผนกเข้ารับบริการ</button>
 
@@ -75,14 +76,16 @@
       <div style="margin: 20px;"></div>
       <h1>แผนกที่ต้องการเข้ารับบริการ</h1>
       <div class="row">
-        <div class="col-3 " [ngClass]="{'col-3': servicePointList.length > 6,'col-4':servicePointList.length <=6}"
+        <div class="col-3 " style="margin-top:20px"
+          [ngClass]="{'col-3': servicePointList.length > 6,'col-4':servicePointList.length <=6}"
           *ngFor="let i of  servicePointList">
-          <button class="btn btn-primary" style="width: 100%;padding: 2rem;font-size: 2rem">{{i}}</button>
+          <button class="btn btn-primary" style="width: 100%;padding: 2rem;font-size: 2.5rem"
+            (click)="register(i)">{{i.service_point_name}}</button>
         </div>
       </div>
 
-      <div style="margin: 10px;">
-        <button class="btn btn-danger" type="button" (click)="cancel()"
+      <div style="margin: 10px;" *ngIf="servicePointList.length > 3">
+        <button class="btn btn-danger" type="button" (click)="cancel()" [disabled]="isPrinting"
           style="height: 6rem; font-size: 1.8em; display: block; margin: auto;">ยกเลิก</button>
 
       </div>
