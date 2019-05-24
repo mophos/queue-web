@@ -2,7 +2,7 @@ import { KioskService } from './../../shared/kiosk.service';
 import { AlertService } from 'src/app/shared/alert.service';
 import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as mqttClient from '../../../vendor/mqtt';
 import { MqttClient } from 'mqtt';
 import * as Random from 'random-js';
@@ -47,7 +47,8 @@ export class MainComponent implements OnInit {
     private route: ActivatedRoute,
     private alertService: AlertService,
     private kioskService: KioskService,
-    private zone: NgZone) {
+    private zone: NgZone,
+    private router: Router) {
     this.route.queryParams
       .subscribe(params => {
         this.token = params.token || null;
@@ -339,6 +340,10 @@ export class MainComponent implements OnInit {
       console.log(error);
       this.alertService.error(error.message);
     }
+  }
+
+  home() {
+    this.router.navigate(['/admin/setting-kiosk']);
 
   }
 }

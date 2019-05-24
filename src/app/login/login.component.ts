@@ -47,7 +47,11 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem('userType', decoded.userType);
           sessionStorage.setItem('username', this.username);
           sessionStorage.setItem('servicePoints', JSON.stringify(rs.servicePoints));
-          this.router.navigate(['/admin']);
+          if (decoded.userType === 'KIOSK') {
+            this.router.navigate(['/kiosk']);
+          } else {
+            this.router.navigate(['/admin']);
+          }
         } else {
           const message = rs.message || 'เกิดข้อผิดพลาด';
           this.alertService.error(message);

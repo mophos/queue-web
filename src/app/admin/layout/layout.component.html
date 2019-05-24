@@ -44,13 +44,13 @@
             <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
           </a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType != 'KIOSK'">
           <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/queue-center">
             <span class="menu-title">แสดงคิวทั้งหมด</span>
             <i class="mdi mdi-animation-play menu-icon"></i>
           </a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType != 'KIOSK'">
           <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/visit">
             <span class="menu-title">ทะเบียนผู้รับบริการ</span>
             <i class="mdi mdi-human-male-female menu-icon"></i>
@@ -64,10 +64,21 @@
           </a>
         </li>
 
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'KIOSK'">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/kiosk">
+            <span class="menu-title">KIOSK</span>
+          </a>
+        </li>
+        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'KIOSK'">
+          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/setting-kiosk">
+            <span class="menu-title">ตั้งค่า KIOSK</span>
+          </a>
+        </li>
+
         <div class="border-bottom"></div>
 
 
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="userType != 'KIOSK'">
           <a class="nav-link" (click)="isCollapedCaller = !isCollapedCaller" data-toggle="collapse" href="javascript://"
             aria-expanded="false" aria-controls="ui-basic">
             <span class="menu-title font-weight-bold">เรียกคิว</span>
@@ -97,7 +108,7 @@
           </div>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="userType != 'KIOSK'">
           <a class="nav-link" (click)="isCollapedDisplay = !isCollapedDisplay" data-toggle="collapse"
             href="javascript://" aria-expanded="false" aria-controls="ui-basic">
             <span class="menu-title font-weight-bold">การแสดงคิว</span>
@@ -138,7 +149,7 @@
 
         <div class="border-bottom"></div>
 
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="userType != 'KIOSK'">
           <a class="nav-link" (click)="isCollapedSettings = !isCollapedSettings" data-toggle="collapse"
             href="javascript://" aria-expanded="false" aria-controls="ui-basic">
             <span class="menu-title font-weight-bold">ตั้งค่าการใช้งาน</span>
