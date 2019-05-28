@@ -1,0 +1,146 @@
+<div class="card card-inverse-danger" *ngIf="isOffline">
+  <div class="card-body">
+    <p class="mb-4">
+      เกิดข้อผิดพลาดในการเชื่อมต่อกับ Notify Server.
+    </p>
+    <button class="btn btn-danger" (click)="connectWebSocket()">เชื่อมต่อใหม่ (<strong>
+        <countdown [config]="{leftTime: 15, template: '$!s!'}" (finished)="onFinished()" (notify)="onNotify($event)">
+        </countdown>
+      </strong>)</button>
+  </div>
+</div>
+
+<div class="body">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class='silver'>
+          <div style="font-size: 2.5rem; font-weight: bold;" (dblclick)="home()">{{hospname}}</div>
+          <h1>ระบบออกคิวอัตโนมัติ (Q4U)</h1>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="tabProfile">
+      <div style="margin: 20px;"></div>
+      <div class="row">
+        <div class="col-4">
+          <div class='silver'>
+            <h1>ข้อมูลจากบัตรประชาชน</h1>
+            <span>เลขบัตรประชาชน</span>
+            <p id="txtCid">{{cardCid || '-'}}</p>
+            <span>ชื่อ - สกุล</span>
+            <p id="txtFullname">{{cardFullName || '-'}}</p>
+            <span>วันเกิด</span>
+            <p id="txtBirthdate">{{cardBirthDate || '-'}}</p>
+            <h4 style="text-align: right">**ข้อมูลจากเครื่องอ่านบัตรประชาชน</h4>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class='gold'>
+            <h1>ข้อมูลโรงพยาบาล</h1>
+            <span>HN</span>
+            <p id="txtHISHn">{{hisHn || '-'}}</p>
+            <span>ชื่อ - สกุล</span>
+            <p id="txtHISFullname">{{hisFullName || '-'}}</p>
+            <span>วันเกิด</span>
+            <p id="txtHISBirthdate">{{hisBirthDate || '-'}}</p>
+            <h4 style="text-align: right">**จากฐานข้อมูลในโรงพยาบาล</h4>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class='silver'>
+            <h1>ข้อมูลสิทธิการรักษา</h1>
+
+            <span>สิทธิการรักษา</span>
+            <p id="txtNHSORight">{{rightName || '-'}}</p>
+            <span>วันที่เริ่มใช้สิทธิ์</span>
+            <p id="txtNHSOStartDart">{{rightStartDate || '-'}}</p>
+            <span>หน่วยบริการหลัก</span>
+            <p id="txtNHSOHmain">{{rightHospital || '-'}}</p>
+            <h4 style="text-align: right">**สำนักงานหลักประกันสุขภาพแห่งชาติ</h4>
+          </div>
+        </div>
+      </div>
+      <div style="margin: 20px;"></div>
+
+      <button *ngIf="btnSelectServicePoint" type="button" class="btn btn-primary"
+        style="height: 6rem; font-size: 1.8em; display: block; margin: auto;"
+        (click)="onSelectServicePointList()">เลือกแผนกเข้ารับบริการ</button>
+
+    </div>
+
+
+    <div id="divDepartment" *ngIf="tabServicePoint">
+      <div style="margin: 20px;"></div>
+      <h1>แผนกที่ต้องการเข้ารับบริการ</h1>
+      <div class="row">
+        <div class="col-3 " style="margin-top:20px"
+          [ngClass]="{'col-3': servicePointList.length > 6,'col-4':servicePointList.length <=6}"
+          *ngFor="let i of  servicePointList">
+          <button class="btn btn-primary" style="width: 100%;padding: 2rem;font-size: 2.5rem"
+            (click)="register(i)">{{i.service_point_name}}</button>
+        </div>
+      </div>
+
+      <div style="margin: 10px;" *ngIf="servicePointList.length > 3">
+        <button class="btn btn-danger" type="button" (click)="cancel()" [disabled]="isPrinting"
+          style="height: 6rem; font-size: 1.8em; display: block; margin: auto;">ยกเลิก</button>
+
+      </div>
+    </div>
+
+    <!-- <div id="divSetting" style="display: none;">
+      <div style="margin: 20px;"></div>
+  
+      <form class="silver">
+        <span class="h1">Connection setting</span>
+        <div class="row">
+          <div class="column">
+            <label for="txtPrinterId">Printer ID</label>
+            <input type="text" placeholder="OPD-PRINTER" id="txtPrinterId">
+          </div>
+          <div class="column">
+            <label for="txtApiUrl">API URL</label>
+            <input type="text" placeholder="http://" id="txtApiUrl">
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+            <label for="txtApiToken">API TOKEN</label>
+            <input type="text" id="txtApiToken">
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="column">
+            <label for="txtNHSOCid">NHSO CID</label>
+            <input type="text" placeholder="" id="txtNHSOCid">
+          </div>
+          <div class="column">
+            <label for="txtNHSOToken">NHSO TOKEN</label>
+            <input type="text" placeholder="" id="txtNHSOToken">
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="column column-50 column-offset-25">
+            <label for="slPriority">Default priority</label>
+            <select name="slPriority" id="slPriority"></select>
+          </div>
+  
+          <div class="column">
+  
+          </div>
+        </div>
+  
+        <button class="button-primary" type="button" id="btnConnectionSave">SAVE</button>
+        <button class="button-black" type="button" id="btnConnectionCancel">CANCEL</button>
+        |
+        <button class="button-primary" type="button" id="btnExit">Exit program</button>
+  
+    </div> -->
+
+  </div>
+</div>

@@ -14,7 +14,8 @@
         </div>
         <div class="form-group col-md-6">
           <label for="password" class="required">รหัสผ่าน</label>
-          <input type="password" name="password" id="password" class="form-control" name="password" [(ngModel)]="password">
+          <input type="password" name="password" id="password" class="form-control" name="password"
+            [(ngModel)]="password">
         </div>
       </div>
 
@@ -31,6 +32,7 @@
           <select class="form-control" name="userType" [(ngModel)]="userType">
             <option value="ADMIN">ผู้ดูแลระบบ</option>
             <option value="MEMBER">ผู้ใช้งานทั่วไป</option>
+            <option value="KIOSK">KIOSK</option>
           </select>
         </div>
       </div>

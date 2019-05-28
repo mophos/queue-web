@@ -8,7 +8,7 @@ export class AlertService {
 
   constructor() { }
 
-  error(text: any = 'เกิดข้อผิดพลาด', title: any = '') {
+  error(text: any = 'เกิดข้อผิดพลาด', title: any = '', timer = null) {
 
     const option: SweetAlertOptions = {
       title: title,
@@ -16,6 +16,9 @@ export class AlertService {
       type: 'error',
       confirmButtonText: 'ตกลง'
     };
+    if (timer) {
+      option.timer = timer;
+    }
     swal.fire(option);
 
   }

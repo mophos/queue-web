@@ -1,3 +1,4 @@
+import { KioskModule } from './kiosk/kiosk.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, InjectionToken } from '@angular/core';
 import { JwtModule } from '@auth0/angular-jwt';
@@ -12,7 +13,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginModule } from './login/login.module';
 import { SharedModule } from './shared/shared.module';
 import { environment } from '../environments/environment';
-
 export function tokenGetter() {
   return sessionStorage.getItem('token');
 }
@@ -37,7 +37,8 @@ export const whitelistedDomains = [new RegExp('[\s\S]*')] as RegExp[];
     }),
     SharedModule,
     AdminModule,
-    LoginModule
+    LoginModule,
+    KioskModule
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
