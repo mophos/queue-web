@@ -338,7 +338,7 @@ export class MainComponent implements OnInit {
       this.rightStartDate = nhso.startdate ? `${moment(nhso.startdate, 'YYYYMMDD').format('DD MMM ')} ${moment(nhso.startdate, 'YYYYMMDD').get('year')}` : '-';
     } catch (error) {
       console.log(error);
-      this.alertService.error(error.message);
+      // this.alertService.error(error.message);
     }
   }
 
