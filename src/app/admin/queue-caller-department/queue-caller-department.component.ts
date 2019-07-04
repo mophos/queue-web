@@ -69,6 +69,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
   query: any;
   pendingOldQueue: any;
 
+  sortQueue = 1
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
   constructor(
@@ -265,7 +266,8 @@ export class QueueCallerDepartmentComponent implements OnInit {
 
   async getQueues() {
     try {
-      const rs: any = await this.queueService.getQueueByDepartment(this.departmentId, this.pageSize, this.offset);
+      const sort = await this.getSort(this.sortQueue);
+      const rs: any = await this.queueService.getQueueByDepartment(this.departmentId, this.pageSize, this.offset, sort);
       if (rs.statusCode === 200) {
         for (const i of rs.results) {
           const rm: any = await this.roomService.list(i.service_point_id);
@@ -482,4 +484,22 @@ export class QueueCallerDepartmentComponent implements OnInit {
     this.mdlSelectRoom.open();
   }
 
+  onClickSortQueue() {
+    if (this.sortQueue === 3) {
+      this.sortQueue = 1;
+    } else {
+      this.sortQueue += 1;
+    }
+    this.getQueues();
+  }
+
+  getSort(id) {
+    if (id === 2) {
+      return 'ASC';
+    } else if (id === 3) {
+      return 'DESC';
+    } else {
+      return '';
+    }
+  }
 }

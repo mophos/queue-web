@@ -25,11 +25,19 @@ export class SoundService {
     const _url = `${this.apiUrl}/sounds`;
     return this.httpClient.get(_url, this.httpOptions).toPromise();
   }
+
   async save(servicePointId, soundId, speed) {
-    const _url = `${this.apiUrl}/sounds/${servicePointId}`;
+    const _url = `${this.apiUrl}/sounds/service-point/${servicePointId}`;
     return this.httpClient.put(_url, {
       soundId: soundId,
       speed: speed
+    }, this.httpOptions).toPromise();
+  }
+
+  async saveRoom(roomId, soundId) {
+    const _url = `${this.apiUrl}/sounds/service-room/${roomId}`;
+    return this.httpClient.put(_url, {
+      soundId: soundId
     }, this.httpOptions).toPromise();
   }
 }

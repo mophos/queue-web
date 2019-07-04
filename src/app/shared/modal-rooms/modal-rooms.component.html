@@ -44,6 +44,9 @@
                   <button class="btn btn-sm btn-icon-append btn-gradient-success" (click)="edit(room)">
                     <i class="mdi mdi-pencil"></i>
                   </button>
+                  <button class="btn btn-sm btn-gradient-primary" (click)="showModalSound(room)">
+                    <i class="mdi mdi-access-point"></i>
+                  </button>
                   <button class="btn btn-sm btn-gradient-danger" (click)="remove(room)">
                     <i class="mdi mdi-delete-outline"></i>
                   </button>
@@ -60,3 +63,8 @@
     <button type="button" class="btn btn-outline-danger" (click)="dismiss()">ปิดหน้าต่าง</button>
   </div>
 </ng-template>
+
+
+<app-modal-setting-sound [servicePointId]="servicePointId" [roomId]="roomId" [tabSpeed]="false"
+  (onSave)="onSaveSound($event)" #mdlSettingSound>
+</app-modal-setting-sound>

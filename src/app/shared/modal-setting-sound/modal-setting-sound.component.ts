@@ -20,11 +20,23 @@ export class ModalSettingSoundComponent implements OnInit {
     this.servicePointId = value;
   }
 
+  @Input('roomId')
+  set setRoomId(value: any) {
+    this.roomId = value;
+  }
+
+  @Input('tabSpeed')
+  set setTabSpeed(value: any) {
+    this.tabSpeed = value;
+  }
+
   modalReference: NgbModalRef;
   sounds = [];
   soundId: any;
   servicePointId: any;
+  roomId: any;
   speed = 1;
+  tabSpeed = true;
   // selectSound: any;
 
   // isAll = false;
@@ -50,7 +62,6 @@ export class ModalSettingSoundComponent implements OnInit {
 
   playSound(sound) {
     const audioFiles = './assets/audio/' + sound.sound_file;
-    console.log(audioFiles);
     const howlerBank = (new Howl({
       src: audioFiles,
       // onend: onEnd,
@@ -69,7 +80,13 @@ export class ModalSettingSoundComponent implements OnInit {
       // size: 'sm',
       // centered: true
     });
-    this.soundId = item.sound_id;
+    if (item.sound_id == null) {
+      if (item.service_point_sound_id != null) {
+        this.soundId = item.service_point_sound_id;
+      }
+    } else {
+      this.soundId = item.sound_id;
+    }
     this.speed = item.sound_speed;
     this.modalReference.result.then((result) => { });
   }
@@ -80,8 +97,12 @@ export class ModalSettingSoundComponent implements OnInit {
 
   async save() {
     try {
-      await this.soundService.save(this.servicePointId, this.soundId, this.speed);
-      this.onSave.emit();
+      if (this.roomId) {
+        await this.soundService.saveRoom(this.roomId, this.soundId);
+      } else {
+        await this.soundService.save(this.servicePointId, this.soundId, this.speed);
+      }
+      this.onSave.emit(this.soundId);
       this.modalReference.close();
     } catch (error) {
       this.alertService.serverError();

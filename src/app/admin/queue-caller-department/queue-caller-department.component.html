@@ -58,7 +58,11 @@
                 <th>จุดบริการ</th>
                 <th>HN</th>
                 <th>ชื่อ - สกุล</th>
-                <th>ความสำคัญ</th>
+                <th>ความสำคัญ
+                  <i *ngIf="sortQueue == 1" class="mdi mdi-sort menu-icon" (click)="onClickSortQueue()"></i>
+                  <i *ngIf="sortQueue == 2" class="mdi mdi-sort-ascending menu-icon" (click)="onClickSortQueue()"></i>
+                  <i *ngIf="sortQueue == 3" class="mdi mdi-sort-descending menu-icon" (click)="onClickSortQueue()"></i>
+                </th>
                 <th>คิวปัจจุบัน</th>
                 <th>#</th>
               </tr>
@@ -297,5 +301,6 @@
 
 
 <app-modal-select-department (onSelected)="onSelectedDepartment($event)" #mdlServicePoint></app-modal-select-department>
-<app-modal-select-transfer #mdlSelectTransfer [servicePointId]='selectedQueue.service_point_id' [priorityId]='selectedQueue.priority_id' (onSelected)="onSelectedTransfer($event)"></app-modal-select-transfer>
+<app-modal-select-transfer #mdlSelectTransfer [servicePointId]='selectedQueue.service_point_id'
+  [priorityId]='selectedQueue.priority_id' (onSelected)="onSelectedTransfer($event)"></app-modal-select-transfer>
 <app-modal-select-room [rooms]="rooms" (onSelected)="onSelectRoom($event)" #mdlSelectRoom></app-modal-select-room>

@@ -2,7 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angu
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertService } from '../alert.service';
 import { ServiceRoomService } from '../service-room.service';
-
+import { ModalSettingSoundComponent } from '../modal-setting-sound/modal-setting-sound.component';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-modal-rooms',
   templateUrl: './modal-rooms.component.html',
@@ -21,6 +22,7 @@ export class ModalRoomsComponent implements OnInit {
 
   @Output('onSave') onSave: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('content') public content: any;
+  @ViewChild('mdlSettingSound') private mdlSettingSound: ModalSettingSoundComponent;
 
   servicePointId: any;
   roomName: any;
@@ -147,5 +149,18 @@ export class ModalRoomsComponent implements OnInit {
     this.roomNumber = null;
     this.roomId = null;
     this.btnLabel = 'เพิ่ม';
+  }
+
+  showModalSound(item) {
+    this.servicePointId = item.service_point_id;
+    this.roomId = item.room_id;
+    this.mdlSettingSound.open(item);
+  }
+
+  onSaveSound(e) {
+    const idx = _.findIndex(this.rooms, { 'room_id': this.roomId });
+    if (idx > -1) {
+      this.rooms[idx].sound_id = e;
+    }
   }
 }
