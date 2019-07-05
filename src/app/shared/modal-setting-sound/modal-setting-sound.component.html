@@ -10,7 +10,7 @@
       <div class="card-body">
         <div class="form-group">
 
-          <div class="row" style="padding: 20px">
+          <div class="row" style="padding: 20px" *ngIf="tabSpeed">
             <div class="col-md-4">
               <button class="btn" (click)="changeSpeed(1)"
                 [ngClass]="{'btn-success':speed == 1,'btn-outline-success':speed != 1}">ปกติ

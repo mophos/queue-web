@@ -16,7 +16,8 @@
       <div class="card-body">
         <div class="row">
           <div class="col-md-12">
-            <button (click)="openRegister()" class="float-right btn-lg btn btn-sm btn-gradient-success"> <i class="mdi mdi-plus"></i>
+            <button (click)="openRegister()" class="float-right btn-lg btn btn-sm btn-gradient-success"> <i
+                class="mdi mdi-plus"></i>
               เพิ่ม
             </button>
           </div>
@@ -26,6 +27,7 @@
             <tr>
               <th>ประเภทผู้ป่วย</th>
               <th>PREFIX</th>
+              <th>ลำดับ</th>
               <th style="width: 150px;">#</th>
             </tr>
           </thead>
@@ -33,6 +35,7 @@
             <tr *ngFor="let item of items">
               <td>{{ item.priority_name }}</td>
               <td>{{ item.priority_prefix }}</td>
+              <td>{{ item.priority_order }}</td>
               <td>
                 <div class="btn-group">
                   <button class="btn btn-sm btn-icon-append btn-gradient-success" (click)="openEdit(item)">
@@ -46,6 +49,7 @@
             </tr>
           </tbody>
         </table>
+        <p>หมายเหตุ เลขลำดับน้อยหมายถึงสำคัญสุด </p>
       </div>
     </div>
   </div>

@@ -67,6 +67,8 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   departmentId: any;
   pendingOldQueue: any;
 
+  sortWaiting = 1;
+  query = '';
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
   constructor(
@@ -120,7 +122,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     try {
       // close old connection
       this.client.end(true);
-    } catch (error) {  }
+    } catch (error) { }
 
     this.client = mqttClient.connect(this.notifyUrl, {
       clientId: clientId,
@@ -238,7 +240,8 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
 
   async getWaiting() {
     try {
-      const rs: any = await this.queueService.getWaiting(this.servicePointId, this.pageSize, this.offset);
+      const sort = await this.getSort(this.sortWaiting);
+      const rs: any = await this.queueService.getWaiting(this.servicePointId, this.pageSize, this.offset, sort, this.query);
       if (rs.statusCode === 200) {
         this.waitingItems = rs.results;
         this.total = rs.total;
@@ -251,10 +254,33 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
       this.alertService.error();
     }
   }
+  searchWorking(e) {
+    if (e.keyCode === 13) {
+      this.getWorking();
+    }
+  }
+
+  searchWaiting(e) {
+    if (e.keyCode === 13) {
+      this.getWaiting();
+    }
+  }
+
+  searchPending(e) {
+    if (e.keyCode === 13) {
+      this.getPending();
+    }
+  }
+
+  searchHistory(e) {
+    if (e.keyCode === 13) {
+      this.getHistory();
+    }
+  }
 
   async getWorking() {
     try {
-      const rs: any = await this.queueService.getWorking(this.servicePointId);
+      const rs: any = await this.queueService.getWorking(this.servicePointId, null, this.query);
       if (rs.statusCode === 200) {
         this.workingItems = rs.results;
       } else {
@@ -269,7 +295,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
 
   async getHistory() {
     try {
-      const rs: any = await this.queueService.getWorkingHistory(this.servicePointId);
+      const rs: any = await this.queueService.getWorkingHistory(this.servicePointId, null,this.query);
       if (rs.statusCode === 200) {
         this.historyItems = rs.results;
       } else {
@@ -284,7 +310,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
 
   async getPending() {
     try {
-      const rs: any = await this.queueService.getPending(this.servicePointId);
+      const rs: any = await this.queueService.getPending(this.servicePointId, this.query);
       if (rs.statusCode === 200) {
         this.pendingItems = rs.results;
       } else {
@@ -516,6 +542,25 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.isInterview = true;
     this.setQueueForCall(item);
     this.mdlSelectRoom.open();
+  }
+
+  onClickSortWaiting() {
+    if (this.sortWaiting === 3) {
+      this.sortWaiting = 1;
+    } else {
+      this.sortWaiting += 1;
+    }
+    this.getWaiting();
+  }
+
+  getSort(id) {
+    if (id === 2) {
+      return 'ASC';
+    } else if (id === 3) {
+      return 'DESC';
+    } else {
+      return '';
+    }
   }
 
 }

@@ -15,6 +15,7 @@ export class ModalAddPriorityComponent implements OnInit {
     this.priorityName = value.priority_name;
     this.priorityId = value.priority_id;
     this.priorityPrefix = value.priority_prefix;
+    this.priorityOrder = value.priority_order;
   }
 
   @Output('onSave') onSave: EventEmitter<any> = new EventEmitter<any>();
@@ -24,6 +25,7 @@ export class ModalAddPriorityComponent implements OnInit {
   priorityId: any;
   priorityName: any;
   priorityPrefix: any;
+  priorityOrder: any;
   prefixes: any = [];
 
   constructor(
@@ -43,6 +45,8 @@ export class ModalAddPriorityComponent implements OnInit {
   ngOnInit(): void { }
 
   open() {
+    console.log(this.content);
+
     this.modalReference = this.modalService.open(this.content, {
       ariaLabelledBy: 'modal-basic-title',
       keyboard: false,
@@ -64,7 +68,8 @@ export class ModalAddPriorityComponent implements OnInit {
       try {
         const data: any = {
           priorityName: this.priorityName,
-          priorityPrefix: this.priorityPrefix.toUpperCase()
+          priorityPrefix: this.priorityPrefix.toUpperCase(),
+          priorityOrder: this.priorityOrder
         };
 
         var rs: any;

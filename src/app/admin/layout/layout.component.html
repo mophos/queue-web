@@ -147,7 +147,7 @@
           </div>
         </li>
 
-        <div class="border-bottom"></div>
+
 
         <li class="nav-item" *ngIf="userType != 'KIOSK'">
           <a class="nav-link" (click)="isCollapedSettings = !isCollapedSettings" data-toggle="collapse"
@@ -193,8 +193,14 @@
             </ul>
           </div>
         </li>
-
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" href="javascript://" (click)="logout()">
+            <span class="menu-title">ออกจากระบบ</span>
+            <i class="mdi mdi-power menu-icon"></i>
+          </a>
+        </li>
       </ul>
+      <div class="border-bottom"></div>
     </nav>
 
     <!-- partial -->
