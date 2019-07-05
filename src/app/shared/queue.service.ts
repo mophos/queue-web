@@ -324,7 +324,7 @@ export class QueueService {
   }
 
   async getSound(servicePointId: any, token: any = null) {
-    const _url = `${this.apiUrl}/queue/sound/service-point/${servicePointId}`;
+    const _url = `${this.apiUrl}/queue/sound/service-point?servicePointId=${servicePointId}`;
     var _httpOptions = {};
 
     if (token) {
@@ -342,7 +342,25 @@ export class QueueService {
   }
 
   async getSoundList(servicePointId: any, token: any = null) {
-    const _url = `${this.apiUrl}/queue/sound/service-room/${servicePointId}`;
+    const _url = `${this.apiUrl}/queue/sound/service-room?servicePointId=${servicePointId}`;
+    var _httpOptions = {};
+
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+
+    return this.httpClient.get(_url, _httpOptions).toPromise();
+  }
+
+  async getSoundListDepartment(departmentId: any, token: any = null) {
+    const _url = `${this.apiUrl}/queue/sound/service-room-department?departmentId=${departmentId}`;
     var _httpOptions = {};
 
     if (token) {
