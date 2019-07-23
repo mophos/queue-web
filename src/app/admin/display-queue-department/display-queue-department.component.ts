@@ -70,12 +70,12 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
   notifyUrl: string;
   token: any;
 
-  servicePoints = [];
+  servicePoints: any = [];
   soundFile: any;
   soundSpeed: any;
   servicePointId: any;
   speakSingle = true;
-  soundList = [];
+  soundList: any = [];
   constructor(
     private queueService: QueueService,
     private alertService: AlertService,
@@ -168,7 +168,8 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
       audioFiles.push(`./assets/audio/${v}.mp3`);
     });
 
-    const idxS = _.findIndex(this.servicePoints, { 'service_point_id': this.servicePointId });
+    const idxS = _.findIndex(this.servicePoints, { 'service_point_id': +this.servicePointId });
+
     if (idxS > -1) {
       this.soundFile = this.servicePoints[idxS].sound_file;
       this.soundSpeed = this.servicePoints[idxS].sound_speed;
@@ -177,7 +178,7 @@ export class DisplayQueueDepartmentComponent implements OnInit, OnDestroy {
     if (isInterview === 'Y') {
       audioFiles.push(`./assets/audio/interview-table.mp3`);
     } else {
-      const idx = _.findIndex(this.soundList, { 'room_id': roomId });
+      const idx = _.findIndex(this.soundList, { 'room_id': +roomId });
       if (idx > -1) {
         audioFiles.push(`./assets/audio/${this.soundList[idx].sound_file}`);
       } else {

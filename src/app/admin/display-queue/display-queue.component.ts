@@ -397,6 +397,8 @@ export class DisplayQueueComponent implements OnInit, OnDestroy {
     this.servicePointName = event.service_point_name;
     this.servicePointId = event.service_point_id;
     await this.getSoundList(this.servicePointId);
+    console.log(event.sound_file);
+
     if (event.sound_file) {
       this.soundFile = event.sound_file;
       this.soundSpeed = event.sound_speed;

@@ -5,7 +5,6 @@ import * as Random from 'random-js';
 import * as _ from 'lodash';
 
 import { ModalSelectTransferComponent } from 'src/app/shared/modal-select-transfer/modal-select-transfer.component';
-import { ModalSelectServicepointsComponent } from 'src/app/shared/modal-select-servicepoints/modal-select-servicepoints.component';
 import { ModalSelectDepartmentComponent } from 'src/app/shared/modal-select-department/modal-select-department.component';
 import { QueueService } from 'src/app/shared/queue.service';
 import { AlertService } from 'src/app/shared/alert.service';
@@ -26,6 +25,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
   @ViewChild('mdlSelectTransfer') private mdlSelectTransfer: ModalSelectTransferComponent;
   @ViewChild('mdlSelectRoom') private mdlSelectRoom: ModalSelectRoomComponent;
 
+  userId: any;
   message: string;
   servicePointId: any;
   servicePointName: any;
@@ -69,7 +69,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
   query: any;
   pendingOldQueue: any;
 
-  sortQueue = 1
+  sortQueue = 1;
   @ViewChild(CountdownComponent) counter: CountdownComponent;
 
   constructor(
@@ -84,18 +84,23 @@ export class QueueCallerDepartmentComponent implements OnInit {
     this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
     this.departmentTopic = decodedToken.DEPARTMENT_TOPIC || 'queue/department';
     this.globalTopic = decodedToken.QUEUE_CENTER_TOPIC;
+    this.userId = decodedToken.userId;
 
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
     this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
-    this.departmentId = sessionStorage.getItem('departmentId') ? sessionStorage.getItem('departmentId') : null;
-    this.departmentName = sessionStorage.getItem('departmentName') ? sessionStorage.getItem('departmentName') : null;
-    const _servicePoints = sessionStorage.getItem('servicePoints');
-    const jsonDecodedServicePoint = JSON.parse(_servicePoints);
-    const _department = _.unionBy(jsonDecodedServicePoint, 'department_id');
-    if (_department.length === 1) {
-      this.onSelectedDepartment(_department[0]);
+
+    const _departments = JSON.parse(localStorage.getItem(`queueCallerDepartment${this.userId}`));
+    if (_departments) {
+      this.onSelectedDepartment(_departments);
+    } else {
+      const _servicePoints = JSON.parse(sessionStorage.getItem('servicePoints'));
+      const _department = _.unionBy(_servicePoints, 'department_id');
+      if (_department.length === 1) {
+        this.onSelectedDepartment(_department[0]);
+      }
     }
+
   }
 
   public unsafePublish(topic: string, message: string): void {
@@ -338,10 +343,9 @@ export class QueueCallerDepartmentComponent implements OnInit {
 
   onSelectedDepartment(event: any) {
     if (event) {
+      localStorage.setItem(`queueCallerDepartment${this.userId}`, JSON.stringify(event));
       this.departmentId = event.department_id;
       this.departmentName = event.department_name;
-      sessionStorage.setItem('departmentId', this.departmentId);
-      sessionStorage.setItem('departmentName', this.departmentName);
       this.connectWebSocket();
       this.getAllList();
     }
@@ -350,7 +354,7 @@ export class QueueCallerDepartmentComponent implements OnInit {
   onSelectedTransfer(event: any) {
     this.pendingToServicePointId = event.servicePointId;
     this.pendingToPriorityId = event.priorityId;
-    this.pendingOldQueue = event.pendingOldQueue
+    this.pendingOldQueue = event.pendingOldQueue;
 
     this.doMarkPending(this.selectedQueue);
   }
