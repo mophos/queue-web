@@ -24,6 +24,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   @ViewChild('mdlSelectTransfer') private mdlSelectTransfer: ModalSelectTransferComponent;
   @ViewChild('mdlSelectRoom') private mdlSelectRoom: ModalSelectRoomComponent;
 
+  userId: any;
   message: string;
   servicePointId: any;
   servicePointName: any;
@@ -83,15 +84,19 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
     this.servicePointTopic = decodedToken.SERVICE_POINT_TOPIC;
     this.globalTopic = decodedToken.QUEUE_CENTER_TOPIC;
     this.departmentTopic = decodedToken.DEPARTMENT_TOPIC || 'queue/department';
-
+    this.userId = decodedToken.userId;
     this.notifyUrl = `ws://${decodedToken.NOTIFY_SERVER}:${+decodedToken.NOTIFY_PORT}`;
     this.notifyUser = decodedToken.NOTIFY_USER;
     this.notifyPassword = decodedToken.NOTIFY_PASSWORD;
 
-    const _servicePoints = sessionStorage.getItem('servicePoints');
-    const jsonDecodedServicePoint = JSON.parse(_servicePoints);
-    if (jsonDecodedServicePoint.length === 1) {
-      this.onSelectedPoint(jsonDecodedServicePoint[0]);
+    const _servicePoints = JSON.parse(localStorage.getItem(`queueCallerServicePoints${this.userId}`));
+    if (_servicePoints) {
+      this.onSelectedPoint(_servicePoints);
+    } else {
+      const _servicePoints2 = JSON.parse(sessionStorage.getItem('servicePoints'));
+      if (_servicePoints2.length === 1) {
+        this.onSelectedPoint(_servicePoints2[0]);
+      }
     }
   }
 
@@ -295,7 +300,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
 
   async getHistory() {
     try {
-      const rs: any = await this.queueService.getWorkingHistory(this.servicePointId, null,this.query);
+      const rs: any = await this.queueService.getWorkingHistory(this.servicePointId, null, this.query);
       if (rs.statusCode === 200) {
         this.historyItems = rs.results;
       } else {
@@ -350,6 +355,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   }
 
   onSelectedPoint(event: any) {
+    localStorage.setItem(`queueCallerServicePoints${this.userId}`, JSON.stringify(event));
     if (event) {
       if (!this.isMarkPending) {
         this.servicePointName = event.service_point_name;

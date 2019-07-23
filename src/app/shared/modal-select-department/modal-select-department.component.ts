@@ -52,7 +52,6 @@ export class ModalSelectDepartmentComponent implements OnInit {
     // if (this.isAll) {
     try {
       const rs: any = await this.departmentService.list();
-      console.log(rs);
 
       if (rs.statusCode === 200) {
         this.points = rs.results;
