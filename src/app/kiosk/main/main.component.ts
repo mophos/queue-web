@@ -269,7 +269,8 @@ export class MainComponent implements OnInit {
 
     const data = {
       queueId: queueId,
-      topic: topicPrint
+      topic: topicPrint,
+      printSmallQueue: printSmallQueue
     };
     try {
       const rs: any = await this.kioskService.print(this.token, data);
