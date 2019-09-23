@@ -32,6 +32,7 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
   workingItems: any = [];
   pendingItems: any = [];
   historyItems: any = [];
+  cancelItems: any = []; //Ubonket10
   rooms: any = [];
   queueNumber: any;
   roomNumber: any;
@@ -537,7 +538,44 @@ export class QueueCallerComponent implements OnInit, OnDestroy {
       window.open(`${this.apiUrl}/print/queue?queueId=${queueId}`, '_blank');
     }
   }
+  
+  //Ubonket10
+  async getCancel() {
+    try {
+      const rs: any = await this.queueService.getCancel(this.servicePointId);
+      if (rs.statusCode === 200) {
+        this.cancelItems = rs.results;
+        console.log(this.cancelItems);
 
+      } else {
+        console.log(rs.message);
+        // this.alertService.error('เกิดข้อผิดพลาด');
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error();
+    }
+  }
+
+  //Ubonket10
+  async nocancelQueue(queue: any) {
+    const _confirm = await this.alertService.confirm(`ต้องการเรียกคิวนี้ [${queue.queue_number}] กับเข้าระบบใช่หรือไม่?`);
+    if (_confirm) {
+      try {
+        const rs: any = await this.queueService.noCancel(queue.queue_id);
+        if (rs.statusCode === 200) {
+          this.alertService.success();
+          this.getAllList();
+        } else {
+          this.alertService.error(rs.message);
+        }
+      } catch (error) {
+        console.log(error);
+        this.alertService.error();
+      }
+    }
+  }
+  
   openModalSelectRoom(item) {
     this.isInterview = false;
     this.setQueueForCall(item);
