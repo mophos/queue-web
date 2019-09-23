@@ -377,4 +377,15 @@ export class QueueService {
     return this.httpClient.get(_url, _httpOptions).toPromise();
   }
 
+  //Ubonket10
+  async getCancel(servicePointId: any) {
+    const _url = `${this.apiUrl}/queue/cancel/${servicePointId}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
+
+  //Ubonket10
+  async noCancel(queueId: any) {
+    const _url = `${this.apiUrl}/queue/nocancel/${queueId}`;
+    return this.httpClient.get(_url, this.httpOptions).toPromise();
+  }
 }
