@@ -1,4 +1,4 @@
-<div class="row">
+<!-- <div class="row">
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
@@ -24,6 +24,98 @@
             </div>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        ตั้งค่า Trigger (เมื่อออกคิว)
+      </div>
+      <div class="card-body">
+        <form>
+          <div class="form-row">
+            <div class="col-md-12">
+              <label style="font-size: 1.5rem;" class="required">URL(method GET ?hn=xx&cid=xx )</label>
+            </div>
+            <div class="col-md-1">
+              <input type="checkbox" class="form-control" name="isGet" [(ngModel)]="isGET">
+            </div>
+            <div class="form-group col-md-11">
+              <input type="text" name="urlGET" class="form-control" [(ngModel)]="urlGET">
+            </div>
+            <div class="col-md-12">
+              <label style="font-size: 1.5rem;" class="required">URL(method POST {{ '{' }}hn:xx,cid:xx} )</label>
+            </div>
+            <div class="col-md-1">
+              <input type="checkbox" class="form-control" name="isPost" [(ngModel)]="isPOST">
+            </div>
+            <div class="col-md-11">
+              <input type="text" name="urlPOST" class="form-control" [(ngModel)]="urlPOST">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        ตั้งค่า KIOSK
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <form class="form-row">
+              <div class="form-group col-md-12">
+                <label style="font-size: 1.5rem;" class="required">NHSO CID</label>
+                <input type="text" name="nhsoCid" class="form-control" [(ngModel)]="nhsoCid">
+              </div>
+              <div class="form-group col-md-12">
+                <label style="font-size: 1.5rem;" class="required">NHSO TOKEN</label>
+                <input type="text" name="nhsoToken" class="form-control" [(ngModel)]="nhsoToken">
+              </div>
+              <div class="form-group col-md-12">
+                <label style="font-size: 1.5rem;" class="required">KIOSK ID</label>
+                <input type="text" name="kioskId" class="form-control" [(ngModel)]="kioskId">
+              </div>
+              <div class="col-md-12">
+                <button type="button" class="btn btn-primary" (click)="save()">บันทึก</button>
+              </div>
+              <!-- </div> -->
+            </form>
+          </div>
+          <div class="col-md-6">
+            <form>
+              <div class="form-row">
+                <div class="col-md-12">
+                  <label style="font-size: 1.5rem;" class="required">URL Trigger (method GET ?hn=xx&cid=xx )</label>
+                </div>
+                <div class="col-md-1">
+                  <input type="checkbox" class="form-control" name="isGet" [(ngModel)]="isGET">
+                </div>
+                <div class="form-group col-md-11">
+                  <input type="text" name="urlGET" class="form-control" [(ngModel)]="urlGET">
+                </div>
+                <div class="col-md-12">
+                  <label style="font-size: 1.5rem;" class="required">URL Trigger (method POST {{ '{' }}hn:xx,cid:xx}
+                    )</label>
+                </div>
+                <div class="col-md-1">
+                  <input type="checkbox" class="form-control" name="isPost" [(ngModel)]="isPOST">
+                </div>
+                <div class="col-md-11">
+                  <input type="text" name="urlPOST" class="form-control" [(ngModel)]="urlPOST">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
