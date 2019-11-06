@@ -121,6 +121,23 @@ export class KioskService {
     }
     return this.httpClient.post(_url, { data: data }, _httpOptions).toPromise();
   }
+
+  async sendAPITRIGGER(token, type, url, hn, cid, localCode, servicePointId) {
+    const _url = `${this.apiUrl}/kiosk/trigger`;
+    let _httpOptions = {};
+    if (token) {
+      _httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        })
+      };
+    } else {
+      _httpOptions = this.httpOptions;
+    }
+    return this.httpClient.post(_url, { url, type, hn, cid, localCode, servicePointId }, _httpOptions).toPromise();
+  }
+
   async test(token) {
     const _url = `${this.apiUrl}/kiosk/test`;
     let _httpOptions = {};

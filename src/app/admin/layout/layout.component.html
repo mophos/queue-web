@@ -63,17 +63,29 @@
             <i class="mdi mdi-key menu-icon"></i>
           </a>
         </li>
-
-        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'KIOSK'">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/kiosk">
-            <span class="menu-title">KIOSK</span>
-          </a>
-        </li>
-        <li class="nav-item" routerLinkActive="active" *ngIf="userType === 'KIOSK'">
-          <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/setting-kiosk">
-            <span class="menu-title">ตั้งค่า KIOSK</span>
-          </a>
-        </li>
+        <div *ngIf="userType === 'KIOSK'">
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/kiosk">
+              <span class="menu-title">KIOSK</span>
+            </a>
+          </li>
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/setting-kiosk">
+              <span class="menu-title">ตั้งค่า KIOSK</span>
+            </a>
+          </li>
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/printer">
+              <span class="menu-title">ตั้งค่าเครื่องพิมพ์</span>
+            </a>
+          </li>
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" href="javascript://" (click)="openSidebar = false" routerLink="/admin/generate-token">
+              <span class="menu-title">Generate token</span>
+              <i class="mdi mdi-key menu-icon"></i>
+            </a>
+          </li>
+        </div>
 
         <div class="border-bottom"></div>
 
