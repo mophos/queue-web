@@ -93,7 +93,7 @@
             <form>
               <div class="form-row">
                 <div class="col-md-12">
-                  <label style="font-size: 1.5rem;" class="required">URL Trigger (method GET ?hn=xx&cid=xx )</label>
+                  <label style="font-size: 1.5rem;" class="required">URL Trigger (method GET ?hn=xx&cid=xx&servicePointId=xx&localCode=xx )</label>
                 </div>
                 <div class="col-md-1">
                   <input type="checkbox" class="form-control" name="isGet" [(ngModel)]="isGET">
@@ -102,7 +102,7 @@
                   <input type="text" name="urlGET" class="form-control" [(ngModel)]="urlGET">
                 </div>
                 <div class="col-md-12">
-                  <label style="font-size: 1.5rem;" class="required">URL Trigger (method POST {{ '{' }}hn:xx,cid:xx}
+                  <label style="font-size: 1.5rem;" class="required">URL Trigger (method POST {{ '{' }}hn:xx,cid:xx,servicePointId:xx,localCode:xx}
                     )</label>
                 </div>
                 <div class="col-md-1">
