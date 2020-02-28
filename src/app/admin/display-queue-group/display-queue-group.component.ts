@@ -23,7 +23,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
         display: flex;
         flex-direction: column;
     }
-    
+
     .bg-primary, .settings-panel .color-tiles .tiles.primary {
         background-color: #01579b !important;
     }
@@ -100,7 +100,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
         const _servicePoints = sessionStorage.getItem('servicePoints');
         const jsonDecodedServicePoint = JSON.parse(_servicePoints);
 
-        if (jsonDecodedServicePoint.length === 1) {
+        if (jsonDecodedServicePoint && jsonDecodedServicePoint.length === 1) {
           this.onSelectedPoint(jsonDecodedServicePoint[0]);
         }
 
@@ -140,7 +140,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
       if (this.playlists.length) {
         const queueNumber = this.playlists[0].queueNumber;
         const roomNumber = this.playlists[0].roomNumber;
-        let arrQueueNumber = Array.isArray(queueNumber) ? queueNumber : [queueNumber]
+        const arrQueueNumber = Array.isArray(queueNumber) ? queueNumber : [queueNumber];
         await this.playSound(arrQueueNumber, roomNumber);
       }
     }
@@ -150,15 +150,15 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
 
     this.isPlayingSound = true;
 
-    let _queue = _.cloneWith(_.map(strQueue, (v: any) => { return v.toString().replace(' ', '') }));
-    _queue = _.map(_queue, (v: any) => { return v.toString().replace('-', '') })
+    let _queue = _.cloneWith(_.map(strQueue, (v: any) => v.toString().replace(' ', '')));
+    _queue = _.map(_queue, (v: any) => v.toString().replace('-', ''));
 
-    const _strQueue = _.map(_queue, (v: any) => { return v.split('') });
+    const _strQueue = _.map(_queue, (v: any) => v.split(''));
     const _strRoom = strRoomNumber.split('');
 
     const audioFiles = [];
 
-    audioFiles.push('./assets/audio/please.mp3')
+    audioFiles.push('./assets/audio/please.mp3');
     // audioFiles.push('./assets/audio/silent.mp3')
 
     _strQueue.forEach((v: any) => {
@@ -180,7 +180,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
     } else {
       try {
         if (_strRoom.length === 2) {
-          var _roomNumber = +strRoomNumber;
+          const _roomNumber = +strRoomNumber;
           if (_roomNumber >= 30) {
             audioFiles.push(`./assets/audio/${_strRoom[0]}.mp3`);
             audioFiles.push(`./assets/audio/10.mp3`);
@@ -238,7 +238,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
         this.isPlayingSound = false;
         // remove queue in playlist
         const idx = _.findIndex(that.playlists, { queueNumber: strQueue, roomNumber: strRoomNumber });
-        if (idx > -1) that.playlists.splice(idx, 1);
+        if (idx > -1) { that.playlists.splice(idx, 1); }
         // call sound again
         setTimeout(() => {
           that.isPlayingSound = false;
@@ -261,8 +261,8 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
 
     try {
 
-      await this._workingItems.shift()
-      this.workingItems = await _.cloneDeep(this._workingItems[0])
+      await this._workingItems.shift();
+      this.workingItems = await _.cloneDeep(this._workingItems[0]);
       await howlerBank[0].play();
     } catch (error) {
       console.log(error);
@@ -303,7 +303,7 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
         if (that.isSound) {
           if (+that.servicePointId === +_payload.servicePointId) {
             // play sound
-            const queueNumber = Array.isArray(_payload.queueNumber) ? _payload.queueNumber : [_payload.queueNumber]
+            const queueNumber = Array.isArray(_payload.queueNumber) ? _payload.queueNumber : [_payload.queueNumber];
             const sound = { queueNumber: queueNumber, roomNumber: _payload.roomNumber.toString() };
             that.playlists.push(sound);
             that.prepareSound();
@@ -404,12 +404,12 @@ export class DisplayQueueGroupComponent implements OnInit, OnDestroy {
       if (rs.statusCode === 200) {
         if (this.isSound) {
           await this._workingItems.push(_.cloneDeep(rs.results));
-          if (this._workingItems != this.workingItems) this.workingItems = await _.cloneDeep(this._workingItems[0])
+          if (this._workingItems != this.workingItems) { this.workingItems = await _.cloneDeep(this._workingItems[0]); }
         } else {
-          this.workingItems = _.cloneDeep(rs.results)
+          this.workingItems = _.cloneDeep(rs.results);
         }
         const arr = _.sortBy(rs.results, ['update_date']).reverse();
-        if (arr.length <= 0) this._workingItems = []
+        if (arr.length <= 0) { this._workingItems = []; }
       } else {
         console.log(rs.message);
         this.alertService.error('เกิดข้อผิดพลาด');
