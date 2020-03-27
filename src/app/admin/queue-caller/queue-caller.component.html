@@ -426,6 +426,77 @@
 
     </ng-template>
   </ngb-tab>
+  
+    <!-- Ubonket10 -->
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      <span class="h3">คิวที่ถูกยกเลิก
+        <label class="badge badge-danger">
+          <span class="h3 font-weight-bold">{{cancelItems.length || 0}}</span>
+        </label>
+      </span>
+    </ng-template>
+    <ng-template ngbTabContent>
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">รายการคิวรอเรียกเข้ารับบริการ</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>HN</th>
+                <th>เวลา</th>
+                <th>ชื่อ - สกุล</th>
+                <th>ความสำคัญ</th>
+                <th>คิวตรวจ</th>
+                <th>#</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="cancelItems.length === 0">
+                <td colspan="6">ไม่พบรายการ</td>
+              </tr>
+              <tr *ngFor="let item of cancelItems">
+
+                <td>
+                  <span class="h2">{{item.hn}}</span>
+                </td>
+                <td>
+                  <span class="h2">{{item.time_serv}}</span>
+                </td>
+                <td>
+                  <span class="h2">{{item.title}} {{item.first_name}} {{item.last_name}}</span>
+                </td>
+                <td>
+                  <span class="h2">{{item.priority_name}}</span>
+                </td>
+                <td>
+                  <label class="badge badge-info" style="width: 100px;">
+                    <span class="h3 font-weight-bold" style="letter-spacing: 6px;">{{item.queue_number}}</span>
+                  </label>
+                </td>
+                <td>
+                  <div class="btn-group">
+                    <button class="btn btn-sm btn-danger" (click)="nocancelQueue(item)">
+                      <span class="h4">
+                        คืนคิวถูกยกเลิก
+                      </span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div *ngIf="waitingItems.length" style="padding-top: 25px;">
+            <ngb-pagination class="d-flex justify-content-center" [rotate]="true" [collectionSize]="total"
+              [maxSize]="maxSizePage" [boundaryLinks]="true" [pageSize]="pageSize" (pageChange)="onPageChange($event)"
+              [(page)]="currentPage" aria-label="pagination">
+            </ngb-pagination>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+
 </ngb-tabset>
 
 <ng-template #popContent>
