@@ -21,9 +21,12 @@
                       (keyup)="doSearch($event)" [(ngModel)]="query" placeholder="ระบุคำค้นหา.."
                       aria-label="ระบุคำค้นหา" aria-describedby="button-addon2">
                     <div class="input-group-append">
-                      <button class="btn btn-primary btn-sm" (click)="getVisit()" type="button" id="button-addon2">
+                      <button class="btn btn-primary btn-sm" (click)="getVisit(query)" type="button" id="button-addon2">
                         <i class="mdi mdi-account-search"></i>
                         ค้นหา
+                      </button>
+                      <button class="btn btn-primary btn-sm" (click)="refresh()" type="button" id="button-addon2">
+                        <i class="mdi mdi mdi-refresh"></i>
                       </button>
                     </div>
                   </div>
@@ -87,7 +90,7 @@
     <ng-template ngbTabTitle>
       <span class="h3">ประวัติการสร้างคิว
         <!-- <label class="badge badge-danger">
-          <span class="h3 font-weight-bold">{{workingItems.length || 0}}</span> 
+          <span class="h3 font-weight-bold">{{workingItems.length || 0}}</span>
         </label> -->
       </span>
     </ng-template>
@@ -116,6 +119,10 @@
                         <i class="mdi mdi-account-search"></i>
                         ค้นหา
                       </button>
+                      <button class="btn btn-primary btn-sm" (click)="refreshHistory()" type="button"
+                        id="button-addon2">
+                        <i class="mdi mdi mdi-refresh"></i>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -139,7 +146,7 @@
                     <th>HN</th>
                     <th>ชื่อ - สกุล</th>
                     <th>คิว</th>
-                    <th style="width: 80px;">#</th>
+                    <th style="width: 210px;">#</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -151,10 +158,18 @@
                   <tr *ngFor="let v of visitHistory">
                     <td>{{v.time_serv}}</td>
                     <td>{{v.hn}}</td>
-                    <td>{{v.first_name}} {{v.last_name}}</td>
-                    <td>{{v.queue_number}}</td>
                     <td>
-                      <button class="btn btn-sm btn-gradient-primary" (click)="printAgain(v.queue_id)">
+                      <del *ngIf="v.is_cancel=='Y'">{{v.first_name}} {{v.last_name}} </del>
+                      <span *ngIf="v.is_cancel=='N'"> {{v.first_name}} {{v.last_name}}</span>
+                      <span class="badge badge-danger" *ngIf="v.is_cancel=='Y'">ยกเลิก</span>
+                    </td>
+                    <td>{{v.queue_number}} </td>
+                    <td>
+                      <button *ngIf="v.is_cancel=='Y'" class="btn btn-sm btn-gradient-primary"
+                        (click)="openPriorityHistory(v)">
+                        <i class="mdi mdi-library-plus"></i> สร้างคิวใหม่
+                      </button>
+                      <button class="btn btn-sm btn-gradient-light btn-icon-text" (click)="printAgain(v.queue_id)">
                         <i class="mdi mdi-printer"></i> พิมพ์คิว
                       </button>
                     </td>

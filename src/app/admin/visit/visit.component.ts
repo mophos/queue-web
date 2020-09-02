@@ -91,6 +91,13 @@ export class VisitComponent implements OnInit {
     this.mdlSelectPriority.open();
   }
 
+  openPriorityHistory(visit: any) {
+    this.patientName = `${visit.first_name} ${visit.last_name} (${visit.hn})`;
+    visit.clinic_code = visit.local_code;
+    this.selectedVisit = visit;
+    this.mdlSelectPriority.open();
+  }
+
   onSelectedPrinter(event) {
     if (event) {
       console.log(event);
@@ -102,6 +109,7 @@ export class VisitComponent implements OnInit {
   }
 
   refresh() {
+    this.query = '';
     this.getVisit();
   }
 
@@ -263,6 +271,11 @@ export class VisitComponent implements OnInit {
       console.error(error);
       this.alertService.error('เกิดข้อผิดพลาด');
     }
+  }
+
+  refreshHistory() {
+    this.query = '';
+    this.getHistory();
   }
 
   async getHistory() {
