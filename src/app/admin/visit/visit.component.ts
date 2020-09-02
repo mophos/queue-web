@@ -109,6 +109,12 @@ export class VisitComponent implements OnInit {
   }
 
   refresh() {
+    this.query = '';
+    this.getVisit();
+  }
+
+  refresh() {
+    this.query = '';
     this.getVisit();
   }
 
@@ -270,6 +276,11 @@ export class VisitComponent implements OnInit {
       console.error(error);
       this.alertService.error('เกิดข้อผิดพลาด');
     }
+  }
+
+  refreshHistory() {
+    this.query = '';
+    this.getHistory();
   }
 
   async getHistory() {

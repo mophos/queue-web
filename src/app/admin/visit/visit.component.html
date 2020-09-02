@@ -21,9 +21,12 @@
                       (keyup)="doSearch($event)" [(ngModel)]="query" placeholder="ระบุคำค้นหา.."
                       aria-label="ระบุคำค้นหา" aria-describedby="button-addon2">
                     <div class="input-group-append">
-                      <button class="btn btn-primary btn-sm" (click)="getVisit()" type="button" id="button-addon2">
+                      <button class="btn btn-primary btn-sm" (click)="getVisit(query)" type="button" id="button-addon2">
                         <i class="mdi mdi-account-search"></i>
                         ค้นหา
+                      </button>
+                      <button class="btn btn-primary btn-sm" (click)="refresh()" type="button" id="button-addon2">
+                        <i class="mdi mdi mdi-refresh"></i>
                       </button>
                     </div>
                   </div>
@@ -115,6 +118,10 @@
                       <button class="btn btn-primary btn-sm" (click)="getHistory()" type="button" id="button-addon2">
                         <i class="mdi mdi-account-search"></i>
                         ค้นหา
+                      </button>
+                      <button class="btn btn-primary btn-sm" (click)="refreshHistory()" type="button"
+                        id="button-addon2">
+                        <i class="mdi mdi mdi-refresh"></i>
                       </button>
                     </div>
                   </div>
