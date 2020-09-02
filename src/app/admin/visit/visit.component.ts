@@ -113,11 +113,6 @@ export class VisitComponent implements OnInit {
     this.getVisit();
   }
 
-  refresh() {
-    this.query = '';
-    this.getVisit();
-  }
-
 
   doSearch(event: any) {
     if (this.query) {
