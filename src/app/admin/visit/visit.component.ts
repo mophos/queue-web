@@ -91,6 +91,13 @@ export class VisitComponent implements OnInit {
     this.mdlSelectPriority.open();
   }
 
+  openPriorityHistory(visit: any) {
+    this.patientName = `${visit.first_name} ${visit.last_name} (${visit.hn})`;
+    visit.clinic_code = visit.local_code;
+    this.selectedVisit = visit;
+    this.mdlSelectPriority.open();
+  }
+
   onSelectedPrinter(event) {
     if (event) {
       console.log(event);
