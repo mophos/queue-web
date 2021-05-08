@@ -28,7 +28,7 @@
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.4",
     "howler": "^2.1.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "moment": "^2.22.2",
     "mqtt": "^2.18.8",
     "ngx-clipboard": "^11.1.9",
